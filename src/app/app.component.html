@@ -1,3 +1,8 @@
-<app-coming-soon></app-coming-soon>
-
-<router-outlet></router-outlet>
+<div id="app-container">
+    <div *ngIf="appService.isInside" id="app-menu">
+        <div *ngFor="let option of menuOptions" [routerLink]="option.navigate">
+            {{option.title}}
+        </div>
+    </div>
+    <router-outlet></router-outlet>
+</div>
