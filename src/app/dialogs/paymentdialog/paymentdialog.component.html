@@ -5,8 +5,8 @@
     <div *ngIf="selectingAmount">
         <div class="popup-message">Select an amount to donate (satoshis)</div>
         <div class="suggested-amount-container">
-            <div class="suggested-amount-line" *ngFor="let suggestedAmountList of suggestedAmounts; let column = index;">
-                <div (click)="selectAmount(row, column)"class="suggested-amount-value" [ngClass]="{ button: (row == selectedRow && column == selectedColumn), 'button-light': (row != selectedRow || column != selectedColumn) }" *ngFor="let suggestedAmount of suggestedAmountList; let row = index;">
+            <div class="suggested-amount-line" *ngFor="let suggestedAmountList of suggestedAmounts; let row = index;">
+                <div (click)="selectAmount(row, column)"class="suggested-amount-value" [ngClass]="{ button: (row == selectedRow && column == selectedColumn), 'button-light': (row != selectedRow || column != selectedColumn) }" *ngFor="let suggestedAmount of suggestedAmountList; let column = index;">
                     {{suggestedAmount | amountPipe}}
                 </div>
             </div>
