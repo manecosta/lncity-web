@@ -7,8 +7,6 @@ import { AppService } from './services/app.service';
     styleUrls: ['./app.component.less']
 })
 export class AppComponent {
-    appService: AppService;
-
     menuOptions = [
         {
             title: 'Home',
@@ -20,7 +18,5 @@ export class AppComponent {
         }
     ];
 
-    constructor(private _appService: AppService) {
-        this.appService = AppService.instance;
-    }
+    constructor(public appService: AppService) {}
 }

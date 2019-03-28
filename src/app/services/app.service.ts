@@ -6,6 +6,8 @@ export class AppService {
 
     public isInside = false;
 
+    public paymentsUrl = 'https://ln.city/api/v1/';
+
     constructor() {
         AppService.instance = this;
     }
