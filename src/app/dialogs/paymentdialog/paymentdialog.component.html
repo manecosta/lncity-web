@@ -1,15 +1,18 @@
-<div class="popup-header">
+<div class="payment-dialog-header">
     Lightning Network City
 </div>
-<div class="popup-body">
+<div class="payment-dialog-body">
     <div *ngIf="selectingAmount">
-        <div class="popup-message">Select an amount to donate (satoshis)</div>
-        <div class="suggested-amount-container">
-            <div class="suggested-amount-line" *ngFor="let suggestedAmountList of suggestedAmounts; let row = index;">
-                <div (click)="selectAmount(row, column)"class="suggested-amount-value" [ngClass]="{ button: (row == selectedRow && column == selectedColumn), 'button-light': (row != selectedRow || column != selectedColumn) }" *ngFor="let suggestedAmount of suggestedAmountList; let column = index;">
+        <div class="payment-dialog-message">Select an amount to donate (satoshis)</div>
+        <div class="payment-dialog-suggested-amount-container">
+            <div class="payment-dialog-suggested-amount-line" *ngFor="let suggestedAmountList of suggestedAmounts; let row = index;">
+                <div (click)="selectAmount(row, column)"class="payment-dialog-suggested-amount-value" [ngClass]="{ button: (row == selectedRow && column == selectedColumn), 'button-light': (row != selectedRow || column != selectedColumn) }" *ngFor="let suggestedAmount of suggestedAmountList; let column = index;">
                     {{suggestedAmount | amountPipe}}
                 </div>
             </div>
+        </div>
+        <div class="payment-dialog-amount-value-container centered-content">
+            <span class="payment-dialog-amount-message">Amount:</span> <input [(ngModel)]="amount" (input)="amountInputChanged($event)" class="payment-dialog-amount-value-input" type="number" />
         </div>
     </div>
     <div class="full-size" *ngIf="!selectingAmount">
@@ -27,7 +30,7 @@
                 <div class="centered-content">
                     <div style="margin: 0 auto;" class="lds-ring"><div></div><div></div><div></div><div></div></div>
                 </div>
-                <div style="text-align: center; margin-top: 10px; font-family: Arial, Helvetica, sans-serif;">Awaiting payment...</div>
+                <div style="text-align: center; margin-top: 10px; font-family: Arial, Helvetica, sans-serif;">Awaiting payment of <b>{{amount}}</b> satoshi...</div>
             </div>
         </div>
         <div *ngIf="paymentSuccess" class="centered-content full-size" style="color: #00695f; font-family: Arial, Helvetica, sans-serif; font-size: 32px;">
@@ -38,8 +41,8 @@
         </div>
     </div>
 </div>
-<div class="popup-footer" style="position: relative;">
+<div class="payment-dialog-footer" style="position: relative;">
     <div *ngIf="selectingAmount" class="button" [ngClass]="{ 'no-hover disabled': amount == null }" (click)="amount != null ? generateInvoice() : null">Generate Invoice</div>
     <div *ngIf="awaitingPayment" style="height: 100%; position: absolute; left: 0; top: 0;" [ngStyle]="{ width: Math.ceil((timeoutElapsedRatio * 100)) + '%', 'background-color': timeoutElapsedRatio > 0.85 ? '#ff9900' : timeoutElapsedRatio > 0.5 ? '#f6d55c' : '#3caea3' }"></div>
-    <div *ngIf="awaitingPayment" class="full-size"style="font-size: 16px; position: absolute;">{{(Math.floor((1 - timeoutElapsedRatio) * 300))}} seconds remaining</div>
+    <div *ngIf="awaitingPayment" class="full-size"style="font-size: 16px; line-height: 54px; position: absolute;">{{(Math.floor((1 - timeoutElapsedRatio) * 300))}} seconds remaining</div>
 </div>

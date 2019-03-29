@@ -166,4 +166,21 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
                 this.loading = false;
             });
     }
+
+    amountInputChanged(event) {
+        const newValue = +event.target.value;
+        for (let row = 0; row < this.suggestedAmounts.length; row++) {
+            const rowAmounts = this.suggestedAmounts[row];
+            for (let column = 0; column < rowAmounts.length; column++) {
+                const suggestedValue = rowAmounts[column];
+                if (suggestedValue === newValue) {
+                    this.selectedRow = row;
+                    this.selectedColumn = column;
+                    return true;
+                }
+            }
+        }
+        this.selectedRow = null;
+        this.selectedColumn = null;
+    }
 }

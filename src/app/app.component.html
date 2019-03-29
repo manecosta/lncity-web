@@ -1,6 +1,6 @@
 <div id="app-container">
-    <div *ngIf="appService.isInside" id="app-menu">
-        <div *ngFor="let option of menuOptions" [routerLink]="option.navigate">
+    <div *ngIf="appService.isInside" id="app-menu" class="centered-content">
+        <div class="app-menu-item" *ngFor="let option of menuOptions" [routerLink]="option.navigate">
             {{option.title}}
         </div>
     </div>

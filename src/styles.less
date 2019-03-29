@@ -1,6 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import '../node_modules/@angular/material/prebuilt-themes/indigo-pink.css';
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import 'variables.less';
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type='number'] {
+    -moz-appearance: textfield;
+}
+
+input {
+    border: none;
+    color: @textcolor;
+    border-bottom: 1px solid @lighttextcolor;
+}
+
+input:focus {
+    box-shadow: none;
+    outline: none;
+    border-bottom: 1px solid @textcolor;
+}
 
 body {
     background-color: white;
@@ -28,11 +51,12 @@ body {
 .button {
     display: inline-block;
     padding: 0 10px;
-    border: 1px solid #ff9900;
+    border: 1px solid @accentcolor;
     border-radius: 5px;
-    color: #ff9900;
-    background-color: #f6d55c;
+    color: @accentcolor;
+    background-color: @primarycontentcolor;
     font-size: 16px;
+    height: 32px;
     line-height: 32px;
     font-weight: 600;
     font-family: Arial, Helvetica, sans-serif;
@@ -42,24 +66,22 @@ body {
 }
 
 .button:hover {
-    border: 1px solid #f6d55c;
-    color: #f6d55c;
-    background-color: #ff9900;
+    color: @primarycontentcolor;
+    background-color: @accentcolor;
 }
 
 .button.no-hover:hover {
-    border: 1px solid #ff9900;
-    color: #ff9900;
-    background-color: #f6d55c;
+    color: @accentcolor;
+    background-color: @primarycontentcolor;
 }
 
 .button-light {
     display: inline-block;
     padding: 0 10px;
-    border: 1px solid #ff9900;
+    border: 1px solid @accentcolor;
     border-radius: 5px;
-    color: #ff9900;
-    background-color: #3caea330;
+    color: @accentcolor;
+    background-color: @lightcontentcolor;
     font-size: 16px;
     line-height: 32px;
     font-weight: 600;
@@ -70,18 +92,18 @@ body {
 }
 
 .disabled {
-    opacity: 0.5;
+    opacity: 0.3;
     cursor: default;
 }
 
 .button-light:hover {
-    background-color: #ff9900;
-    color: #f6d55c;
+    background-color: @accentcolor;
+    color: @primarycontentcolor;
 }
 
 .button-light.no-hover:hover {
-    color: #ff9900;
-    background-color: #3caea330;
+    color: @accentcolor;
+    background-color: @lightcontentcolor;
 }
 
 mat-dialog-container {
@@ -101,7 +123,7 @@ mat-dialog-container {
     width: 51px;
     height: 51px;
     margin: 6px;
-    border: 6px solid #3caea3;
+    border: 6px solid @lightcontentcolor;
     border-radius: 50%;
     animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
     border-color: #3caea3 transparent transparent transparent;

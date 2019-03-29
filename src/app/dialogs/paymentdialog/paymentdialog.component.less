@@ -1,60 +1,86 @@
-@spacing: 20px;
+@import '../../../variables.less';
 
-.popup-header {
+@verticalspacing: 10px;
+@horizontalspacing: 20px;
+
+.payment-dialog-header {
     width: 100%;
     height: 54px;
-    border-bottom: 1px solid #ff9900;
-    background-color: #f6d55c;
+    border-bottom: 1px solid @accentcolor;
+    background-color: @primarycontentcolor;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 24px;
     line-height: 54px;
     text-align: center;
 }
 
-.popup-body {
+.payment-dialog-body {
     width: 100%;
     height: calc(100% - 110px);
 }
 
-.popup-message {
+.payment-dialog-message {
     padding-top: 30px;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
     text-align: center;
+    color: @textcolor;
 }
 
-.popup-footer {
+.payment-dialog-footer {
     position: relative;
     width: 100%;
     height: 54px;
-    border-top: 1px solid #ff9900;
-    background-color: #fff5d0;
+    border-top: 1px solid @accentcolor;
+    background-color: @secondarycontentcolor;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 24px;
     line-height: 44px;
     text-align: center;
 }
 
-.suggested-amount-container {
+.payment-dialog-suggested-amount-container {
     width: calc(100% - 60px);
     margin-left: 30px;
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
-.suggested-amount-line {
+.payment-dialog-suggested-amount-line {
     display: flex;
     flex-direction: row;
 }
 
-.suggested-amount-line:last-child {
-    margin-bottom: @spacing;
+.payment-dialog-suggested-amount-line:last-child {
+    margin-bottom: @verticalspacing;
 }
 
-.suggested-amount-value {
-    margin: @spacing 0 0 @spacing;
+.payment-dialog-suggested-amount-value {
+    margin: @verticalspacing 0 0 @horizontalspacing;
     flex-grow: 1;
 }
 
-.suggested-amount-value:last-child {
-    margin-right: @spacing;
+.payment-dialog-suggested-amount-value:last-child {
+    margin-right: @horizontalspacing;
+}
+
+.payment-dialog-amount-value-container {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    color: @textcolor;
+    padding-top: 20px;
+}
+
+.payment-dialog-amount-value-input {
+    vertical-align: middle;
+    height: 24px;
+    font-size: 16px;
+    width: 96px;
+    margin-left: 10px;
+    text-align: center;
+}
+
+.payment-dialog-amount-message {
+    color: @textcolor;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
 }

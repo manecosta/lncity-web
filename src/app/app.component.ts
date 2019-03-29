@@ -13,8 +13,8 @@ export class AppComponent {
             navigate: '/alpha'
         },
         {
-            title: 'Coming Soon',
-            navigate: ''
+            title: 'Roulette',
+            navigate: '/roulette'
         }
     ];
 
