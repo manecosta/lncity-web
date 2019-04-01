@@ -11,8 +11,8 @@ import { User } from '../models/user';
 @Injectable()
 export class RequestService {
     static instance: RequestService;
-    // static baseUrl = 'https://ln.city/api/v1';
-    static baseUrl = 'http://127.0.0.1:5001/api/v1';
+    static baseUrl = 'https://ln.city/api/v1';
+    // static baseUrl = 'http://127.0.0.1:5001/api/v1';
 
     constructor(private http: HttpClient, private appService: AppService) {
         RequestService.instance = this;
