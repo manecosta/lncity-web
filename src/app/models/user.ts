@@ -1,13 +1,19 @@
 import { Model } from './model';
 
 export class User extends Model {
-    identifier: string = null;
-    balance = 0;
+    userId: number;
+    balance: number;
+    username: string;
+    created: string;
+    updated: string;
 
     mapping(): { [key: string]: any } {
         return {
-            identifier: 'userId',
-            balance: 'balance'
+            id: 'userId',
+            username: 'username',
+            balance: 'balance',
+            created: 'created',
+            updated: 'updated'
         };
     }
 }

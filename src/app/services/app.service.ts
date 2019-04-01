@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user';
+import { LocalStorage } from './localstorage.service';
 
 @Injectable()
 export class AppService {
@@ -8,10 +9,23 @@ export class AppService {
     public isInside = false;
 
     public user: User = null;
+    public authToken: string = null;
+    public refreshToken: string = null;
 
-    public paymentsUrl = 'https://ln.city/api/v1/';
-
-    constructor() {
+    constructor(private localStorage: LocalStorage) {
         AppService.instance = this;
+
+        this.user = LocalStorage.getObject('user');
+        this.authToken = LocalStorage.get('auth_token');
+        this.refreshToken = LocalStorage.get('refresh_token');
+    }
+
+    updateUserDetails(user: User, authToken: string, refreshToken: string) {
+        this.user = user;
+        this.authToken = authToken;
+        this.refreshToken = refreshToken;
+        LocalStorage.setObject('user', user.serializable());
+        LocalStorage.set('auth_token', authToken);
+        LocalStorage.set('refresh_token', refreshToken);
     }
 }

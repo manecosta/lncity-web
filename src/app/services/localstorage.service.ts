@@ -26,7 +26,12 @@ export class LocalStorage {
     }
 
     static getObject(key: string): any {
-        return JSON.parse(LocalStorage.localStorage[key] || '{}');
+        const value = LocalStorage.localStorage[key];
+        if (value) {
+            return JSON.parse(value);
+        } else {
+            return null;
+        }
     }
 
     static remove(key: string): any {

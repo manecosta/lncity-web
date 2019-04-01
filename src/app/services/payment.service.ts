@@ -13,15 +13,12 @@ export class PaymentService {
 
     generateInvoice(amount, memo) {
         return this.requestService.get(
-            'https://ln.city/api/v1/invoices/generate/' +
-                amount +
-                '/' +
-                encodeURI(memo)
+            '/invoices/generate/' + amount + '/' + encodeURI(memo)
         );
     }
 
     getInvoice(rHash) {
-        return this.requestService.post('https://ln.city/api/v1/invoices/get', {
+        return this.requestService.post('/invoices/get', {
             r_hash: rHash
         });
     }

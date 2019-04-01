@@ -69,7 +69,7 @@ export abstract class Model {
         return obj;
     }
 
-    constructor(jsonObject?: Object) {
+    constructor(jsonObject?: object) {
         if (!jsonObject) {
             jsonObject = {};
         }

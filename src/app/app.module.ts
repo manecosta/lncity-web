@@ -13,13 +13,14 @@ import {
 } from './dialogs/paymentdialog/paymentdialog.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PaymentService } from './services/payment.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpResponse } from '@angular/common/http';
 import { RequestService } from './services/request.service';
 import { QRCodeModule } from 'angularx-qrcode';
 import { RouletteGameComponent } from './components/games/roulette/roulette.component';
 import { LocalStorage } from './services/localstorage.service';
 import { HomeComponent } from './components/home/home.component';
 import { FormsModule } from '@angular/forms';
+import { User } from './models/user';
 
 @NgModule({
     declarations: [
@@ -53,13 +54,29 @@ import { FormsModule } from '@angular/forms';
     bootstrap: [AppComponent]
 })
 export class AppModule {
-    constructor(private router: Router) {
+    constructor(
+        private router: Router,
+        private appService: AppService,
+        private requestService: RequestService
+    ) {
         router.events.subscribe((event: RouterEvent) => {
             if (event instanceof NavigationStart) {
-                console.log(event);
                 AppService.instance.isInside =
                     event.url !== '/comingsoon' && event.url !== '/';
             }
         });
+
+        if (!this.appService.user) {
+            this.requestService
+                .post('/users/register', {}, true)
+                .then((response: HttpResponse<object>) => {
+                    const user = new User(response.body);
+                    this.appService.updateUserDetails(
+                        user,
+                        response.headers.get('x-auth-token'),
+                        response.headers.get('x-refresh-token')
+                    );
+                });
+        }
     }
 }
