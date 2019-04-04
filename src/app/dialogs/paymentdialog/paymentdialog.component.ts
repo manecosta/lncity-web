@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { PaymentService } from 'src/app/services/payment.service';
+import { AccountService } from 'src/app/services/account.service';
 
 @Pipe({ name: 'amountPipe' })
 export class AmountPipe implements PipeTransform {
@@ -37,7 +38,9 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
     Math = Math;
 
     title = 'Lightning Network City';
-    message = 'Please choose the amount to donate:';
+    message = 'Select an amount to donate (satoshi):';
+
+    payingToBalance = false;
 
     amount: number = null;
     selectedRow: number = null;
@@ -66,7 +69,8 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
     constructor(
         public dialogRef: MatDialogRef<PaymentDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private paymentService: PaymentService
+        private paymentService: PaymentService,
+        private accountService: AccountService
     ) {
         if (data) {
             if (data.title) {
@@ -78,6 +82,9 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
             if (data.amount) {
                 this.amount = data.amount;
                 this.generateInvoice();
+            }
+            if (data.payingToBalance) {
+                this.payingToBalance = data.payingToBalance;
             }
         }
     }
@@ -99,72 +106,86 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
         this.amount = this.suggestedAmounts[row][column];
     }
 
-    generateInvoice() {
-        this.selectingAmount = false;
-        this.loading = true;
-        this.dialogRef.updateSize('400px', '700px');
-        this.paymentService
-            .generateInvoice(this.amount, this.amount + ' donation to ln.city')
-            .then(generatedInvoice => {
-                this.loading = false;
-                this.generatedInvoicePaymentRequest =
-                    generatedInvoice.payment_request;
-                this.generatedInvoiceRHash = generatedInvoice.r_hash;
-                this.awaitingPayment = true;
-                let step = 0;
-                this.checkInvoiceInterval = setInterval(() => {
-                    if (step % 6 === 0) {
-                        this.paymentService
-                            .getInvoice(this.generatedInvoiceRHash)
-                            .then((statusInvoice: any) => {
-                                const currentT = Math.floor(Date.now() / 1000);
-                                this.invoiceExpirationTimestamp =
-                                    +statusInvoice.creation_date +
-                                    +statusInvoice.expiry;
-                                this.timeoutElapsedRatio =
-                                    1 -
-                                    (this.invoiceExpirationTimestamp -
-                                        currentT) /
-                                        this.invoiceTimeout;
-                                if (
-                                    statusInvoice.settled ||
-                                    this.timeoutElapsedRatio > 1
-                                ) {
-                                    if (
-                                        !this.paymentSuccess &&
-                                        !this.paymentTimeout
-                                    ) {
-                                        this.awaitingPayment = false;
-                                        if (statusInvoice.settled) {
-                                            this.paymentSuccess = true;
-                                        } else {
-                                            this.paymentTimeout = true;
-                                        }
-                                        clearInterval(
-                                            this.checkInvoiceInterval
-                                        );
-                                        this.generatedInvoicePaymentRequest = null;
-                                        this.generatedInvoiceRHash = null;
-                                        setTimeout(() => {
-                                            this.dialogRef.close();
-                                        }, 2000);
-                                    }
-                                }
-                            })
-                            .catch(error => {});
-                    } else if (this.invoiceExpirationTimestamp) {
+    generatedInvoiceSuccessHandler(generatedInvoice) {
+        this.loading = false;
+        this.generatedInvoicePaymentRequest = generatedInvoice.payment_request;
+        this.generatedInvoiceRHash = generatedInvoice.r_hash;
+        this.awaitingPayment = true;
+        let step = 0;
+        this.checkInvoiceInterval = setInterval(() => {
+            if (step % 6 === 0) {
+                this.paymentService
+                    .getInvoice(this.generatedInvoiceRHash)
+                    .then((statusInvoice: any) => {
                         const currentT = Math.floor(Date.now() / 1000);
+                        this.invoiceExpirationTimestamp =
+                            +statusInvoice.creation_date +
+                            +statusInvoice.expiry;
                         this.timeoutElapsedRatio =
                             1 -
                             (this.invoiceExpirationTimestamp - currentT) /
                                 this.invoiceTimeout;
-                    }
-                    step += 1;
-                }, 500);
-            })
-            .catch(error => {
-                this.loading = false;
-            });
+                        if (
+                            statusInvoice.settled ||
+                            this.timeoutElapsedRatio > 1
+                        ) {
+                            if (!this.paymentSuccess && !this.paymentTimeout) {
+                                this.awaitingPayment = false;
+                                if (statusInvoice.settled) {
+                                    this.paymentSuccess = true;
+                                } else {
+                                    this.paymentTimeout = true;
+                                }
+                                clearInterval(this.checkInvoiceInterval);
+                                this.generatedInvoicePaymentRequest = null;
+                                this.generatedInvoiceRHash = null;
+                                if (this.payingToBalance) {
+                                    this.accountService.reloadAccount();
+                                }
+                                setTimeout(() => {
+                                    this.dialogRef.close();
+                                }, 2000);
+                            }
+                        }
+                    })
+                    .catch(error => {});
+            } else if (this.invoiceExpirationTimestamp) {
+                const currentT = Math.floor(Date.now() / 1000);
+                this.timeoutElapsedRatio =
+                    1 -
+                    (this.invoiceExpirationTimestamp - currentT) /
+                        this.invoiceTimeout;
+            }
+            step += 1;
+        }, 500);
+    }
+
+    generateInvoice() {
+        this.selectingAmount = false;
+        this.loading = true;
+        this.dialogRef.updateSize('400px', '700px');
+        if (this.payingToBalance) {
+            this.accountService
+                .depositBalance(this.amount)
+                .then(response => {
+                    this.generatedInvoiceSuccessHandler(response);
+                })
+                .catch(error => {
+                    this.loading = false;
+                });
+        } else {
+            this.paymentService
+                .generateInvoice(
+                    this.amount,
+                    this.amount + ' donation to ln.city'
+                )
+                .then(response => {
+                    this.generatedInvoiceSuccessHandler(response);
+                })
+                .catch(error => {
+                    this.loading = false;
+                });
+        }
     }
 
     amountInputChanged(event) {

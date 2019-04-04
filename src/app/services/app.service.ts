@@ -20,7 +20,12 @@ export class AppService {
         this.refreshToken = LocalStorage.get('refresh_token');
     }
 
-    updateUserDetails(user: User, authToken: string, refreshToken: string) {
+    updateUser(user: User) {
+        this.user = user;
+        LocalStorage.setObject('user', user.serializable());
+    }
+
+    updateUserAndAuth(user: User, authToken: string, refreshToken: string) {
         this.user = user;
         this.authToken = authToken;
         this.refreshToken = refreshToken;

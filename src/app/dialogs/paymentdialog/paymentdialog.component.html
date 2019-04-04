@@ -1,9 +1,9 @@
 <div class="payment-dialog-header">
-    Lightning Network City
+    {{title}}
 </div>
 <div class="payment-dialog-body">
     <div *ngIf="selectingAmount">
-        <div class="payment-dialog-message">Select an amount to donate (satoshis)</div>
+        <div class="payment-dialog-message">{{message}}</div>
         <div class="payment-dialog-suggested-amount-container">
             <div class="payment-dialog-suggested-amount-line" *ngFor="let suggestedAmountList of suggestedAmounts; let row = index;">
                 <div (click)="selectAmount(row, column)"class="payment-dialog-suggested-amount-value" [ngClass]="{ button: (row == selectedRow && column == selectedColumn), 'button-light': (row != selectedRow || column != selectedColumn) }" *ngFor="let suggestedAmount of suggestedAmountList; let column = index;">
@@ -34,10 +34,10 @@
             </div>
         </div>
         <div *ngIf="paymentSuccess" class="centered-content full-size" style="color: #00695f; font-family: Arial, Helvetica, sans-serif; font-size: 32px;">
-            <div>Payment Success!</div>
+            <div>{{payingToBalance ? 'Deposit' : 'Donation'}} Success!</div>
         </div>
         <div *ngIf="paymentTimeout" class="centered-content full-size" style="color: #ff6600; font-family: Arial, Helvetica, sans-serif; font-size: 32px;">
-            <div>Payment Timed Out.</div>
+            <div>{{payingToBalance ? 'Deposit' : 'Donation'}} Timed Out.</div>
         </div>
     </div>
 </div>

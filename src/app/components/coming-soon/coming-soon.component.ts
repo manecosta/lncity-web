@@ -12,9 +12,9 @@ export class ComingSoonComponent {
     constructor(private dialog: MatDialog, private appService: AppService) {}
 
     openPopup() {
-        let dialogConfig = new MatDialogConfig();
+        const dialogConfig = new MatDialogConfig();
 
-        let paymentDialog = this.dialog.open(
+        const paymentDialog = this.dialog.open(
             PaymentDialogComponent,
             dialogConfig
         );

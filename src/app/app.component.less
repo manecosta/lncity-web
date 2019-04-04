@@ -6,6 +6,22 @@
     padding: 0;
     margin: 0;
     background-color: @darkbackgroundcolor;
+    position: relative;
+}
+
+#app-menu-account-button {
+    position: absolute;
+    right: 20px;
+    height: 44px;
+    top: 10px;
+    padding: 0 10px;
+    line-height: 44px;
+    text-transform: initial;
+}
+
+#app-menu-account-button:hover {
+    background-color: @primarycontentcolor;
+    color: @accentcolor;
 }
 
 #app-menu {
@@ -13,6 +29,37 @@
     height: 64px;
     background-color: @primarycontentcolor;
     border-bottom: 1px solid @accentcolor;
+}
+
+#app-menu-account-button:hover > #app-menu-account-options {
+    display: block;
+}
+
+#app-menu-account-options {
+    display: none;
+    width: 196px;
+    position: absolute;
+    right: 0;
+    top: 44px;
+    height: 88px;
+    border: 1px solid @accentcolor;
+    background-color: @primarycontentcolor;
+    cursor: pointer;
+}
+
+.app-menu-account-option {
+    width: 186px;
+    height: 44px;
+    line-height: 44px;
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: @accentcolor;
+    padding-left: 10px;
+}
+
+.app-menu-account-option:hover {
+    background-color: @accentcolor;
+    color: @primarycontentcolor;
 }
 
 .app-menu-item {

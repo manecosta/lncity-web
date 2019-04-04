@@ -21,6 +21,7 @@ import { LocalStorage } from './services/localstorage.service';
 import { HomeComponent } from './components/home/home.component';
 import { FormsModule } from '@angular/forms';
 import { User } from './models/user';
+import { AccountService } from './services/account.service';
 
 @NgModule({
     declarations: [
@@ -45,6 +46,7 @@ import { User } from './models/user';
         AppService,
         PaymentService,
         RequestService,
+        AccountService,
         LocalStorage,
         {
             provide: MAT_DIALOG_DEFAULT_OPTIONS,
@@ -57,7 +59,8 @@ export class AppModule {
     constructor(
         private router: Router,
         private appService: AppService,
-        private requestService: RequestService
+        private requestService: RequestService,
+        private accountService: AccountService
     ) {
         router.events.subscribe((event: RouterEvent) => {
             if (event instanceof NavigationStart) {
@@ -71,12 +74,14 @@ export class AppModule {
                 .post('/users/register', {}, true)
                 .then((response: HttpResponse<object>) => {
                     const user = new User(response.body);
-                    this.appService.updateUserDetails(
+                    this.appService.updateUserAndAuth(
                         user,
                         response.headers.get('x-auth-token'),
                         response.headers.get('x-refresh-token')
                     );
                 });
+        } else {
+            this.accountService.reloadAccount();
         }
     }
 }
