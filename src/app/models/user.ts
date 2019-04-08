@@ -4,16 +4,16 @@ export class User extends Model {
     userId: number;
     balance: number;
     username: string;
-    created: string;
-    updated: string;
+    createdTime: number;
+    updatedTime: number;
 
     mapping(): { [key: string]: any } {
         return {
             id: 'userId',
             username: 'username',
             balance: 'balance',
-            created: 'created',
-            updated: 'updated'
+            created_time: 'createdTime',
+            updated_time: 'updatedTime'
         };
     }
 }

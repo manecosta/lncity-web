@@ -9,14 +9,23 @@
     position: relative;
 }
 
+#app-content-container {
+    width: 100vw;
+    height: calc(100vh - 65px);
+}
+
 #app-menu-account-button {
     position: absolute;
-    right: 20px;
-    height: 44px;
-    top: 10px;
-    padding: 0 10px;
-    line-height: 44px;
+    right: 0;
+    height: 64px;
+    top: 0;
+    padding: 0 20px;
+    line-height: 64px;
     text-transform: initial;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    color: @accentcolor;
+    cursor: default;
 }
 
 #app-menu-account-button:hover {
@@ -37,24 +46,25 @@
 
 #app-menu-account-options {
     display: none;
-    width: 196px;
     position: absolute;
     right: 0;
-    top: 44px;
-    height: 88px;
-    border: 1px solid @accentcolor;
-    background-color: @primarycontentcolor;
+    top: 100%;
+    border-left: 1px solid @accentcolor;
+    border-bottom: 1px solid @accentcolor;
+    border-top: 1px solid @accentcolor;
+    background-color: @secondarycontentcolor;
     cursor: pointer;
+    white-space: nowrap;
+    text-align: right;
 }
 
 .app-menu-account-option {
-    width: 186px;
     height: 44px;
     line-height: 44px;
     font-size: 16px;
     font-family: Arial, Helvetica, sans-serif;
     color: @accentcolor;
-    padding-left: 10px;
+    padding: 0 20px;
 }
 
 .app-menu-account-option:hover {
@@ -70,6 +80,7 @@
     width: 128px;
     cursor: pointer;
     text-align: center;
+    position: relative;
 }
 
 .app-menu-item:hover {
@@ -77,6 +88,45 @@
     color: @primarycontentcolor;
 }
 
+.app-menu-item.no-hover:hover {
+    color: @accentcolor;
+    background-color: @primarycontentcolor;
+    cursor: default;
+}
+
 .app-menu-item:focus {
+    outline: none;
+}
+
+.app-menu-item-submenu {
+    display: none;
+    background-color: @secondarycontentcolor;
+    border: 1px solid @accentcolor;
+}
+
+.app-menu-item:hover > .app-menu-item-submenu {
+    display: block;
+    position: absolute;
+    top: 100%;
+}
+
+.app-menu-item-submenu-item {
+    line-height: 64px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    padding: 0 20px;
+    color: @accentcolor;
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+    white-space: nowrap;
+}
+
+.app-menu-item-submenu-item:hover {
+    background-color: @accentcolor;
+    color: @primarycontentcolor;
+}
+
+.app-menu-item-submenu-item:focus {
     outline: none;
 }

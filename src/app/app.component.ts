@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AppService } from './services/app.service';
 import { PaymentDialogComponent } from './dialogs/paymentdialog/paymentdialog.component';
 import { MatDialog, MatDialogConfig } from '@angular/material';
+import { WithdrawalDialogComponent } from './dialogs/withdrawaldialog/withdrawaldialog.component';
 
 @Component({
     selector: 'app-root',
@@ -12,11 +13,24 @@ export class AppComponent {
     menuOptions = [
         {
             title: 'Home',
+            type: 'navigate',
             navigate: '/alpha'
         },
         {
-            title: 'Roulette',
-            navigate: '/roulette'
+            title: 'Games',
+            type: 'menu',
+            options: [
+                {
+                    title: 'Roulette',
+                    type: 'navigate',
+                    navigate: '/roulette'
+                },
+                {
+                    title: 'Slot Machine',
+                    type: 'navigate',
+                    navigate: '/slot'
+                }
+            ]
         }
     ];
 
@@ -47,6 +61,26 @@ export class AppComponent {
     withdrawBalance() {
         this.accountOptionsShowing = false;
 
-        console.log('Not implemented!');
+        const dialogConfig = new MatDialogConfig();
+
+        dialogConfig.data = {
+            message:
+                'Paste a payment request here of up to ' +
+                this.appService.user.balance +
+                ' satoshi.'
+        };
+
+        const withdrawalDialog = this.dialog.open(
+            WithdrawalDialogComponent,
+            dialogConfig
+        );
+    }
+
+    registerAccount() {
+        console.log('Register');
+    }
+
+    switchAccount() {
+        console.log('Switch');
     }
 }

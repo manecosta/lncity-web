@@ -22,17 +22,21 @@ import { HomeComponent } from './components/home/home.component';
 import { FormsModule } from '@angular/forms';
 import { User } from './models/user';
 import { AccountService } from './services/account.service';
+import { WithdrawalDialogComponent } from './dialogs/withdrawaldialog/withdrawaldialog.component';
+import { SlotMachinGameComponent } from './components/games/slotmachine/slotmachine.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         ComingSoonComponent,
         PaymentDialogComponent,
+        WithdrawalDialogComponent,
         AmountPipe,
         RouletteGameComponent,
+        SlotMachinGameComponent,
         HomeComponent
     ],
-    entryComponents: [PaymentDialogComponent],
+    entryComponents: [PaymentDialogComponent, WithdrawalDialogComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,

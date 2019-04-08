@@ -1,16 +1,25 @@
 <div id="app-container">
     <div *ngIf="appService.isInside" id="app-menu" class="centered-content">
-        <div class="app-menu-item" *ngFor="let option of menuOptions" [routerLink]="option.navigate">
+        <div class="app-menu-item" [ngClass]="{ 'no-hover': (option.type == 'menu') }" *ngFor="let option of menuOptions" [routerLink]="option.navigate">
             {{option.title}}
+            <div class="app-menu-item-submenu" *ngIf="option.type == 'menu'">
+                <div *ngFor="let subOption of option.options" class="app-menu-item-submenu-item" [routerLink]="subOption.navigate">
+                    {{subOption.title}}
+                </div>
+            </div>
         </div>
 
-        <div id="app-menu-account-button" class="button" (click)="toggleAccountOptions()">
+        <div id="app-menu-account-button" (click)="toggleAccountOptions()">
             Balance: {{appService.user ? appService.user.balance : 0}} satoshi
             <div id="app-menu-account-options">
                 <div class="app-menu-account-option" (click)="depositBalance()">Deposit</div>
                 <div class="app-menu-account-option" (click)="withdrawBalance()">Withdraw</div>
+                <div *ngIf="!appService.user.username" class="app-menu-account-option" (click)="registerAccount()">Register Account</div>
+                <div class="app-menu-account-option" (click)="switchAccount()">Switch Account</div>
             </div>
         </div>
     </div>
-    <router-outlet></router-outlet>
+    <div id="app-content-container">
+        <router-outlet></router-outlet>
+    </div>
 </div>
