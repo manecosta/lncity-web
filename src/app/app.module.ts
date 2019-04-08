@@ -74,16 +74,7 @@ export class AppModule {
         });
 
         if (!this.appService.user) {
-            this.requestService
-                .post('/users/register', {}, true)
-                .then((response: HttpResponse<object>) => {
-                    const user = new User(response.body);
-                    this.appService.updateUserAndAuth(
-                        user,
-                        response.headers.get('x-auth-token'),
-                        response.headers.get('x-refresh-token')
-                    );
-                });
+            this.requestService.register();
         } else {
             this.accountService.reloadAccount();
         }

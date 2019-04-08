@@ -14,7 +14,7 @@
             <div id="app-menu-account-options">
                 <div class="app-menu-account-option" (click)="depositBalance()">Deposit</div>
                 <div class="app-menu-account-option" (click)="withdrawBalance()">Withdraw</div>
-                <div *ngIf="!appService.user.username" class="app-menu-account-option" (click)="registerAccount()">Register Account</div>
+                <div *ngIf="appService.user && !appService.user.username" class="app-menu-account-option" (click)="registerAccount()">Register Account</div>
                 <div class="app-menu-account-option" (click)="switchAccount()">Switch Account</div>
             </div>
         </div>

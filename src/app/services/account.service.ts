@@ -24,6 +24,10 @@ export class AccountService {
         });
     }
 
+    register() {
+        return this.requestService.register();
+    }
+
     depositBalance(amount) {
         return this.requestService.post('/balances/deposit', { amount });
     }

@@ -11,8 +11,8 @@ import { User } from '../models/user';
 @Injectable()
 export class RequestService {
     static instance: RequestService;
-    // static baseUrl = 'https://ln.city/api/v1';
-    static baseUrl = 'http://127.0.0.1:5001/api/v1';
+    static baseUrl = 'https://ln.city/api/v1';
+    // static baseUrl = 'http://127.0.0.1:5001/api/v1';
 
     constructor(private http: HttpClient, private appService: AppService) {
         RequestService.instance = this;
@@ -57,11 +57,28 @@ export class RequestService {
                     return Promise.resolve(renewResponse);
                 })
                 .catch((renewResponse: HttpErrorResponse) => {
+                    if (renewResponse.status === 401) {
+                        return this.register();
+                    }
                     return Promise.reject(renewResponse);
                 });
         } else {
             return Promise.reject(response);
         }
+    }
+
+    register() {
+        return this.post('/users/register', {}, true).then(
+            (response: HttpResponse<object>) => {
+                const user = new User(response.body);
+                this.appService.updateUserAndAuth(
+                    user,
+                    response.headers.get('x-auth-token'),
+                    response.headers.get('x-refresh-token')
+                );
+                return Promise.resolve(response);
+            }
+        );
     }
 
     get(
