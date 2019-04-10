@@ -1,0 +1,140 @@
+.slot-reels-container {
+    position: relative;
+    overflow: hidden;
+    width: 800px;
+    margin: 0 auto;
+    height: 464px;
+    background-color: #333;
+    border: 20px solid white;
+    border-radius: 10px;
+}
+
+.slot-reels-column {
+    background-color: white;
+    display: inline-block;
+    vertical-align: top;
+    height: 100%;
+    margin-right: 10px;
+    border-right: 10px solid grey;
+    border-left: 10px solid grey;
+}
+
+.slot-reels-column:first-child {
+    margin-left: 10px;
+}
+
+.slot-reels-element-container {
+    height: 128px;
+    width: 128px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.slot-reels-element-container-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.slot-reels-element-container:first-child {
+    margin-top: 20px;
+}
+
+.slot-reels-element-img {
+    max-width: 100%;
+    min-width: 100%;
+    height: auto;
+}
+
+.slot-reels-container-shadow {
+    position: absolute;
+    top: 0;
+    left: -10px;
+    width: calc(100% + 20px);
+    height: 100%;
+    box-shadow: inset 0 0 20px 10px black;
+}
+
+.slot-spin-button {
+    margin: 0 auto;
+    display: block !important;
+    width: 128px;
+    margin-top: 20px;
+}
+
+.slot-credit-info-container {
+    width: 600px;
+    height: 44px;
+    margin: 0 auto;
+    background-color: white;
+}
+
+.slot-credit-info-field {
+    display: inline-block;
+    width: 200px;
+    height: 100%;
+    line-height: 44px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 22px;
+    color: #333;
+    text-align: center;
+}
+
+.slot-reels-line-1 {
+    width: calc(100% - 40px - 128px);
+    height: 5px;
+    background-color: red;
+    position: absolute;
+    left: 84px;
+    top: 50%;
+}
+
+.slot-reels-line-2-1 {
+    width: calc((50% - 20px - 60px) * 1.41421356237);
+    height: 5px;
+    background-color: green;
+    position: absolute;
+    left: 80px;
+    top: 74px;
+    transform-origin: 0 0;
+    transform: rotate(45deg);
+}
+
+.slot-reels-line-2-2 {
+    width: calc((50% - 20px - 60px) * 1.41421356237);
+    height: 5px;
+    background-color: green;
+    position: absolute;
+    right: 80px;
+    top: 74px;
+    transform-origin: 100% 0;
+    transform: rotate(-45deg);
+}
+
+.slot-reels-line-3-1 {
+    width: calc((50% - 20px - 60px) * 1.41421356237);
+    height: 5px;
+    background-color: yellow;
+    position: absolute;
+    left: 80px;
+    bottom: 74px;
+    transform-origin: 0 0;
+    transform: rotate(-45deg);
+}
+
+.slot-reels-line-3-2 {
+    width: calc((50% - 20px - 60px) * 1.41421356237);
+    height: 5px;
+    background-color: yellow;
+    position: absolute;
+    right: 80px;
+    bottom: 74px;
+    transform-origin: 100% 0;
+    transform: rotate(45deg);
+}
+
+.slot-highlighted-element {
+    box-shadow: inset 0 0 5px 5px red;
+}
