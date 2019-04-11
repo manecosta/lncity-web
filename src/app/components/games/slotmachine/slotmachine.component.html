@@ -1,45 +1,68 @@
 <div class="centered-content" style="height: 100px; width: 100%; font-family: Arial, Helvetica, sans-serif; font-size: 44px; color: white;">Slot Machine</div>
 <div style="height: calc(100% - 100px); width: 100%;">
-
-    <div *ngIf="board != null" class="slot-reels-container">
-        <div class="slot-reels-container-shadow"></div>
-        <div [hidden]="!lastWonLines[0]" class="slot-reels-line-1">
-            <div style="position: absolute; left: 0; top: calc(50% - 8px); width: 16px; height: 16px; border-radius: 8px; background-color: red;"></div>
-            <div style="position: absolute; left: 50%; top: calc(50% - 8px); width: 16px; height: 16px; border-radius: 8px; background-color: red;"></div>
-            <div style="position: absolute; right: 0; top: calc(50% - 8px); width: 16px; height: 16px; border-radius: 8px; background-color: red;"></div>
-        </div>
-        <div [hidden]="!lastWonLines[1]" class="slot-reels-line-2-1">
-            <div style="position: absolute; left: 0; top: calc(50% - 8px); width: 16px; height: 16px; border-radius: 8px; background-color: green;"></div>
-            <div style="position: absolute; right: -10px; top: calc(50% - 8px); width: 16px; height: 16px; border-radius: 8px; background-color: green;"></div>
-        </div>
-        <div [hidden]="!lastWonLines[1]" class="slot-reels-line-2-2">
-            <div style="position: absolute; right: 0; top: calc(50% - 8px); width: 16px; height: 16px; border-radius: 8px; background-color: green;"></div>
-        </div>
-        <div [hidden]="!lastWonLines[2]" class="slot-reels-line-3-1">
-            <div style="position: absolute; left: 0; top: calc(50% - 8px); width: 16px; height: 16px; border-radius: 8px; background-color: yellow;"></div>
-            <div style="position: absolute; right: -5px; top: calc(50% - 8px); width: 16px; height: 16px; border-radius: 8px; background-color: yellow;"></div>
-        </div>
-        <div [hidden]="!lastWonLines[2]" class="slot-reels-line-3-2">
-            <div style="position: absolute; right: 0; top: calc(50% - 8px); width: 16px; height: 16px; border-radius: 8px; background-color: yellow;"></div>
-        </div>
-        <div>
-            <div class="slot-reels-column" *ngFor="let columnElements of board; let column = index">
-                <div class="slot-reels-element-container" *ngFor="let element of columnElements; let line = index">
-                    <div class="slot-reels-element-container-overlay" [ngClass]="{ 'slot-highlighted-element': highlightedElements[column][line] }"></div>
-                    <img class="slot-reels-element-img" src="{{availableSymbols[element].image_path}}"/>
+    <div *ngIf="loading" class="slot-loading centered-content">
+        <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+    </div>
+    <div *ngIf="!loading" class="slot-container">
+        <div class="slot-score-board">
+            <div class="slot-score-board-title">Prizes:</div>
+            <div class="slot-score-board-line">
+                <div class="slot-score-board-line-element"></div>
+                <div style="font-weight: 600;" class="slot-score-board-line-element">x3</div>
+                <div style="font-weight: 600;" class="slot-score-board-line-element">x4</div>
+                <div style="font-weight: 600;" class="slot-score-board-line-element">x5</div>
+            </div>
+            <div class="slot-score-board-line" *ngFor="let symbolName of Object.keys(availableSymbols).reverse(); let i = index;">
+                <div class="slot-score-board-line-element">
+                    <img class="slot-score-board-line-image" src="{{availableSymbols[symbolName].imagePath}}" />
+                </div>
+                <div class="slot-score-board-line-element slot-score-board-prize">
+                    <div [ngClass]="{ 'slot-score-board-prize-highlighted': isPrizeWon(symbolName, 2) }" class="slot-score-board-prize-overlay"></div>
+                    <div [ngClass]="{ 'slot-score-board-line-element-wild': availableSymbols[symbolName].prize[2] == 0 }">{{availableSymbols[symbolName].prize[2] > 0 ? availableSymbols[symbolName].prize[2] * betMultiplier : 'WILD'}}</div>
+                </div>
+                <div class="slot-score-board-line-element slot-score-board-prize">
+                    <div [ngClass]="{ 'slot-score-board-prize-highlighted': isPrizeWon(symbolName, 3) }" class="slot-score-board-prize-overlay"></div>
+                    <div [ngClass]="{ 'slot-score-board-line-element-wild': availableSymbols[symbolName].prize[3] == 0 }">{{availableSymbols[symbolName].prize[3] > 0 ? availableSymbols[symbolName].prize[3] * betMultiplier : 'WILD'}}</div>
+                </div>
+                <div class="slot-score-board-line-element slot-score-board-prize">
+                    <div [ngClass]="{ 'slot-score-board-prize-highlighted': isPrizeWon(symbolName, 4) }" class="slot-score-board-prize-overlay"></div>
+                    <b>{{availableSymbols[symbolName].prize[4] * betMultiplier}}</b>
                 </div>
             </div>
         </div>
+        <div *ngIf="board != null" class="slot-reels-container">
+            <div class="slot-reels-container-shadow"></div>
+            <div>
+                <div class="slot-reels-column" [ngStyle]="{ top: (fillerBoard == null) ? '0' : 'calc(-100 * ' + (148 * uiScale) + 'px)' }" [ngClass]="
+                    {
+                        'slots-reel-column-animation-0' : column == 0 && animatingColumn[column],
+                        'slots-reel-column-animation-1' : column == 1 && animatingColumn[column],
+                        'slots-reel-column-animation-2' : column == 2 && animatingColumn[column],
+                        'slots-reel-column-animation-3' : column == 3 && animatingColumn[column],
+                        'slots-reel-column-animation-4' : column == 4 && animatingColumn[column]
+                    }" *ngFor="let columnElements of board; let column = index">
+                    <div class="slot-reels-element-container" *ngFor="let element of columnElements; let line = index">
+                        <div class="slot-reels-element-container-overlay" [ngClass]="{ 'slot-highlighted-element': highlightedElements[column][line] }"></div>
+                        <img class="slot-reels-element-img" src="{{availableSymbols[element].imagePath}}"/>
+                    </div>
+                    <div *ngIf="fillerBoard != null">
+                        <div  class="slot-reels-element-container"  *ngFor="let element of fillerBoard[column];">
+                            <img class="slot-reels-element-img" src="{{availableSymbols[element].imagePath}}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slot-credit-info-container">
+            <div class="slot-credit-info-field">
+                <div class="slot-credit-info-field-element"><span>BET: </span><span>{{baseBet * betMultiplier}}</span></div>
+                <div class="slot-credit-info-field-element button" [ngClass]="{ 'disabled': betMultiplier == 1, 'no-hover': betMultiplier == 1 }" (click)="decreaseMultiplier()">-</div>
+                <div class="slot-credit-info-field-element button" [ngClass]="{ 'disabled': betMultiplier == maxBetMultiplier, 'no-hover': betMultiplier == maxBetMultiplier }" (click)="increaseMultiplier()">+</div></div>
+            <div class="slot-credit-info-field"><span>BALANCE: </span><span >{{appService.user.balance}}</span></div>
+            <div class="slot-credit-info-field"><span>LAST WIN: </span><span>{{lastWin}}</span></div>
+            <div class="slot-credit-info-field">
+                <div class="slot-spin-button button" [ngClass]="{ 'disabled': spinning || (appService.user.balance < baseBet * betMultiplier), 'no-hover': spinning  || (appService.user.balance < baseBet * betMultiplier) }" (click)="spin()">SPIN<span>(Tap Space)</span></div>
+            </div>
+        </div>
     </div>
-
-    <div class="slot-credit-info-container">
-        <div class="slot-credit-info-field">Bet: {{creditPrice}}</div>
-        <div class="slot-credit-info-field">Balance: {{balance}}</div>
-        <div class="slot-credit-info-field">Last Win: {{lastWin}}</div>
-    </div>
-
-    <div class="slot-spin-button button" (click)="spin()">
-        Spin
-    </div>
-
 </div>

@@ -1,25 +1,37 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { AppService } from 'src/app/services/app.service';
+import { GameService } from 'src/app/services/game.service';
 
 @Component({
     selector: 'app-game-slotmachine',
     templateUrl: 'slotmachine.component.html',
     styleUrls: ['slotmachine.component.less']
 })
-export class SlotMachinGameComponent implements OnInit {
+export class SlotMachinGameComponent implements OnInit, OnDestroy {
     Object = Object;
 
-    balance = 1000;
-    creditPrice = 50;
+    uiScale = 1;
+
+    loading = true;
+
+    fillerWildcardChance = 0.09;
+
+    baseBet = null;
+    betMultiplier = null;
+    maxBetMultiplier = null;
     lastWin = 0;
+    serverPrize = null;
 
     columnCount = 5;
     lineCount = 3;
 
-    board = null;
-    wildcardChance = 0.115;
+    spinning = false;
+    spinTimeout = null;
 
-    lastWonLines = [false, false, false];
+    animatingColumn = [false, false, false, false, false];
+
+    fillerBoard = null;
+    board = null;
 
     highlightedElements = [
         [false, false, false],
@@ -29,102 +41,185 @@ export class SlotMachinGameComponent implements OnInit {
         [false, false, false]
     ];
 
-    lines = [
-        [[0, 1], [1, 1], [2, 1], [3, 1], [4, 1]],
-        [[0, 0], [1, 1], [2, 2], [3, 1], [4, 0]],
-        [[0, 2], [1, 1], [2, 0], [3, 1], [4, 2]]
-    ];
+    lastWinsInfo = {};
 
-    availableSymbols = {
-        Apple: {
-            image_path: 'assets/img/slot/apple.png',
-            prize: [0, 0, 25, 50, 100],
-            isWild: false
-        },
-        Strawberry: {
-            image_path: 'assets/img/slot/strawberry.png',
-            prize: [0, 0, 50, 100, 200],
-            isWild: false
-        },
-        Lemon: {
-            image_path: 'assets/img/slot/lemon.png',
-            prize: [0, 0, 75, 150, 300],
-            isWild: false
-        },
-        Banana: {
-            image_path: 'assets/img/slot/banana.png',
-            prize: [0, 0, 125, 250, 500],
-            isWild: false
-        },
-        Bitcoin: {
-            image_path: 'assets/img/slot/bitcoin.png',
-            prize: [0, 0, 175, 350, 700],
-            isWild: false
-        },
-        Satoshi: {
-            image_path: 'assets/img/slot/satoshi.png',
-            prize: [0, 0, 0, 0, 1000],
-            isWild: true
-        }
-    };
+    highlightedWinIndex = 0;
 
-    symbolNames = [];
+    winHighlightsInterval = null;
+
+    lines = null;
+    availableSymbols = null;
+    symbolNames = null;
     wildSymbolName = null;
 
-    constructor(private appService: AppService) {}
+    constructor(
+        public appService: AppService,
+        private gameService: GameService
+    ) {}
 
     ngOnInit() {
-        this.parseSymbols();
-        this.board = this.generateBoard();
+        this.loading = true;
+        this.gameService
+            .getSlotParameters()
+            .then(response => {
+                this.loading = false;
+                this.availableSymbols = response.available_symbols;
+                this.lines = response.lines;
+                this.baseBet = response.base_bet;
+                this.betMultiplier = response.min_bet_multiplier;
+                this.maxBetMultiplier = response.max_bet_multiplier;
+                this.symbolNames = response.symbol_names;
+                this.wildSymbolName = response.wild_symbol_name;
+
+                this.board = this.generateInitialBoard();
+            })
+            .catch(error => {
+                console.log(error);
+            });
+
+        this.fillerBoard = null;
     }
 
-    parseSymbols() {
-        for (const index in Object.keys(this.availableSymbols)) {
-            if (index in Object.keys(this.availableSymbols)) {
-                const symbolName = Object.keys(this.availableSymbols)[index];
-                if (!this.availableSymbols[symbolName].isWild) {
-                    this.symbolNames.push(symbolName);
-                } else {
-                    this.wildSymbolName = symbolName;
-                }
+    ngOnDestroy() {
+        if (this.winHighlightsInterval) {
+            clearInterval(this.winHighlightsInterval);
+            this.winHighlightsInterval = null;
+        }
+        if (this.spinTimeout) {
+            clearTimeout(this.spinTimeout);
+            this.spinTimeout = null;
+        }
+    }
+
+    increaseMultiplier() {
+        if (this.betMultiplier < this.maxBetMultiplier) {
+            this.betMultiplier += 1;
+        }
+    }
+
+    decreaseMultiplier() {
+        if (this.betMultiplier > 1) {
+            this.betMultiplier -= 1;
+        }
+    }
+
+    @HostListener('window:keydown', ['$event'])
+    keyPressed(event) {
+        if (event.code === 'Space') {
+            this.spin();
+            return false;
+        } else if (event.key === '+') {
+            this.increaseMultiplier();
+            return false;
+        } else if (event.key === '-') {
+            this.decreaseMultiplier();
+            return false;
+        }
+    }
+
+    dealWithWins(win) {
+        for (const column of this.highlightedElements) {
+            for (let lineIndex = 0; lineIndex < column.length; lineIndex++) {
+                column[lineIndex] = false;
             }
         }
+
+        this.lastWinsInfo = {};
+        const winSymbol = win[1][0];
+        const prizeIndex = win[1].length - 1;
+        if (this.lastWinsInfo[winSymbol] in this.lastWinsInfo) {
+            if (this.lastWinsInfo[winSymbol].indexOf(prizeIndex) === -1) {
+                this.lastWinsInfo[winSymbol].push(prizeIndex);
+            }
+        } else {
+            this.lastWinsInfo[winSymbol] = [prizeIndex];
+        }
+        for (let j = 0; j < win[1].length; j++) {
+            const coordinate = win[2][j];
+            this.highlightedElements[coordinate[0]][coordinate[1]] = true;
+        }
+
+        this.highlightedWinIndex++;
     }
 
     spin() {
-        if (this.balance >= this.creditPrice) {
-            this.balance -= this.creditPrice;
-            this.board = this.generateBoard();
-            const wins = this.checkBoard();
+        if (this.spinning) {
+            return;
+        }
+        this.spinning = true;
 
-            for (const column of this.highlightedElements) {
-                for (
-                    let lineIndex = 0;
-                    lineIndex < column.length;
-                    lineIndex++
-                ) {
-                    column[lineIndex] = false;
-                }
+        if (this.winHighlightsInterval) {
+            clearInterval(this.winHighlightsInterval);
+            this.winHighlightsInterval = null;
+        }
+
+        this.lastWinsInfo = {};
+        for (const column of this.highlightedElements) {
+            for (let lineIndex = 0; lineIndex < column.length; lineIndex++) {
+                column[lineIndex] = false;
             }
+        }
 
-            this.lastWin = 0;
-            for (let i = 0; i < wins.length; i++) {
-                const win = wins[i];
-                this.lastWin += win[3];
-                if (win[3] > 0) {
-                    this.lastWonLines[i] = true;
-                    for (let j = 0; j < win[1].length; j++) {
-                        const coordinate = win[2][j];
-                        console.log(coordinate);
-                        this.highlightedElements[coordinate[0]][
-                            coordinate[1]
-                        ] = true;
+        const betPrice = this.betMultiplier * this.baseBet;
+
+        if (this.appService.user.balance >= betPrice) {
+            this.appService.user.balance -= betPrice;
+            this.appService.backupUser();
+            const lastBoard = this.board;
+            this.gameService
+                .getSlotBoard(this.betMultiplier)
+                .then(response => {
+                    this.animatingColumn = [false, false, false, false, false];
+
+                    this.board = response.board;
+                    this.serverPrize = response.prize;
+
+                    this.fillerBoard = this.generateFillerBoard(lastBoard);
+
+                    for (let i = 0; i < 5; i++) {
+                        setTimeout(() => {
+                            this.animatingColumn[i] = true;
+                        }, 200 * i);
                     }
-                } else {
-                    this.lastWonLines[i] = false;
-                }
-            }
-            this.balance += this.lastWin;
+
+                    this.spinTimeout = setTimeout(() => {
+                        const wins = this.checkBoard();
+
+                        const prizedWins = [];
+                        this.lastWinsInfo = {};
+                        this.lastWin = 0;
+                        for (const win of wins) {
+                            const prize = win[3];
+                            if (prize > 0) {
+                                this.lastWin += prize;
+                                prizedWins.push(win);
+                            }
+                        }
+                        this.lastWin *= this.betMultiplier;
+                        this.appService.user.balance += this.lastWin;
+
+                        if (prizedWins.length > 0) {
+                            this.highlightedWinIndex = 0;
+                            this.dealWithWins(
+                                prizedWins[
+                                    this.highlightedWinIndex % prizedWins.length
+                                ]
+                            );
+                            this.winHighlightsInterval = setInterval(() => {
+                                this.dealWithWins(
+                                    prizedWins[
+                                        this.highlightedWinIndex %
+                                            prizedWins.length
+                                    ]
+                                );
+                            }, 1000);
+                        }
+                        this.spinning = false;
+                    }, 8000);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
     }
 
@@ -175,12 +270,46 @@ export class SlotMachinGameComponent implements OnInit {
         return winningLines;
     }
 
-    generateBoard() {
+    isPrizeWon(symbolName, index) {
+        const winsForSymbol = this.lastWinsInfo[symbolName];
+        if (winsForSymbol != null) {
+            return winsForSymbol.indexOf(index) !== -1 ? true : false;
+        }
+        return false;
+    }
+
+    generateFillerBoard(lastBoard) {
+        const board = [];
+        for (let column = 0; column < this.columnCount; column++) {
+            board.push([]);
+            for (let line = 0; line < 100 - this.lineCount; line++) {
+                if (Math.random() < this.fillerWildcardChance) {
+                    board[column].push(this.wildSymbolName);
+                } else {
+                    const randInt = this.getRandomInt(
+                        0,
+                        this.symbolNames.length - 1
+                    );
+                    board[column].push(this.symbolNames[randInt]);
+                }
+            }
+        }
+
+        for (let column = 0; column < this.columnCount; column++) {
+            for (let line = 0; line < this.lineCount; line++) {
+                board[column].push(lastBoard[column][line]);
+            }
+        }
+
+        return board;
+    }
+
+    generateInitialBoard() {
         const board = [];
         for (let column = 0; column < this.columnCount; column++) {
             board.push([]);
             for (let line = 0; line < this.lineCount; line++) {
-                if (Math.random() < this.wildcardChance) {
+                if (Math.random() < this.fillerWildcardChance) {
                     board[column].push(this.wildSymbolName);
                 } else {
                     const randInt = this.getRandomInt(

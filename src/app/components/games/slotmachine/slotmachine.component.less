@@ -1,12 +1,135 @@
+@keyframes inoutAnimation {
+    0% {
+        opacity: 0;
+    }
+    30% {
+        opacity: 1;
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes reelAnimation {
+    0% {
+        top: calc(-100 * (148px * @scale));
+    }
+    100% {
+        top: 0;
+    }
+}
+
+@scale: 1;
+
+.slot-loading {
+    background-color: white;
+    margin: 128px auto;
+    width: 128px;
+    height: 128px;
+    border-radius: 10px;
+    background-color: white;
+}
+
+.slot-container {
+    width: calc(1100px * @scale);
+    height: calc(548px * @scale);
+    margin: 0 auto;
+    padding: calc(20px * @scale);
+    background-color: white;
+    border-radius: calc(10px * @scale);
+}
+
+.slot-score-board {
+    width: calc(280px * @scale);
+    height: calc(464px * @scale);
+    display: inline-block;
+    background-color: #eee;
+    vertical-align: top;
+    margin-right: calc(20px * @scale);
+    border-radius: calc(5px * @scale);
+}
+
+.slot-score-board-title {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: calc(22px * @scale);
+    color: #333;
+    text-align: center;
+    height: calc(44px * @scale);
+    line-height: calc(44px * @scale);
+    width: 100%;
+    font-weight: 600;
+}
+
+.slot-score-board-line {
+    width: calc(100% - (10px * @scale));
+    height: calc(32px * @scale);
+    margin-bottom: calc(10px * @scale);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: calc(16px * @scale);
+    color: #333;
+    line-height: calc(32px * @scale);
+    padding: calc(2px * @scale) calc(5px * @scale);
+}
+
+.slot-score-board-prize-overlay {
+    position: absolute;
+    top: calc(2px * @scale);
+    left: calc(2px * @scale);
+    width: calc(100% - (8px * @scale));
+    height: calc(100% - (8px * @scale));
+}
+
+.slot-score-board-prize-highlighted {
+    border: calc(2px * @scale) solid #333;
+    box-shadow: inset 0 0 calc(2px * @scale) calc(2px * @scale) #f9a643;
+    opacity: 0;
+    animation: inoutAnimation 1s infinite;
+}
+
+.slot-score-board-line-element {
+    width: 25%;
+    height: 100%;
+    display: inline-block;
+    line-height: calc(32px * @scale);
+    vertical-align: top;
+    text-align: center;
+}
+
+.slot-score-board-line-element-wild {
+    color: #f9a643 !important;
+    font-weight: 600;
+}
+
+.slot-score-board-prize {
+    font-size: calc(12px * @scale);
+    position: relative;
+}
+
+.slot-score-board-prize:nth-of-type(3) {
+    font-size: calc(15px * @scale);
+}
+
+.slot-score-board-prize:nth-of-type(4) {
+    font-size: calc(18px * @scale);
+}
+
+.slot-score-board-line-image {
+    padding: calc(2px * @scale);
+    width: auto;
+    height: calc(100% - (4px * @scale));
+}
+
 .slot-reels-container {
     position: relative;
     overflow: hidden;
-    width: 800px;
-    margin: 0 auto;
-    height: 464px;
+    width: calc(800px * @scale);
+    height: calc(464px * @scale);
     background-color: #333;
-    border: 20px solid white;
-    border-radius: 10px;
+    display: inline-block;
+    vertical-align: top;
 }
 
 .slot-reels-column {
@@ -14,32 +137,67 @@
     display: inline-block;
     vertical-align: top;
     height: 100%;
-    margin-right: 10px;
-    border-right: 10px solid grey;
-    border-left: 10px solid grey;
+    margin-right: calc(10px * @scale);
+    border-right: calc(10px * @scale) solid grey;
+    border-left: calc(10px * @scale) solid grey;
+    position: relative;
+}
+
+.slots-reel-column-animation-0 {
+    top: 0px !important;
+    animation: reelAnimation 3s 1 ease-in-out;
+}
+
+.slots-reel-column-animation-1 {
+    top: 0px !important;
+    animation: reelAnimation 4s 1 ease-in-out;
+}
+
+.slots-reel-column-animation-2 {
+    top: 0px !important;
+    animation: reelAnimation 5s 1 ease-in-out;
+}
+
+.slots-reel-column-animation-3 {
+    top: 0px !important;
+    animation: reelAnimation 6s 1 ease-in-out;
+}
+
+.slots-reel-column-animation-4 {
+    top: 0px !important;
+    animation: reelAnimation 7s 1 ease-in-out;
 }
 
 .slot-reels-column:first-child {
-    margin-left: 10px;
+    margin-left: calc(10px * @scale);
 }
 
 .slot-reels-element-container {
-    height: 128px;
-    width: 128px;
-    margin-bottom: 20px;
+    height: calc(108px * @scale);
+    width: calc(108px * @scale);
+    margin-bottom: calc(20px * @scale);
     position: relative;
+    padding: calc(10px * @scale);
 }
 
 .slot-reels-element-container-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: calc(-6px * @scale);
+    left: calc(-6px * @scale);
     width: 100%;
     height: 100%;
+    border-radius: calc(10px * @scale);
+}
+
+.slot-highlighted-element {
+    box-shadow: inset 0 0 calc(5px * @scale) calc(5px * @scale) #f9a643;
+    border: calc(6px * @scale) solid #333;
+    opacity: 0;
+    animation: inoutAnimation 1s infinite;
 }
 
 .slot-reels-element-container:first-child {
-    margin-top: 20px;
+    margin-top: calc(20px * @scale);
 }
 
 .slot-reels-element-img {
@@ -50,91 +208,84 @@
 
 .slot-reels-container-shadow {
     position: absolute;
+    z-index: 10;
     top: 0;
-    left: -10px;
-    width: calc(100% + 20px);
+    left: calc(-10px * @scale);
+    width: calc(100% + (20px * @scale));
     height: 100%;
-    box-shadow: inset 0 0 20px 10px black;
+    box-shadow: inset 0 0 calc(20px * @scale) calc(10px * @scale) black;
 }
 
 .slot-spin-button {
     margin: 0 auto;
     display: block !important;
-    width: 128px;
-    margin-top: 20px;
+    width: 100%;
+    height: calc(44px * @scale);
+    line-height: calc(44px * @scale);
+    margin-top: calc(20px * @scale);
+    position: relative;
+}
+
+.slot-spin-button > span {
+    position: absolute;
+    top: 14px;
+    left: 0;
+    width: 100%;
+    font-size: 10px;
+    color: grey;
 }
 
 .slot-credit-info-container {
-    width: 600px;
-    height: 44px;
+    width: calc(1060px * @scale);
+    height: calc(44px * @scale);
     margin: 0 auto;
     background-color: white;
+    padding: calc(20px * @scale);
 }
 
 .slot-credit-info-field {
     display: inline-block;
-    width: 200px;
+    width: 25%;
     height: 100%;
-    line-height: 44px;
+    line-height: calc(44px * @scale);
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 22px;
+    font-size: calc(14px * @scale);
     color: #333;
     text-align: center;
 }
 
-.slot-reels-line-1 {
-    width: calc(100% - 40px - 128px);
-    height: 5px;
-    background-color: red;
-    position: absolute;
-    left: 84px;
-    top: 50%;
+.slot-credit-info-field-element {
+    vertical-align: top;
+    display: inline-block;
 }
 
-.slot-reels-line-2-1 {
-    width: calc((50% - 20px - 60px) * 1.41421356237);
-    height: 5px;
-    background-color: green;
-    position: absolute;
-    left: 80px;
-    top: 74px;
-    transform-origin: 0 0;
-    transform: rotate(45deg);
+.slot-credit-info-field-element.button {
+    margin-left: calc(20px * @scale);
+    width: calc(24px * @scale);
+    height: calc(44px * @scale);
+    line-height: calc(44px * @scale);
+    font-weight: 600;
+    font-size: calc(24px * @scale);
 }
 
-.slot-reels-line-2-2 {
-    width: calc((50% - 20px - 60px) * 1.41421356237);
-    height: 5px;
-    background-color: green;
-    position: absolute;
-    right: 80px;
-    top: 74px;
-    transform-origin: 100% 0;
-    transform: rotate(-45deg);
+.slot-credit-info-field > span:nth-child(1) {
+    vertical-align: top;
+    font-weight: 600;
 }
 
-.slot-reels-line-3-1 {
-    width: calc((50% - 20px - 60px) * 1.41421356237);
-    height: 5px;
-    background-color: yellow;
-    position: absolute;
-    left: 80px;
-    bottom: 74px;
-    transform-origin: 0 0;
-    transform: rotate(-45deg);
+.slot-credit-info-field > span:nth-child(2) {
+    vertical-align: top;
+    color: #f9a643;
+    font-size: 24px;
 }
 
-.slot-reels-line-3-2 {
-    width: calc((50% - 20px - 60px) * 1.41421356237);
-    height: 5px;
-    background-color: yellow;
-    position: absolute;
-    right: 80px;
-    bottom: 74px;
-    transform-origin: 100% 0;
-    transform: rotate(45deg);
+.slot-credit-info-field > .slot-credit-info-field-element > span:nth-child(1) {
+    vertical-align: top;
+    font-weight: 600;
 }
 
-.slot-highlighted-element {
-    box-shadow: inset 0 0 5px 5px red;
+.slot-credit-info-field > .slot-credit-info-field-element > span:nth-child(2) {
+    vertical-align: top;
+    color: #f9a643;
+    font-size: 24px;
 }

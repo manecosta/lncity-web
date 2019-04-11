@@ -24,6 +24,7 @@ import { User } from './models/user';
 import { AccountService } from './services/account.service';
 import { WithdrawalDialogComponent } from './dialogs/withdrawaldialog/withdrawaldialog.component';
 import { SlotMachinGameComponent } from './components/games/slotmachine/slotmachine.component';
+import { GameService } from './services/game.service';
 
 @NgModule({
     declarations: [
@@ -51,6 +52,7 @@ import { SlotMachinGameComponent } from './components/games/slotmachine/slotmach
         PaymentService,
         RequestService,
         AccountService,
+        GameService,
         LocalStorage,
         {
             provide: MAT_DIALOG_DEFAULT_OPTIONS,
