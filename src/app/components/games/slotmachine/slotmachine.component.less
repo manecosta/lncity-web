@@ -22,6 +22,24 @@
     }
 }
 
+@keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOutAnimation {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
 @scale: 1;
 
 .slot-loading {
@@ -130,6 +148,22 @@
     background-color: #333;
     display: inline-block;
     vertical-align: top;
+}
+
+.slot-reels-lines-overlay {
+    z-index: 11;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    animation: fadeOutAnimation 1s 1;
+}
+
+.slot-reels-lines-overlay:hover {
+    opacity: 1;
+    animation: fadeInAnimation 1s 1;
 }
 
 .slot-reels-column {

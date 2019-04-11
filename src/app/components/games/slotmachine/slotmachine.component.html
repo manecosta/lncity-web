@@ -31,6 +31,7 @@
             </div>
         </div>
         <div *ngIf="board != null" class="slot-reels-container">
+            <img class="slot-reels-lines-overlay" src="assets/img/slot/lines-overlay.png" />
             <div class="slot-reels-container-shadow"></div>
             <div>
                 <div class="slot-reels-column" [ngStyle]="{ top: (fillerBoard == null) ? '0' : 'calc(-100 * ' + (148 * uiScale) + 'px)' }" [ngClass]="
