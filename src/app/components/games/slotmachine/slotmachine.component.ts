@@ -11,6 +11,7 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
     Object = Object;
 
     uiScale = 1;
+    fillerCount = 30;
 
     loading = true;
 
@@ -176,11 +177,12 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
 
                     this.fillerBoard = this.generateFillerBoard(lastBoard);
 
-                    for (let i = 0; i < 5; i++) {
+                    this.animatingColumn = [true, true, true, true, true];
+                    /*for (let i = 0; i < 5; i++) {
                         setTimeout(() => {
                             this.animatingColumn[i] = true;
                         }, 200 * i);
-                    }
+                    }*/
 
                     this.spinTimeout = setTimeout(() => {
                         const wins = this.checkBoard();
@@ -215,7 +217,7 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
                             }, 1000);
                         }
                         this.spinning = false;
-                    }, 8000);
+                    }, 4200);
                 })
                 .catch(error => {
                     console.log(error);
@@ -282,7 +284,11 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
         const board = [];
         for (let column = 0; column < this.columnCount; column++) {
             board.push([]);
-            for (let line = 0; line < 100 - this.lineCount; line++) {
+            for (
+                let line = 0;
+                line < this.fillerCount - this.lineCount;
+                line++
+            ) {
                 if (Math.random() < this.fillerWildcardChance) {
                     board[column].push(this.wildSymbolName);
                 } else {

@@ -1,3 +1,5 @@
+@fillerCount: 30;
+
 @keyframes inoutAnimation {
     0% {
         opacity: 0;
@@ -15,7 +17,7 @@
 
 @keyframes reelAnimation {
     0% {
-        top: calc(-100 * (148px * @scale));
+        top: calc(-1 * @fillerCount * (148px * @scale));
     }
     100% {
         top: 0;
@@ -179,27 +181,27 @@
 
 .slots-reel-column-animation-0 {
     top: 0px !important;
-    animation: reelAnimation 3s 1 ease-in-out;
+    animation: reelAnimation 2s 1 ease-in-out;
 }
 
 .slots-reel-column-animation-1 {
     top: 0px !important;
-    animation: reelAnimation 4s 1 ease-in-out;
+    animation: reelAnimation 2.5s 1 ease-in-out;
 }
 
 .slots-reel-column-animation-2 {
     top: 0px !important;
-    animation: reelAnimation 5s 1 ease-in-out;
+    animation: reelAnimation 3s 1 ease-in-out;
 }
 
 .slots-reel-column-animation-3 {
     top: 0px !important;
-    animation: reelAnimation 6s 1 ease-in-out;
+    animation: reelAnimation 3.5s 1 ease-in-out;
 }
 
 .slots-reel-column-animation-4 {
     top: 0px !important;
-    animation: reelAnimation 7s 1 ease-in-out;
+    animation: reelAnimation 4s 1 ease-in-out;
 }
 
 .slot-reels-column:first-child {

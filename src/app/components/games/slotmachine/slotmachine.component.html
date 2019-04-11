@@ -34,7 +34,7 @@
             <img class="slot-reels-lines-overlay" src="assets/img/slot/lines-overlay.png" />
             <div class="slot-reels-container-shadow"></div>
             <div>
-                <div class="slot-reels-column" [ngStyle]="{ top: (fillerBoard == null) ? '0' : 'calc(-100 * ' + (148 * uiScale) + 'px)' }" [ngClass]="
+                <div class="slot-reels-column" [ngStyle]="{ top: (fillerBoard == null) ? '0' : 'calc(-' + fillerCount + ' * ' + (148 * uiScale) + 'px)' }" [ngClass]="
                     {
                         'slots-reel-column-animation-0' : column == 0 && animatingColumn[column],
                         'slots-reel-column-animation-1' : column == 1 && animatingColumn[column],
