@@ -86,12 +86,29 @@
 .slot-score-board-line {
     width: calc(100% - (10px * @scale));
     height: calc(32px * @scale);
-    margin-bottom: calc(10px * @scale);
+    margin-bottom: calc(4px * @scale);
     font-family: Arial, Helvetica, sans-serif;
     font-size: calc(16px * @scale);
     color: #333;
     line-height: calc(32px * @scale);
     padding: calc(2px * @scale) calc(5px * @scale);
+}
+
+.slot-score-board-line-bonus > div:nth-child(3) {
+    font-size: 12px;
+}
+
+.slot-score-board-line-bonus > div:nth-child(4) {
+    font-size: 14px;
+}
+
+.slot-score-board-line-bonus > div:nth-child(5) {
+    font-size: 16px;
+}
+
+.slot-score-board-line-bonus > div:nth-child(6) {
+    font-size: 18px;
+    font-weight: 600;
 }
 
 .slot-score-board-prize-overlay {
@@ -181,27 +198,27 @@
 
 .slots-reel-column-animation-0 {
     top: 0px !important;
-    animation: reelAnimation 2s 1 ease-in-out;
+    animation: reelAnimation 1.5s 1 ease-in-out;
 }
 
 .slots-reel-column-animation-1 {
     top: 0px !important;
-    animation: reelAnimation 2.5s 1 ease-in-out;
+    animation: reelAnimation 2s 1 ease-in-out;
 }
 
 .slots-reel-column-animation-2 {
     top: 0px !important;
-    animation: reelAnimation 3s 1 ease-in-out;
+    animation: reelAnimation 2.5s 1 ease-in-out;
 }
 
 .slots-reel-column-animation-3 {
     top: 0px !important;
-    animation: reelAnimation 3.5s 1 ease-in-out;
+    animation: reelAnimation 3s 1 ease-in-out;
 }
 
 .slots-reel-column-animation-4 {
     top: 0px !important;
-    animation: reelAnimation 4s 1 ease-in-out;
+    animation: reelAnimation 3.5s 1 ease-in-out;
 }
 
 .slot-reels-column:first-child {

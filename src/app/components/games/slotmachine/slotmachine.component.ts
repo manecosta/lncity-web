@@ -15,7 +15,8 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
 
     loading = true;
 
-    fillerWildcardChance = 0.09;
+    fillerWildcardChance = 0.08;
+    fillerBonusChance = 0.08;
 
     baseBet = null;
     betMultiplier = null;
@@ -52,6 +53,9 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
     availableSymbols = null;
     symbolNames = null;
     wildSymbolName = null;
+    bonusSymbolName = null;
+
+    nonBonusSymbols = [];
 
     constructor(
         public appService: AppService,
@@ -71,6 +75,13 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
                 this.maxBetMultiplier = response.max_bet_multiplier;
                 this.symbolNames = response.symbol_names;
                 this.wildSymbolName = response.wild_symbol_name;
+                this.bonusSymbolName = response.bonus_symbol_name;
+
+                for (const symbolName of Object.keys(this.availableSymbols)) {
+                    if (!this.availableSymbols[symbolName].isBonus) {
+                        this.nonBonusSymbols.push(symbolName);
+                    }
+                }
 
                 this.board = this.generateInitialBoard();
             })
@@ -93,13 +104,13 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
     }
 
     increaseMultiplier() {
-        if (this.betMultiplier < this.maxBetMultiplier) {
+        if (this.betMultiplier < this.maxBetMultiplier && !this.spinning) {
             this.betMultiplier += 1;
         }
     }
 
     decreaseMultiplier() {
-        if (this.betMultiplier > 1) {
+        if (this.betMultiplier > 1 && !this.spinning) {
             this.betMultiplier -= 1;
         }
     }
@@ -178,11 +189,6 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
                     this.fillerBoard = this.generateFillerBoard(lastBoard);
 
                     this.animatingColumn = [true, true, true, true, true];
-                    /*for (let i = 0; i < 5; i++) {
-                        setTimeout(() => {
-                            this.animatingColumn[i] = true;
-                        }, 200 * i);
-                    }*/
 
                     this.spinTimeout = setTimeout(() => {
                         const wins = this.checkBoard();
@@ -217,9 +223,10 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
                             }, 1000);
                         }
                         this.spinning = false;
-                    }, 4200);
+                    }, 3700);
                 })
                 .catch(error => {
+                    this.spinning = false;
                     console.log(error);
                 });
         }
@@ -263,11 +270,41 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
                 }
             }
 
+            if (consecutiveSymbolNames[0] === this.bonusSymbolName) {
+                continue;
+            }
             const prize = this.availableSymbols[consecutiveSymbolNames[0]]
                 .prize[consecutiveSymbolNames.length - 1];
 
             winningLines.push([symbols, consecutiveSymbolNames, line, prize]);
         }
+
+        const bonusCoordinates = [];
+        for (let column = 0; column < this.columnCount; column++) {
+            for (let line = 0; line < this.lineCount; line++) {
+                if (this.board[column][line] === this.bonusSymbolName) {
+                    bonusCoordinates.push([column, line]);
+                }
+            }
+        }
+
+        let bonusPrize = 0;
+        if (bonusCoordinates.length > 0) {
+            bonusPrize = this.availableSymbols[this.bonusSymbolName].prize[
+                bonusCoordinates.length - 1
+            ];
+        }
+
+        const bonusLineSymbols = [];
+        for (const _ of bonusCoordinates) {
+            bonusLineSymbols.push(this.bonusSymbolName);
+        }
+        winningLines.push([
+            bonusLineSymbols,
+            bonusLineSymbols,
+            bonusCoordinates,
+            bonusPrize
+        ]);
 
         return winningLines;
     }
@@ -289,8 +326,14 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
                 line < this.fillerCount - this.lineCount;
                 line++
             ) {
-                if (Math.random() < this.fillerWildcardChance) {
+                const r = Math.random();
+                if (r < this.fillerWildcardChance) {
                     board[column].push(this.wildSymbolName);
+                } else if (
+                    r <
+                    this.fillerWildcardChance + this.fillerBonusChance
+                ) {
+                    board[column].push(this.bonusSymbolName);
                 } else {
                     const randInt = this.getRandomInt(
                         0,
@@ -315,8 +358,14 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
         for (let column = 0; column < this.columnCount; column++) {
             board.push([]);
             for (let line = 0; line < this.lineCount; line++) {
-                if (Math.random() < this.fillerWildcardChance) {
+                const r = Math.random();
+                if (r < this.fillerWildcardChance) {
                     board[column].push(this.wildSymbolName);
+                } else if (
+                    r <
+                    this.fillerWildcardChance + this.fillerBonusChance
+                ) {
+                    board[column].push(this.bonusSymbolName);
                 } else {
                     const randInt = this.getRandomInt(
                         0,
