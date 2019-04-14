@@ -61,7 +61,7 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
     generatedInvoicePaymentRequest = null;
     generatedInvoiceRHash = null;
 
-    invoiceTimeout = 300;
+    invoiceTimeout = 20;
     invoiceExpirationTimestamp = 0;
     timeoutElapsedRatio = 0;
     checkInvoiceInterval = null;
@@ -119,8 +119,7 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
                     .then((statusInvoice: any) => {
                         const currentT = Math.floor(Date.now() / 1000);
                         this.invoiceExpirationTimestamp =
-                            +statusInvoice.creation_date +
-                            +statusInvoice.expiry;
+                            +statusInvoice.creation_date + statusInvoice.expiry;
                         this.timeoutElapsedRatio =
                             1 -
                             (this.invoiceExpirationTimestamp - currentT) /

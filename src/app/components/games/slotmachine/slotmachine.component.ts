@@ -158,23 +158,28 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
         if (this.spinning) {
             return;
         }
-        this.spinning = true;
-
-        if (this.winHighlightsInterval) {
-            clearInterval(this.winHighlightsInterval);
-            this.winHighlightsInterval = null;
-        }
-
-        this.lastWinsInfo = {};
-        for (const column of this.highlightedElements) {
-            for (let lineIndex = 0; lineIndex < column.length; lineIndex++) {
-                column[lineIndex] = false;
-            }
-        }
 
         const betPrice = this.betMultiplier * this.baseBet;
 
         if (this.appService.user.balance >= betPrice) {
+            this.spinning = true;
+
+            if (this.winHighlightsInterval) {
+                clearInterval(this.winHighlightsInterval);
+                this.winHighlightsInterval = null;
+            }
+
+            this.lastWinsInfo = {};
+            for (const column of this.highlightedElements) {
+                for (
+                    let lineIndex = 0;
+                    lineIndex < column.length;
+                    lineIndex++
+                ) {
+                    column[lineIndex] = false;
+                }
+            }
+
             this.appService.user.balance -= betPrice;
             this.appService.backupUser();
             const lastBoard = this.board;

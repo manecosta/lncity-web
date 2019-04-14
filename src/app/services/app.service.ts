@@ -6,7 +6,7 @@ import { LocalStorage } from './localstorage.service';
 export class AppService {
     static instance: AppService;
 
-    public isInside = false;
+    public isInside = true;
 
     public user: User = null;
     public authToken: string = null;

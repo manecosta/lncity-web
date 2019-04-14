@@ -3,6 +3,14 @@
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
 @import 'variables.less';
 
+body {
+    background-color: @lightbackgroundcolor;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    color: @textcolor;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -16,7 +24,8 @@ input[type='number'] {
 input {
     border: none;
     color: @textcolor;
-    border-bottom: 1px solid @lighttextcolor;
+    border-bottom: 1px solid @infotextcolor;
+    background-color: transparent;
 }
 
 input:focus {
@@ -25,10 +34,10 @@ input:focus {
     border-bottom: 1px solid @textcolor;
 }
 
-body {
-    background-color: white;
-    margin: 0;
-    padding: 0;
+a {
+    color: @darkaccentcolor;
+    outline: none;
+    text-decoration: none;
 }
 
 .full-size {
@@ -51,11 +60,11 @@ body {
 .button {
     display: inline-block;
     padding: 0 10px;
-    border: 1px solid @accentcolor;
     border-radius: 5px;
-    color: @accentcolor;
-    background-color: @primarycontentcolor;
-    font-size: 16px;
+    color: @lighttextcolor;
+    background-color: @darkaccentcolor;
+    border: 1px solid @darkaccentcolor;
+    font-size: 15px;
     height: 32px;
     line-height: 32px;
     font-weight: 600;
@@ -66,23 +75,25 @@ body {
 }
 
 .button:hover {
-    color: @primarycontentcolor;
-    background-color: @accentcolor;
+    color: @darkaccentcolor;
+    background-color: @lightaccentcolor;
+    border: 1px solid @darkaccentcolor;
 }
 
 .button.no-hover:hover {
-    color: @accentcolor;
-    background-color: @primarycontentcolor;
+    color: @lightbackgroundcolor;
+    background-color: @darkaccentcolor;
+    cursor: default;
 }
 
 .button-light {
     display: inline-block;
     padding: 0 10px;
-    border: 1px solid @accentcolor;
     border-radius: 5px;
-    color: @accentcolor;
-    background-color: @lightcontentcolor;
-    font-size: 16px;
+    color: @darkaccentcolor;
+    background-color: @lightbackgroundcolor;
+    border: 1px solid @darkaccentcolor;
+    font-size: 15px;
     line-height: 32px;
     font-weight: 600;
     font-family: Arial, Helvetica, sans-serif;
@@ -91,23 +102,32 @@ body {
     cursor: pointer;
 }
 
+.button-light:hover {
+    background-color: @lightaccentcolor;
+    color: @lighttextcolor;
+}
+
+.button-light.no-hover:hover {
+    color: @lightbackgroundcolor;
+    background-color: @darkaccentcolor;
+}
+
 .disabled {
     opacity: 0.3;
     cursor: default;
 }
 
-.button-light:hover {
-    background-color: @accentcolor;
-    color: @primarycontentcolor;
-}
-
-.button-light.no-hover:hover {
-    color: @accentcolor;
-    background-color: @lightcontentcolor;
-}
-
 mat-dialog-container {
     padding: 0 !important;
+}
+
+.app-page-title {
+    padding: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 300;
+    color: @textcolor;
+    font-size: 20px;
+    margin-bottom: 20px;
 }
 
 .lds-ring {
@@ -123,10 +143,10 @@ mat-dialog-container {
     width: 51px;
     height: 51px;
     margin: 6px;
-    border: 6px solid @lightcontentcolor;
+    border: 6px solid @darkaccentcolor;
     border-radius: 50%;
     animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border-color: @darkbackgroundcolor transparent transparent transparent;
+    border-color: @darkaccentcolor transparent transparent transparent;
 }
 .lds-ring div:nth-child(1) {
     animation-delay: -0.45s;

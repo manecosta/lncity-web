@@ -3,6 +3,7 @@ import { AppService } from './services/app.service';
 import { PaymentDialogComponent } from './dialogs/paymentdialog/paymentdialog.component';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { WithdrawalDialogComponent } from './dialogs/withdrawaldialog/withdrawaldialog.component';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-root',
@@ -12,23 +13,55 @@ import { WithdrawalDialogComponent } from './dialogs/withdrawaldialog/withdrawal
 export class AppComponent {
     menuOptions = [
         {
-            title: 'Home',
+            title: 'Account',
+            type: 'menu',
+            subtitle: 'getBalance',
+            options: [
+                {
+                    title: 'Deposit',
+                    type: 'action',
+                    action: 'depositBalance'
+                },
+                {
+                    title: 'Withdraw',
+                    type: 'action',
+                    action: 'withdrawBalance'
+                } /*,
+                {
+                    title: 'Register Account',
+                    type: 'action',
+                    action: this.registerAccount
+                },
+                {
+                    title: 'Switch Account',
+                    type: 'action',
+                    action: this.switchAccount
+                }*/
+            ]
+        },
+        {
+            title: 'Blog',
             type: 'navigate',
-            navigate: '/alpha'
+            navigate: '/blog'
+        },
+        {
+            title: 'Tutorials',
+            type: 'navigate',
+            navigate: '/tutorials'
         },
         {
             title: 'Games',
             type: 'menu',
             options: [
                 {
-                    title: 'Roulette',
-                    type: 'navigate',
-                    navigate: '/roulette'
-                },
-                {
                     title: 'Slot Machine',
                     type: 'navigate',
                     navigate: '/slot'
+                },
+                {
+                    title: 'Roulette',
+                    type: 'navigate',
+                    navigate: '/roulette'
                 }
             ]
         }
@@ -36,13 +69,18 @@ export class AppComponent {
 
     accountOptionsShowing = false;
 
-    constructor(public appService: AppService, private dialog: MatDialog) {}
+    constructor(
+        public appService: AppService,
+        private dialog: MatDialog,
+        private router: Router
+    ) {}
 
     toggleAccountOptions() {
         this.accountOptionsShowing = !this.accountOptionsShowing;
     }
 
     depositBalance() {
+        console.log('This', this);
         this.accountOptionsShowing = false;
 
         const dialogConfig = new MatDialogConfig();
@@ -82,5 +120,18 @@ export class AppComponent {
 
     switchAccount() {
         console.log('Switch');
+    }
+
+    clickedOption(option) {
+        if (option.type === 'navigate') {
+            this.router.navigateByUrl(option.navigate);
+        } else if (option.type === 'action') {
+            this[option.action]();
+        }
+        return true;
+    }
+
+    getBalance() {
+        return this.appService.user.balance;
     }
 }

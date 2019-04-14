@@ -2,129 +2,124 @@
 
 #app-container {
     min-height: 100vh;
-    min-width: 100vw;
+    width: 1200px;
     padding: 0;
-    margin: 0;
-    background-color: @darkbackgroundcolor;
+    margin: 0 auto;
+    background-color: @lightbackgroundcolor;
     position: relative;
-}
-
-#app-content-container {
-    width: 100vw;
-    min-height: calc(100vh - 65px);
-}
-
-#app-menu-account-button {
-    position: absolute;
-    right: 0;
-    height: 64px;
-    top: 0;
-    padding: 0 20px;
-    line-height: 64px;
-    text-transform: initial;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 16px;
-    color: @accentcolor;
-    cursor: default;
-}
-
-#app-menu-account-button:hover {
-    background-color: @primarycontentcolor;
-    color: @accentcolor;
+    overflow-x: hidden;
 }
 
 #app-menu {
     width: 100%;
-    height: 64px;
-    background-color: @primarycontentcolor;
-    border-bottom: 1px solid @accentcolor;
+    height: 96px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid @lightbackgroundaccentcolor;
 }
 
-#app-menu-account-button:hover > #app-menu-account-options {
-    display: block;
+#app-content-container {
+    width: 100%;
+    min-height: calc(100vh - 128px);
 }
 
-#app-menu-account-options {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 100%;
-    border-left: 1px solid @accentcolor;
-    border-bottom: 1px solid @accentcolor;
-    border-top: 1px solid @accentcolor;
-    background-color: @secondarycontentcolor;
-    cursor: pointer;
-    white-space: nowrap;
-    text-align: right;
-}
-
-.app-menu-account-option {
-    height: 44px;
-    line-height: 44px;
-    font-size: 16px;
+.app-menu-logo {
+    line-height: 96px;
     font-family: Arial, Helvetica, sans-serif;
-    color: @accentcolor;
+    font-size: 16px;
+    font-weight: 600;
+    color: @textcolor;
+    float: left;
     padding: 0 20px;
+    cursor: pointer;
+    height: 100%;
 }
 
-.app-menu-account-option:hover {
-    background-color: @accentcolor;
-    color: @primarycontentcolor;
+.app-menu-logo:focus {
+    outline: none;
+}
+
+.app-menu-logo-image {
+    width: auto;
+    height: 50%;
+    position: relative;
+    top: 25%;
 }
 
 .app-menu-item {
-    line-height: 64px;
+    line-height: 96px;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 24px;
-    color: @accentcolor;
-    width: 128px;
+    font-size: 16px;
+    font-weight: 600;
+    color: @textcolor;
     cursor: pointer;
-    text-align: center;
+    text-align: right;
     position: relative;
+    float: right;
+    padding: 0 30px;
 }
 
 .app-menu-item:hover {
-    background-color: @accentcolor;
-    color: @primarycontentcolor;
+    color: @highlightedtextcolor;
 }
 
 .app-menu-item.no-hover:hover {
-    color: @accentcolor;
-    background-color: @primarycontentcolor;
     cursor: default;
+    color: @textcolor;
 }
 
 .app-menu-item:focus {
     outline: none;
 }
 
+.app-menu-item-subtitle {
+    position: absolute;
+    top: calc(50% + 14px);
+    right: 0;
+    padding-right: 45px;
+    width: 100%;
+    height: 16px;
+    line-height: 16px;
+    font-size: 12px;
+    color: @infotextcolor;
+}
+
+.app-menu-item-subtitle > img {
+    height: 20px;
+    width: 10px;
+    width: auto;
+    position: absolute;
+    top: -2px;
+    right: 30px;
+}
+
 .app-menu-item-submenu {
     display: none;
-    background-color: @secondarycontentcolor;
-    border: 1px solid @accentcolor;
+    background-color: @lightbackgroundaccentcolor;
+    min-width: 100%;
+    position: absolute;
+    top: 100%;
+    right: 10px;
+    z-index: 1000;
 }
 
 .app-menu-item:hover > .app-menu-item-submenu {
     display: block;
-    position: absolute;
-    top: 100%;
 }
 
 .app-menu-item-submenu-item {
-    line-height: 64px;
+    line-height: 44px;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 16px;
     padding: 0 20px;
-    color: @accentcolor;
+    color: @textcolor;
     cursor: pointer;
-    text-align: center;
+    text-align: right;
     position: relative;
     white-space: nowrap;
 }
 
 .app-menu-item-submenu-item:hover {
-    background-color: @accentcolor;
-    color: @primarycontentcolor;
+    color: @darkaccentcolor;
 }
 
 .app-menu-item-submenu-item:focus {

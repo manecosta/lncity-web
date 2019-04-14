@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AppService } from 'src/app/services/app.service';
+import { MatDialogConfig, MatDialog } from '@angular/material';
+import { PaymentDialogComponent } from 'src/app/dialogs/paymentdialog/paymentdialog.component';
 
 @Component({
     selector: 'app-home',
@@ -6,5 +9,19 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['home.component.less']
 })
 export class HomeComponent {
-    constructor() {}
+    constructor(private dialog: MatDialog) {}
+
+    donate() {
+        const dialogConfig = new MatDialogConfig();
+
+        dialogConfig.data = {
+            message: 'Choose amount to donate (satoshi):',
+            payingToBalance: false
+        };
+
+        const paymentDialog = this.dialog.open(
+            PaymentDialogComponent,
+            dialogConfig
+        );
+    }
 }

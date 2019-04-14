@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ComingSoonComponent } from './components/coming-soon/coming-soon.component';
 import { Router, RouterEvent, NavigationStart } from '@angular/router';
 import { AppService } from './services/app.service';
 import { MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule } from '@angular/material';
@@ -20,22 +19,24 @@ import { RouletteGameComponent } from './components/games/roulette/roulette.comp
 import { LocalStorage } from './services/localstorage.service';
 import { HomeComponent } from './components/home/home.component';
 import { FormsModule } from '@angular/forms';
-import { User } from './models/user';
 import { AccountService } from './services/account.service';
 import { WithdrawalDialogComponent } from './dialogs/withdrawaldialog/withdrawaldialog.component';
 import { SlotMachinGameComponent } from './components/games/slotmachine/slotmachine.component';
 import { GameService } from './services/game.service';
+import { BlogComponent } from './components/blog/blog.component';
+import { TutorialsComponent } from './components/tutorials/tutorials.component';
 
 @NgModule({
     declarations: [
         AppComponent,
-        ComingSoonComponent,
         PaymentDialogComponent,
         WithdrawalDialogComponent,
         AmountPipe,
         RouletteGameComponent,
         SlotMachinGameComponent,
-        HomeComponent
+        HomeComponent,
+        BlogComponent,
+        TutorialsComponent
     ],
     entryComponents: [PaymentDialogComponent, WithdrawalDialogComponent],
     imports: [
@@ -63,18 +64,10 @@ import { GameService } from './services/game.service';
 })
 export class AppModule {
     constructor(
-        private router: Router,
         private appService: AppService,
         private requestService: RequestService,
         private accountService: AccountService
     ) {
-        router.events.subscribe((event: RouterEvent) => {
-            if (event instanceof NavigationStart) {
-                AppService.instance.isInside =
-                    event.url !== '/comingsoon' && event.url !== '/';
-            }
-        });
-
         if (!this.appService.user) {
             this.requestService.register();
         } else {
