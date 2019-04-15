@@ -43,6 +43,6 @@
 </div>
 <div class="payment-dialog-footer" style="position: relative;">
     <div *ngIf="selectingAmount" class="button" [ngClass]="{ 'no-hover disabled': amount == null }" (click)="amount != null ? generateInvoice() : null">Generate Invoice</div>
-    <div *ngIf="awaitingPayment" style="height: 100%; position: absolute; left: 0; top: 0;" [ngStyle]="{ width: Math.min(100, Math.ceil((timeoutElapsedRatio * 100))) + '%', 'background-color': timeoutElapsedRatio > 0.5 ? '#f9a643' : timeoutElapsedRatio > 0.9 ? '#ee5921' : '#4090c0' }"></div>
+    <div *ngIf="awaitingPayment" style="height: 100%; position: absolute; left: 0; top: 0;" [ngStyle]="{ width: Math.min(100, Math.ceil((timeoutElapsedRatio * 100))) + '%', 'background-color': timeoutElapsedRatio > 0.85 ? '#ee5921' : timeoutElapsedRatio > 0.5 ? '#f9a643' : '#4090c0' }"></div>
     <div *ngIf="awaitingPayment" class="full-size"style="font-size: 16px; line-height: 54px; position: absolute;">Pay within {{(Math.max(0, Math.floor((1 - timeoutElapsedRatio) * invoiceTimeout)))}} seconds</div>
 </div>
