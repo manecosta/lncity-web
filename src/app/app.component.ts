@@ -80,7 +80,6 @@ export class AppComponent {
     }
 
     depositBalance() {
-        console.log('This', this);
         this.accountOptionsShowing = false;
 
         const dialogConfig = new MatDialogConfig();
