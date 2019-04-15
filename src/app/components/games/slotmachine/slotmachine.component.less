@@ -55,7 +55,7 @@
 
 .slot-container {
     width: calc(1100px * @scale);
-    height: calc(548px * @scale);
+    height: calc(568px * @scale);
     margin: 0 auto;
     padding: calc(20px * @scale);
     background-color: white;
@@ -69,7 +69,6 @@
     background-color: #eee;
     vertical-align: top;
     margin-right: calc(20px * @scale);
-    border-radius: calc(5px * @scale);
 }
 
 .slot-score-board-title {
@@ -137,7 +136,7 @@
 }
 
 .slot-score-board-line-element-wild {
-    color: @warningaccentcolor !important;
+    color: @darkaccentcolor !important;
     font-weight: 600;
 }
 
@@ -168,6 +167,7 @@
     background-color: #333;
     display: inline-block;
     vertical-align: top;
+    margin-bottom: 20px;
 }
 
 .slot-reels-lines-overlay {
@@ -271,12 +271,10 @@
 }
 
 .slot-spin-button {
-    margin: 0 auto;
     display: block !important;
-    width: 100%;
+    width: calc(100% - 20px);
     height: calc(44px * @scale);
     line-height: calc(44px * @scale);
-    margin-top: calc(20px * @scale);
     position: relative;
 }
 
@@ -290,12 +288,10 @@
 }
 
 .slot-deposit-button {
-    margin: 0 auto;
     display: block !important;
-    width: 100%;
+    width: calc(100% - 20px);
     height: calc(44px * @scale);
     line-height: calc(44px * @scale);
-    margin-top: calc(20px * @scale);
     position: relative;
 }
 
@@ -316,6 +312,7 @@
     font-size: calc(14px * @scale);
     color: #333;
     text-align: center;
+    vertical-align: top;
 }
 
 .slot-credit-info-field-element {
