@@ -4,9 +4,30 @@
 <div class="withdrawal-dialog-body">
     <div *ngIf="!loading && !paymentCompleted" class="full-size">
         <div class="withdrawal-dialog-message">{{message}}</div>
-        <div class="withdrawal-dialog-payment-request-container centered-content">
-            <textarea class="withdrawal-dialog-payment-request-textarea" [(ngModel)]="paymentRequest"></textarea>
+        <div class="withdrawal-dialog-payment-request-container">
+            <div class="withdrawal-dialog-payment-request-tabs-container">
+                <div class="withdrawal-dialog-payment-request-tab" [ngClass]="{ 'highlighted-tab': selectedTab == 0 }" (click)="selectTab(0)">Text</div>
+                <div class="withdrawal-dialog-payment-request-tab" [ngClass]="{ 'highlighted-tab': selectedTab == 1 }" (click)="selectTab(1)">Camera</div>
+            </div>
+            <div *ngIf="selectedTab == 0" class="withdrawal-dialog-payment-request-text-container centered-content">
+                <textarea class="withdrawal-dialog-payment-request-textarea" [(ngModel)]="paymentRequest"></textarea>
+            </div>
+            <div *ngIf="selectedTab == 1" class="withdrawal-dialog-payment-request-video-container centered-content">
+                <div class="withdrawal-dialog-payment-request-video-loader centered-content" style="position: absolute; z-index: 1;">
+                    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                </div>
+                <div [hidden]="!camerasLoaded" style="position: absolute; z-index: 2;">
+                    <zxing-scanner #scanner class="withdrawal-dialog-payment-request-video-component" start="true" [device]="selectedDevice" (scanSuccess)="handleQrCodeResult($event)"></zxing-scanner>
+                </div>
+                <div [hidden]="!camerasLoaded || cameraFound">
+                    No camera
+                </div>
+                <div [hidden]="!camerasLoaded || hasPermission">
+                    No permissions
+                </div>
+            </div>
         </div>
+
     </div>
     <div *ngIf="loading" class="full-size centered-content" style="width: 100%; height: 100%;">
         <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
@@ -20,7 +41,7 @@
     </div>
 </div>
 <div class="withdrawal-dialog-footer" style="position: relative;">
-    <div *ngIf="!loading && !paymentCompleted" class="button" [ngClass]="{ 'no-hover disabled': paymentRequest == '' }" (click)="paymentRequest != '' ? withdrawPaymentRequest() : null">Withdraw</div>
+    <div *ngIf="!loading && !paymentCompleted && selectedTab != 1" class="button" [ngClass]="{ 'no-hover disabled': paymentRequest == '' }" (click)="paymentRequest != '' ? withdrawPaymentRequest() : null">Withdraw</div>
     <div *ngIf="loading" class="centered-content full-size">
         Withdrawing...
     </div>

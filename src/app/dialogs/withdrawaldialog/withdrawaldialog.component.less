@@ -17,16 +17,63 @@
     font-size: 18px;
     text-align: center;
     color: @textcolor;
+    line-height: 22px;
+    height: 44px;
 }
 
 .withdrawal-dialog-payment-request-container {
-    padding-top: 30px;
-    height: 50%;
+    padding-top: 10px;
+    height: calc(100% - 84px);
+    position: relative;
 }
 
-.withdrawal-dialog-payment-request-textarea {
-    resize: none;
+.withdrawal-dialog-payment-request-tabs-container {
+    height: 32px;
+    line-height: 32px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.withdrawal-dialog-payment-request-tab {
+    display: inline-block;
+    width: calc(50% - 40px);
+    margin: 0 20px;
+    text-align: center;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    color: @textcolor;
+}
+
+.withdrawal-dialog-payment-request-tab.highlighted-tab {
+    color: @highlightedtextcolor;
+    border-bottom: 2px solid @darkaccentcolor;
+}
+
+.withdrawal-dialog-payment-request-text-container {
+    height: calc(100% - 40px - 32px);
     width: calc(100% - 40px);
+    padding: 20px;
+}
+
+.withdrawal-dialog-payment-request-video-container {
+    height: calc(100% - 40px - 32px);
+    width: calc(100% - 40px);
+    padding: 20px;
+}
+
+.withdrawal-dialog-payment-request-video-loader {
+    height: calc(100% - 32px);
+    width: 100%;
+}
+
+.withdrawal-dialog-payment-request-video-component {
+    width: 320px;
+    height: 240px;
+}
+
+.withdrawal-dialog-payment-request-text-container > textarea {
+    resize: none;
+    width: 100%;
     height: 100%;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 16px;

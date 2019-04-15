@@ -25,12 +25,14 @@ import { SlotMachinGameComponent } from './components/games/slotmachine/slotmach
 import { GameService } from './services/game.service';
 import { BlogComponent } from './components/blog/blog.component';
 import { TutorialsComponent } from './components/tutorials/tutorials.component';
+import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 
 @NgModule({
     declarations: [
         AppComponent,
         PaymentDialogComponent,
         WithdrawalDialogComponent,
+        ZXingScannerComponent,
         AmountPipe,
         RouletteGameComponent,
         SlotMachinGameComponent,

@@ -1,4 +1,6 @@
-import { Component, Inject, AfterViewInit } from '@angular/core';
+import { Component, Inject, AfterViewInit, ViewChild } from '@angular/core';
+import { ZXingScannerComponent } from '@zxing/ngx-scanner';
+import { Result } from '@zxing/library';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { AccountService } from 'src/app/services/account.service';
 
@@ -20,6 +22,24 @@ export class WithdrawalDialogComponent implements AfterViewInit {
     paymentMessage = '';
     paymentResultMessage = '';
 
+    selectedTab = 0;
+
+    // Camera
+
+    cameraInitialized = false;
+
+    @ViewChild('scanner')
+    scanner: ZXingScannerComponent;
+
+    camerasLoaded = false;
+    hasPermission = true;
+    cameraFound = true;
+
+    availableDevices: MediaDeviceInfo[];
+    selectedDevice: MediaDeviceInfo;
+
+    // End Camera
+
     constructor(
         public dialogRef: MatDialogRef<WithdrawalDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -36,7 +56,48 @@ export class WithdrawalDialogComponent implements AfterViewInit {
     }
 
     ngAfterViewInit() {
-        this.dialogRef.updateSize('400px', '400px');
+        this.dialogRef.updateSize('400px', '500px');
+    }
+
+    initializeCamera() {
+        this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
+            this.camerasLoaded = true;
+
+            this.availableDevices = devices;
+
+            for (const device of devices) {
+                if (/back|rear|environment/gi.test(device.label)) {
+                    this.scanner.changeDevice(device);
+                    this.selectedDevice = device;
+                    console.log(this.selectedDevice);
+                    break;
+                }
+            }
+
+            if (this.selectedDevice == null) {
+                this.selectedDevice = this.availableDevices[0];
+            }
+
+            this.cameraInitialized = true;
+        });
+
+        this.scanner.camerasNotFound.subscribe((devices: MediaDeviceInfo[]) => {
+            this.cameraFound = false;
+        });
+
+        this.scanner.permissionResponse.subscribe((answer: boolean) => {
+            this.hasPermission = answer;
+        });
+    }
+
+    handleQrCodeResult(resultString: string) {
+        this.paymentRequest = resultString;
+        this.selectTab(0);
+    }
+
+    onDeviceSelectChange(selectedValue: string) {
+        console.log('Selection changed: ', selectedValue);
+        this.selectedDevice = this.scanner.getDeviceById(selectedValue);
     }
 
     withdrawPaymentRequest() {
@@ -63,5 +124,15 @@ export class WithdrawalDialogComponent implements AfterViewInit {
                     this.dialogRef.close();
                 }, 2000);
             });
+    }
+
+    selectTab(tabIndex) {
+        this.selectedTab = tabIndex;
+
+        if (tabIndex === 1) {
+            setTimeout(() => {
+                this.initializeCamera();
+            }, 500);
+        }
     }
 }
