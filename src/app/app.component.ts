@@ -67,21 +67,13 @@ export class AppComponent {
         }
     ];
 
-    accountOptionsShowing = false;
-
     constructor(
         public appService: AppService,
         private dialog: MatDialog,
         private router: Router
     ) {}
 
-    toggleAccountOptions() {
-        this.accountOptionsShowing = !this.accountOptionsShowing;
-    }
-
     depositBalance() {
-        this.accountOptionsShowing = false;
-
         const dialogConfig = new MatDialogConfig();
 
         dialogConfig.data = {
@@ -96,8 +88,6 @@ export class AppComponent {
     }
 
     withdrawBalance() {
-        this.accountOptionsShowing = false;
-
         const dialogConfig = new MatDialogConfig();
 
         dialogConfig.data = {

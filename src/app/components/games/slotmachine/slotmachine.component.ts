@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { AppService } from 'src/app/services/app.service';
 import { GameService } from 'src/app/services/game.service';
+import { MatDialogConfig, MatDialog } from '@angular/material';
+import { PaymentDialogComponent } from 'src/app/dialogs/paymentdialog/paymentdialog.component';
 
 @Component({
     selector: 'app-game-slotmachine',
@@ -59,7 +61,8 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
 
     constructor(
         public appService: AppService,
-        private gameService: GameService
+        private gameService: GameService,
+        private dialog: MatDialog
     ) {}
 
     ngOnInit() {
@@ -397,5 +400,19 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    depositBalance() {
+        const dialogConfig = new MatDialogConfig();
+
+        dialogConfig.data = {
+            message: 'Select an amount to deposit (satoshi):',
+            payingToBalance: true
+        };
+
+        const paymentDialog = this.dialog.open(
+            PaymentDialogComponent,
+            dialogConfig
+        );
     }
 }

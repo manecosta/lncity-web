@@ -80,7 +80,8 @@
             <div class="slot-credit-info-field"><span>BALANCE: </span><span >{{appService.user.balance}}</span></div>
             <div class="slot-credit-info-field"><span>LAST WIN: </span><span>{{lastWin}}</span></div>
             <div class="slot-credit-info-field">
-                <div class="slot-spin-button button" [ngClass]="{ 'disabled': spinning || (appService.user.balance < baseBet * betMultiplier), 'no-hover': spinning  || (appService.user.balance < baseBet * betMultiplier) }" (click)="spin()">SPIN<span>(Tap Space)</span></div>
+                <div *ngIf="appService.user.balance >= baseBet * betMultiplier" class="slot-spin-button button" [ngClass]="{ 'disabled': spinning, 'no-hover': spinning }" (click)="spin()">SPIN<span>(Tap Space)</span></div>
+                <div *ngIf="appService.user.balance < baseBet * betMultiplier" class="slot-deposit-button button" [ngClass]="{ 'disabled': spinning, 'no-hover': spinning }" (click)="deposit()">Deposit</div>
             </div>
         </div>
     </div>
