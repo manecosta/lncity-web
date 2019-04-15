@@ -214,7 +214,10 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
                         console.log('ServerPrize', this.serverPrize);
                         console.log('LocalPrize', this.lastWin);
                         if (this.serverPrize !== this.lastWin) {
-                            console.error('Mismatch prize from server and local', this.board);
+                            console.error(
+                                'Mismatch prize from server and local',
+                                this.board
+                            );
                         }
 
                         if (prizedWins.length > 0) {
