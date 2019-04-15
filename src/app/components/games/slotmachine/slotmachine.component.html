@@ -75,7 +75,7 @@
         <div class="slot-credit-info-container">
             <div class="slot-credit-info-field">
                 <div class="slot-credit-info-field-element"><span>BET: </span><span>{{baseBet * betMultiplier}}</span></div>
-                <div class="slot-credit-info-field-element button" [ngClass]="{ 'disabled': betMultiplier == 1, 'no-hover': betMultiplier == 1 }" (click)="decreaseMultiplier()">-</div>
+                <div class="slot-credit-info-field-element button" [ngClass]="{ 'disabled': betMultiplier == 1 || spinning, 'no-hover': betMultiplier == 1 || spinning }" (click)="decreaseMultiplier()">-</div>
                 <div class="slot-credit-info-field-element button" [ngClass]="{ 'disabled': betMultiplier == maxBetMultiplier || spinning, 'no-hover': betMultiplier == maxBetMultiplier || spinning }" (click)="increaseMultiplier()">+</div></div>
             <div class="slot-credit-info-field"><span>BALANCE: </span><span >{{appService.user.balance}}</span></div>
             <div class="slot-credit-info-field"><span>LAST WIN: </span><span>{{lastWin}}</span></div>
