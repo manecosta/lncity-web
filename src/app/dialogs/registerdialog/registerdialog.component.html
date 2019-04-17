@@ -1,0 +1,26 @@
+<div class="register-dialog-header">
+    {{title}}
+</div>
+<div class="register-dialog-body">
+    <div *ngIf="!requestCompleted && !loading" class="full-size">
+        <div class="register-dialog-field-label">Username:</div>
+        <input class="register-dialog-input" [(ngModel)]="username" />
+        <div class="register-dialog-field-label">Password:</div>
+        <input class="register-dialog-input" type="password" [(ngModel)]="password" />
+    </div>
+    <div *ngIf="!requestCompleted && loading" class="full-size centered-content" style="width: 100%; height: 100%;">
+        <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+    </div>
+    <div *ngIf="requestCompleted && requestSuccess" class="centered-content full-size register-dialog-success-message">
+        <div>Register Success!</div>
+    </div>
+    <div *ngIf="requestCompleted && !requestSuccess" class="centered-content full-size register-dialog-failure-message">
+        <div>{{failureMessage}}</div>
+    </div>
+</div>
+<div class="register-dialog-footer" style="position: relative;">
+    <div *ngIf="!requestCompleted && !loading" class="button" [ngClass]="{ 'no-hover disabled': username == '' || password == '' }" (click)="username != '' && password ? addCredentials() : null">Register</div>
+    <div *ngIf="loading" class="centered-content full-size">
+        Registering...
+    </div>
+</div>

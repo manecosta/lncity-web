@@ -25,14 +25,15 @@ import { SlotMachinGameComponent } from './components/games/slotmachine/slotmach
 import { GameService } from './services/game.service';
 import { BlogComponent } from './components/blog/blog.component';
 import { TutorialsComponent } from './components/tutorials/tutorials.component';
-import { ZXingScannerComponent } from '@zxing/ngx-scanner';
+import { RegisterDialogComponent } from './dialogs/registerdialog/registerdialog.component';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 @NgModule({
     declarations: [
         AppComponent,
         PaymentDialogComponent,
         WithdrawalDialogComponent,
-        ZXingScannerComponent,
+        RegisterDialogComponent,
         AmountPipe,
         RouletteGameComponent,
         SlotMachinGameComponent,
@@ -40,7 +41,11 @@ import { ZXingScannerComponent } from '@zxing/ngx-scanner';
         BlogComponent,
         TutorialsComponent
     ],
-    entryComponents: [PaymentDialogComponent, WithdrawalDialogComponent],
+    entryComponents: [
+        PaymentDialogComponent,
+        WithdrawalDialogComponent,
+        RegisterDialogComponent
+    ],
     imports: [
         BrowserModule,
         AppRoutingModule,
@@ -48,7 +53,8 @@ import { ZXingScannerComponent } from '@zxing/ngx-scanner';
         MatDialogModule,
         HttpClientModule,
         QRCodeModule,
-        FormsModule
+        FormsModule,
+        ZXingScannerModule
     ],
     providers: [
         AppService,

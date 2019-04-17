@@ -1,6 +1,5 @@
 import { Component, Inject, AfterViewInit, ViewChild } from '@angular/core';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
-import { Result } from '@zxing/library';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { AccountService } from 'src/app/services/account.service';
 

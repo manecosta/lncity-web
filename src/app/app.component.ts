@@ -4,6 +4,7 @@ import { PaymentDialogComponent } from './dialogs/paymentdialog/paymentdialog.co
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { WithdrawalDialogComponent } from './dialogs/withdrawaldialog/withdrawaldialog.component';
 import { Router } from '@angular/router';
+import { RegisterDialogComponent } from './dialogs/registerdialog/registerdialog.component';
 
 @Component({
     selector: 'app-root',
@@ -26,16 +27,17 @@ export class AppComponent {
                     title: 'Withdraw',
                     type: 'action',
                     action: 'withdrawBalance'
-                } /*,
+                },
                 {
                     title: 'Register Account',
                     type: 'action',
-                    action: this.registerAccount
-                },
+                    action: 'registerAccount',
+                    condition: 'isRegisterVisible'
+                } /*,
                 {
                     title: 'Switch Account',
                     type: 'action',
-                    action: this.switchAccount
+                    action: 'switchAccount'
                 }*/
             ]
         },
@@ -104,7 +106,14 @@ export class AppComponent {
     }
 
     registerAccount() {
-        console.log('Register');
+        const dialogConfig = new MatDialogConfig();
+
+        dialogConfig.data = {};
+
+        const registerDialog = this.dialog.open(
+            RegisterDialogComponent,
+            dialogConfig
+        );
     }
 
     switchAccount() {
@@ -122,5 +131,13 @@ export class AppComponent {
 
     getBalance() {
         return this.appService.user.balance;
+    }
+
+    isRegisterVisible() {
+        return this.appService.user.username == null;
+    }
+
+    checkOptionCondition(option) {
+        return this[option.condition]();
     }
 }

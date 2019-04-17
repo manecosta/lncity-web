@@ -9,7 +9,7 @@
                 {{getBalance()}} <img src="assets/img/satoshi-symbol-32x64.png"/>
             </div>
             <div class="app-menu-item-submenu" *ngIf="option.type == 'menu'">
-                <div *ngFor="let subOption of option.options" class="app-menu-item-submenu-item" (click)="clickedOption(subOption)">
+                <div *ngFor="let subOption of option.options" [ngStyle]="{ 'display': (subOption.condition == null || checkOptionCondition(subOption)) ? 'block' : 'none' }" class="app-menu-item-submenu-item" (click)="clickedOption(subOption)">
                     {{subOption.title}}
                 </div>
             </div>

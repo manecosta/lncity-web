@@ -33,10 +33,10 @@
                 <div style="text-align: center; margin-top: 10px; font-family: Arial, Helvetica, sans-serif;">Awaiting payment of <b>{{amount}}</b> satoshi...</div>
             </div>
         </div>
-        <div *ngIf="paymentSuccess" class="centered-content full-size" style="color: #4090c0; font-family: Arial, Helvetica, sans-serif; font-size: 32px;">
+        <div *ngIf="paymentSuccess" class="centered-content full-size payment-dialog-success-message">
             <div>{{payingToBalance ? 'Deposit' : 'Donation'}} Success!</div>
         </div>
-        <div *ngIf="paymentTimeout" class="centered-content full-size" style="color: #ee5921; font-family: Arial, Helvetica, sans-serif; font-size: 32px;">
+        <div *ngIf="paymentTimeout" class="centered-content full-size payment-dialog-failure-message">
             <div>{{payingToBalance ? 'Deposit' : 'Donation'}} Timed Out.</div>
         </div>
     </div>
