@@ -58,45 +58,29 @@ export class WithdrawalDialogComponent implements AfterViewInit {
         this.dialogRef.updateSize('400px', '500px');
     }
 
-    initializeCamera() {
-        this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
-            this.camerasLoaded = true;
+    camerasFoundHandler(devices) {
+        this.camerasLoaded = true;
 
-            this.availableDevices = devices;
+        this.availableDevices = devices;
 
-            for (const device of devices) {
-                if (/back|rear|environment/gi.test(device.label)) {
-                    this.scanner.changeDevice(device);
-                    this.selectedDevice = device;
-                    console.log(this.selectedDevice);
-                    break;
-                }
-            }
+        if (this.selectedDevice == null) {
+            this.selectedDevice = this.availableDevices[0];
+        }
 
-            if (this.selectedDevice == null) {
-                this.selectedDevice = this.availableDevices[0];
-            }
-
-            this.cameraInitialized = true;
-        });
-
-        this.scanner.camerasNotFound.subscribe((devices: MediaDeviceInfo[]) => {
-            this.cameraFound = false;
-        });
-
-        this.scanner.permissionResponse.subscribe((answer: boolean) => {
-            this.hasPermission = answer;
-        });
+        this.cameraInitialized = true;
     }
 
-    handleQrCodeResult(resultString: string) {
+    camerasNotFoundHandler(event) {
+        this.cameraFound = false;
+    }
+
+    scanSuccessHandler(resultString: string) {
         this.paymentRequest = resultString;
         this.selectTab(0);
     }
 
-    onDeviceSelectChange(selectedValue: string) {
-        console.log('Selection changed: ', selectedValue);
-        this.selectedDevice = this.scanner.getDeviceById(selectedValue);
+    permissionResponseHandler(hasPermission) {
+        this.hasPermission = hasPermission;
     }
 
     withdrawPaymentRequest() {
@@ -127,11 +111,5 @@ export class WithdrawalDialogComponent implements AfterViewInit {
 
     selectTab(tabIndex) {
         this.selectedTab = tabIndex;
-
-        if (tabIndex === 1) {
-            setTimeout(() => {
-                this.initializeCamera();
-            }, 500);
-        }
     }
 }

@@ -13,11 +13,19 @@
                 <textarea class="withdrawal-dialog-payment-request-textarea" [(ngModel)]="paymentRequest"></textarea>
             </div>
             <div *ngIf="selectedTab == 1" class="withdrawal-dialog-payment-request-video-container centered-content">
-                <div class="withdrawal-dialog-payment-request-video-loader centered-content" style="position: absolute; z-index: 1;">
+                <div [ngStyle]="{ 'display': !cameraFound || !hasPermission ? 'none' : 'flex' }" class="withdrawal-dialog-payment-request-video-loader centered-content" style="position: absolute; z-index: 1;">
                     <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
                 </div>
                 <div [hidden]="!camerasLoaded" style="position: absolute; z-index: 2;">
-                    <zxing-scanner #scanner class="withdrawal-dialog-payment-request-video-component" start="true" [device]="selectedDevice" (scanSuccess)="handleQrCodeResult($event)"></zxing-scanner>
+                    <zxing-scanner #scanner
+                        class="withdrawal-dialog-payment-request-video-component"
+                        start="true"
+                        [device]="selectedDevice"
+                        (camerasFound)="camerasFoundHandler($event)"
+                        (scanSuccess)="scanSuccessHandler($event)"
+                        (camerasNotFound)="camerasNotFoundHandler($event)"
+                        (permissionResponse)="permissionResponseHandler($event)"
+                    ></zxing-scanner>
                 </div>
                 <div [hidden]="!camerasLoaded || cameraFound">
                     No camera
