@@ -47,10 +47,10 @@
 @scale: 1;
 
 .slot-loading {
-    margin: 128px auto;
-    width: 128px;
-    height: 128px;
-    border-radius: 10px;
+    margin: calc(128px * @scale) auto;
+    width: calc(128px * @scale);
+    height: calc(128px * @scale);
+    border-radius: calc(10px * @scale);
 }
 
 .slot-container {
@@ -94,19 +94,19 @@
 }
 
 .slot-score-board-line-bonus > div:nth-child(3) {
-    font-size: 12px;
+    font-size: calc(12px * @scale);
 }
 
 .slot-score-board-line-bonus > div:nth-child(4) {
-    font-size: 14px;
+    font-size: calc(14px * @scale);
 }
 
 .slot-score-board-line-bonus > div:nth-child(5) {
-    font-size: 16px;
+    font-size: calc(16px * @scale);
 }
 
 .slot-score-board-line-bonus > div:nth-child(6) {
-    font-size: 18px;
+    font-size: calc(18px * @scale);
     font-weight: 600;
 }
 
@@ -167,7 +167,7 @@
     background-color: #333;
     display: inline-block;
     vertical-align: top;
-    margin-bottom: 20px;
+    margin-bottom: calc(20px * @scale);
 }
 
 .slot-reels-lines-overlay {
@@ -192,8 +192,8 @@
     vertical-align: top;
     height: 100%;
     margin-right: calc(10px * @scale);
-    border-right: calc(10px * @scale) solid grey;
-    border-left: calc(10px * @scale) solid grey;
+    border-right: 10px * @scale solid grey;
+    border-left: 10px * @scale solid grey;
     position: relative;
 }
 
@@ -280,10 +280,10 @@
 
 .slot-spin-button > span {
     position: absolute;
-    top: 14px;
+    top: calc(14px * @scale);
     left: 0;
     width: 100%;
-    font-size: 10px;
+    font-size: calc(10px * @scale);
     color: @textcolor;
 }
 
@@ -337,7 +337,7 @@
 .slot-credit-info-field > span:nth-child(2) {
     vertical-align: top;
     color: @highlightedtextcolor;
-    font-size: 24px;
+    font-size: calc(24px * @scale);
 }
 
 .slot-credit-info-field > .slot-credit-info-field-element > span:nth-child(1) {
@@ -348,5 +348,5 @@
 .slot-credit-info-field > .slot-credit-info-field-element > span:nth-child(2) {
     vertical-align: top;
     color: @highlightedtextcolor;
-    font-size: 24px;
+    font-size: calc(24px * @scale);
 }

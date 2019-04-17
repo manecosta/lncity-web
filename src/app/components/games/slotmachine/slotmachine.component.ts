@@ -86,6 +86,8 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
                     }
                 }
 
+                this.nonBonusSymbols.reverse();
+
                 this.board = this.generateInitialBoard();
             })
             .catch(error => {
