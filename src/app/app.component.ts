@@ -146,15 +146,18 @@ export class AppComponent {
     }
 
     isRegisterVisible() {
-        return this.appService.user.username == null;
+        if (this.appService.user) {
+            return this.appService.user.username == null;
+        } else {
+            return false;
+        }
     }
 
     getAccountTitle() {
-        if (!this.appService.user.username) {
-            return 'Account';
-        } else {
+        if (this.appService.user && this.appService.user.username) {
             return this.appService.user.username;
         }
+        return 'Account';
     }
 
     getMethodResult(methodName) {
