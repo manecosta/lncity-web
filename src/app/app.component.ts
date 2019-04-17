@@ -5,6 +5,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material';
 import { WithdrawalDialogComponent } from './dialogs/withdrawaldialog/withdrawaldialog.component';
 import { Router } from '@angular/router';
 import { RegisterDialogComponent } from './dialogs/registerdialog/registerdialog.component';
+import { SwitchAccountDialogComponent } from './dialogs/switchaccountdialog/switchaccountdialog.component';
 
 @Component({
     selector: 'app-root',
@@ -14,7 +15,7 @@ import { RegisterDialogComponent } from './dialogs/registerdialog/registerdialog
 export class AppComponent {
     menuOptions = [
         {
-            title: 'Account',
+            titleMethod: 'getAccountTitle',
             type: 'menu',
             subtitle: 'getBalance',
             options: [
@@ -33,12 +34,12 @@ export class AppComponent {
                     type: 'action',
                     action: 'registerAccount',
                     condition: 'isRegisterVisible'
-                } /*,
+                },
                 {
                     title: 'Switch Account',
                     type: 'action',
                     action: 'switchAccount'
-                }*/
+                }
             ]
         },
         {
@@ -117,7 +118,14 @@ export class AppComponent {
     }
 
     switchAccount() {
-        console.log('Switch');
+        const dialogConfig = new MatDialogConfig();
+
+        dialogConfig.data = {};
+
+        const registerDialog = this.dialog.open(
+            SwitchAccountDialogComponent,
+            dialogConfig
+        );
     }
 
     clickedOption(option) {
@@ -130,14 +138,26 @@ export class AppComponent {
     }
 
     getBalance() {
-        return this.appService.user.balance;
+        if (this.appService.user) {
+            return this.appService.user.balance;
+        } else {
+            return 0;
+        }
     }
 
     isRegisterVisible() {
         return this.appService.user.username == null;
     }
 
-    checkOptionCondition(option) {
-        return this[option.condition]();
+    getAccountTitle() {
+        if (!this.appService.user.username) {
+            return 'Account';
+        } else {
+            return this.appService.user.username;
+        }
+    }
+
+    getMethodResult(methodName) {
+        return this[methodName]();
     }
 }

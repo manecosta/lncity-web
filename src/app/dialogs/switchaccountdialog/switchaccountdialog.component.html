@@ -1,0 +1,26 @@
+<div class="switchaccount-dialog-header">
+    {{title}}
+</div>
+<div class="switchaccount-dialog-body">
+    <div *ngIf="!requestCompleted && !loading" class="full-size">
+        <div class="switchaccount-dialog-field-label">Username:</div>
+        <input class="switchaccount-dialog-input" [(ngModel)]="username" />
+        <div class="switchaccount-dialog-field-label">Password:</div>
+        <input class="switchaccount-dialog-input" type="password" [(ngModel)]="password" />
+    </div>
+    <div *ngIf="!requestCompleted && loading" class="full-size centered-content" style="width: 100%; height: 100%;">
+        <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+    </div>
+    <div *ngIf="requestCompleted && requestSuccess" class="centered-content full-size switchaccount-dialog-success-message">
+        <div>Login Success!</div>
+    </div>
+    <div *ngIf="requestCompleted && !requestSuccess" class="centered-content full-size switchaccount-dialog-failure-message">
+        <div>{{failureMessage}}</div>
+    </div>
+</div>
+<div class="switchaccount-dialog-footer" style="position: relative;">
+    <div *ngIf="!requestCompleted && !loading" class="button" [ngClass]="{ 'no-hover disabled': username == '' || password == '' }" (click)="username != '' && password ? loginToAccount() : null">Login</div>
+    <div *ngIf="loading" class="centered-content full-size">
+        Logging in...
+    </div>
+</div>

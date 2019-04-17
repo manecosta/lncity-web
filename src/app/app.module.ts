@@ -27,6 +27,7 @@ import { BlogComponent } from './components/blog/blog.component';
 import { TutorialsComponent } from './components/tutorials/tutorials.component';
 import { RegisterDialogComponent } from './dialogs/registerdialog/registerdialog.component';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { SwitchAccountDialogComponent } from './dialogs/switchaccountdialog/switchaccountdialog.component';
 
 @NgModule({
     declarations: [
@@ -34,6 +35,7 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
         PaymentDialogComponent,
         WithdrawalDialogComponent,
         RegisterDialogComponent,
+        SwitchAccountDialogComponent,
         AmountPipe,
         RouletteGameComponent,
         SlotMachinGameComponent,
@@ -44,7 +46,8 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
     entryComponents: [
         PaymentDialogComponent,
         WithdrawalDialogComponent,
-        RegisterDialogComponent
+        RegisterDialogComponent,
+        SwitchAccountDialogComponent
     ],
     imports: [
         BrowserModule,

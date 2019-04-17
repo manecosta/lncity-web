@@ -49,6 +49,27 @@ export class AccountService {
             });
     }
 
+    loginToAccount(username, password) {
+        return this.requestService
+            .post(
+                '/users/login',
+                {
+                    username,
+                    password
+                },
+                true
+            )
+            .then((response: HttpResponse<object>) => {
+                const user = new User(response.body);
+                this.appService.updateUserAndAuth(
+                    user,
+                    response.headers.get('x-auth-token'),
+                    response.headers.get('x-refresh-token')
+                );
+                return Promise.resolve(response.body);
+            });
+    }
+
     depositBalance(amount) {
         return this.requestService.post('/balances/deposit', { amount });
     }
