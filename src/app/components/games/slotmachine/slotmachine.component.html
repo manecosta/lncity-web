@@ -1,9 +1,9 @@
 <div class="app-page-title">Slot Machine</div>
 <div style="width: 100%;">
-    <div *ngIf="loading" class="slot-loading centered-content">
+    <div *ngIf="!loadedParameters" class="slot-loading centered-content">
         <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
     </div>
-    <div *ngIf="!loading" class="slot-container">
+    <div *ngIf="loadedParameters" class="slot-container">
         <div class="slot-score-board">
             <div class="slot-score-board-title">Prizes:</div>
             <div class="slot-score-board-line">
@@ -85,7 +85,7 @@
             </div>
         </div>
     </div>
-    <div *ngIf="!loading" class="slot-rules-container">
+    <div *ngIf="loadedParameters" class="slot-rules-container">
         <h2>Instructions</h2>
         <h4>Balance</h4>
         <ul>

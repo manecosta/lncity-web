@@ -15,7 +15,9 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
     uiScale = 1;
     fillerCount = 30;
 
-    loading = true;
+    loadParamtersInterval = null;
+    loadedParameters = false;
+    loadingParameters = false;
 
     fillerWildcardChance = 0.08;
     fillerBonusChance = 0.08;
@@ -70,39 +72,17 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit() {
-        this.loading = true;
-        this.gameService
-            .getSlotParameters()
-            .then(response => {
-                this.loading = false;
-                this.availableSymbols = response.available_symbols;
-                this.lines = response.lines;
-                this.baseBet = response.base_bet;
-                this.betMultiplier = response.min_bet_multiplier;
-                this.maxBetMultiplier = response.max_bet_multiplier;
-                this.symbolNames = response.symbol_names;
-                this.wildSymbolName = response.wild_symbol_name;
-                this.bonusSymbolName = response.bonus_symbol_name;
-
-                for (const symbolName of Object.keys(this.availableSymbols)) {
-                    if (!this.availableSymbols[symbolName].isBonus) {
-                        this.nonBonusSymbols.push(symbolName);
-                    }
-                }
-
-                this.reversedNonBonusSymbols = this.nonBonusSymbols.slice();
-                this.reversedNonBonusSymbols.reverse();
-
-                this.board = this.generateInitialBoard();
-            })
-            .catch(error => {
-                console.log(error);
-            });
-
         this.fillerBoard = null;
+
+        this.initializeSlotParameters();
     }
 
     ngOnDestroy() {
+        this.loadingParameters = false;
+        if (this.loadParamtersInterval) {
+            clearInterval(this.loadParamtersInterval);
+            this.loadParamtersInterval = null;
+        }
         if (this.winHighlightsInterval) {
             clearInterval(this.winHighlightsInterval);
             this.winHighlightsInterval = null;
@@ -112,6 +92,48 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
             this.spinTimeout = null;
         }
         this.resetPrizeAnimations();
+    }
+
+    initializeSlotParameters() {
+        this.loadParamtersInterval = setInterval(() => {
+            if (this.loadedParameters) {
+                clearInterval(this.loadParamtersInterval);
+                return;
+            }
+            if (!this.loadingParameters) {
+                this.loadingParameters = true;
+                this.gameService
+                    .getSlotParameters()
+                    .then(response => {
+                        this.loadedParameters = true;
+                        this.loadingParameters = false;
+                        this.availableSymbols = response.available_symbols;
+                        this.lines = response.lines;
+                        this.baseBet = response.base_bet;
+                        this.betMultiplier = response.min_bet_multiplier;
+                        this.maxBetMultiplier = response.max_bet_multiplier;
+                        this.symbolNames = response.symbol_names;
+                        this.wildSymbolName = response.wild_symbol_name;
+                        this.bonusSymbolName = response.bonus_symbol_name;
+
+                        for (const symbolName of Object.keys(
+                            this.availableSymbols
+                        )) {
+                            if (!this.availableSymbols[symbolName].isBonus) {
+                                this.nonBonusSymbols.push(symbolName);
+                            }
+                        }
+
+                        this.reversedNonBonusSymbols = this.nonBonusSymbols.slice();
+                        this.reversedNonBonusSymbols.reverse();
+
+                        this.board = this.generateInitialBoard();
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            }
+        }, 1000);
     }
 
     resetPrizeAnimations() {
@@ -279,6 +301,8 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
                 })
                 .catch(error => {
                     this.spinning = false;
+                    this.appService.user.balance += betPrice;
+                    this.appService.backupUser();
                     console.log(error);
                 });
         }
