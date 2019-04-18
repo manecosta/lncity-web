@@ -25,6 +25,7 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
     maxBetMultiplier = null;
     lastWin = 0;
     serverPrize = null;
+    winningLines = null;
 
     columnCount = 5;
     lineCount = 3;
@@ -50,6 +51,8 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
     highlightedWinIndex = 0;
 
     winHighlightsInterval = null;
+    prizeAnimationTimeout = null;
+    prizeAnimationInterval = null;
 
     lines = null;
     availableSymbols = null;
@@ -58,6 +61,7 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
     bonusSymbolName = null;
 
     nonBonusSymbols = [];
+    reversedNonBonusSymbols = [];
 
     constructor(
         public appService: AppService,
@@ -86,7 +90,8 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
                     }
                 }
 
-                this.nonBonusSymbols.reverse();
+                this.reversedNonBonusSymbols = this.nonBonusSymbols.slice();
+                this.reversedNonBonusSymbols.reverse();
 
                 this.board = this.generateInitialBoard();
             })
@@ -105,6 +110,22 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
         if (this.spinTimeout) {
             clearTimeout(this.spinTimeout);
             this.spinTimeout = null;
+        }
+        this.resetPrizeAnimations();
+    }
+
+    resetPrizeAnimations() {
+        if (this.prizeAnimationTimeout) {
+            clearTimeout(this.prizeAnimationTimeout);
+            this.prizeAnimationTimeout = null;
+        }
+        if (this.prizeAnimationInterval) {
+            clearInterval(this.prizeAnimationInterval);
+            this.prizeAnimationInterval = null;
+        }
+        if (this.lastWin > 0) {
+            this.appService.user.balance += this.lastWin;
+            this.lastWin = 0;
         }
     }
 
@@ -166,6 +187,8 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
 
         const betPrice = this.betMultiplier * this.baseBet;
 
+        this.resetPrizeAnimations();
+
         if (this.appService.user.balance >= betPrice) {
             this.spinning = true;
 
@@ -194,35 +217,43 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
                     this.animatingColumn = [false, false, false, false, false];
 
                     this.board = response.board;
-                    this.serverPrize = response.prize;
+                    this.winningLines = response.winning_lines;
 
                     this.fillerBoard = this.generateFillerBoard(lastBoard);
 
                     this.animatingColumn = [true, true, true, true, true];
 
                     this.spinTimeout = setTimeout(() => {
-                        const wins = this.checkBoard();
-
                         const prizedWins = [];
-                        this.lastWinsInfo = {};
-                        this.lastWin = 0;
-                        for (const win of wins) {
+                        this.lastWin = response.prize;
+
+                        for (const win of this.winningLines) {
                             const prize = win[3];
                             if (prize > 0) {
-                                this.lastWin += prize;
                                 prizedWins.push(win);
                             }
                         }
                         this.lastWin *= this.betMultiplier;
-                        this.appService.user.balance += this.lastWin;
 
-                        console.log('ServerPrize', this.serverPrize);
-                        console.log('LocalPrize', this.lastWin);
-                        if (this.serverPrize !== this.lastWin) {
-                            console.error(
-                                'Mismatch prize from server and local',
-                                this.board
-                            );
+                        if (this.lastWin > 0) {
+                            this.prizeAnimationTimeout = setTimeout(() => {
+                                this.prizeAnimationTimeout = null;
+                                this.prizeAnimationInterval = setInterval(
+                                    () => {
+                                        const step = Math.min(this.lastWin, 50);
+                                        this.appService.user.balance += step;
+                                        this.lastWin -= step;
+                                        if (this.lastWin === 0) {
+                                            clearInterval(
+                                                this.prizeAnimationInterval
+                                            );
+                                            this.prizeAnimationInterval = null;
+                                            this.appService.backupUser();
+                                        }
+                                    },
+                                    50
+                                );
+                            }, 2000);
                         }
 
                         if (prizedWins.length > 0) {
@@ -249,83 +280,6 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
                     console.log(error);
                 });
         }
-    }
-
-    checkBoard() {
-        const winningLines = [];
-        for (const line of this.lines) {
-            const symbols = [];
-            for (const position of line) {
-                symbols.push(this.board[position[0]][position[1]]);
-            }
-
-            let consecutiveSymbolNames = [];
-            for (const symbol of symbols) {
-                if (consecutiveSymbolNames.length === 0) {
-                    consecutiveSymbolNames = [symbol];
-                    continue;
-                }
-
-                const lastSymbolName = consecutiveSymbolNames.slice(-1)[0];
-                if (lastSymbolName === this.wildSymbolName) {
-                    if (symbol === this.wildSymbolName) {
-                        consecutiveSymbolNames.push(this.wildSymbolName);
-                    } else {
-                        const newConsecutiveSymbolNames = [];
-                        for (const _ of consecutiveSymbolNames) {
-                            newConsecutiveSymbolNames.push(symbol);
-                        }
-                        newConsecutiveSymbolNames.push(symbol);
-                        consecutiveSymbolNames = newConsecutiveSymbolNames;
-                    }
-                } else {
-                    if (symbol === lastSymbolName) {
-                        consecutiveSymbolNames.push(symbol);
-                    } else if (symbol === this.wildSymbolName) {
-                        consecutiveSymbolNames.push(lastSymbolName);
-                    } else {
-                        break;
-                    }
-                }
-            }
-
-            if (consecutiveSymbolNames[0] === this.bonusSymbolName) {
-                continue;
-            }
-            const prize = this.availableSymbols[consecutiveSymbolNames[0]]
-                .prize[consecutiveSymbolNames.length - 1];
-
-            winningLines.push([symbols, consecutiveSymbolNames, line, prize]);
-        }
-
-        const bonusCoordinates = [];
-        for (let column = 0; column < this.columnCount; column++) {
-            for (let line = 0; line < this.lineCount; line++) {
-                if (this.board[column][line] === this.bonusSymbolName) {
-                    bonusCoordinates.push([column, line]);
-                }
-            }
-        }
-
-        let bonusPrize = 0;
-        if (bonusCoordinates.length > 0) {
-            bonusPrize = this.availableSymbols[this.bonusSymbolName].prize[
-                bonusCoordinates.length - 1
-            ];
-        }
-
-        const bonusLineSymbols = [];
-        for (const _ of bonusCoordinates) {
-            bonusLineSymbols.push(this.bonusSymbolName);
-        }
-        winningLines.push([
-            bonusLineSymbols,
-            bonusLineSymbols,
-            bonusCoordinates,
-            bonusPrize
-        ]);
-
-        return winningLines;
     }
 
     isPrizeWon(symbolName, index) {
@@ -402,6 +356,10 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    aboveZero(e) {
+        return e > 0;
     }
 
     depositBalance() {

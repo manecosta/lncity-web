@@ -19,10 +19,10 @@
 
 @keyframes reelAnimation {
     0% {
-        top: calc(-1 * @fillerCount * (148px * @scale));
+        transform: translate(0, 0);
     }
     100% {
-        top: 0;
+        transform: translate(0, @fillerCount * (148px * @scale));
     }
 }
 
@@ -60,6 +60,21 @@
     padding: calc(20px * @scale);
     background-color: white;
     border-radius: calc(10px * @scale);
+}
+
+.slot-rules-container {
+    padding: 20px;
+    width: calc(100% - 40px);
+}
+
+.slot-rules-container li {
+    margin-bottom: 10px;
+}
+
+.slot-rules-container img {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
 }
 
 .slot-score-board {
@@ -198,27 +213,27 @@
 }
 
 .slots-reel-column-animation-0 {
-    top: 0px !important;
+    transform: translate(0, @fillerCount * (148px * @scale)) !important;
     animation: reelAnimation 1.5s 1 ease-in-out;
 }
 
 .slots-reel-column-animation-1 {
-    top: 0px !important;
+    transform: translate(0, @fillerCount * (148px * @scale)) !important;
     animation: reelAnimation 2s 1 ease-in-out;
 }
 
 .slots-reel-column-animation-2 {
-    top: 0px !important;
+    transform: translate(0, @fillerCount * (148px * @scale)) !important;
     animation: reelAnimation 2.5s 1 ease-in-out;
 }
 
 .slots-reel-column-animation-3 {
-    top: 0px !important;
+    transform: translate(0, @fillerCount * (148px * @scale)) !important;
     animation: reelAnimation 3s 1 ease-in-out;
 }
 
 .slots-reel-column-animation-4 {
-    top: 0px !important;
+    transform: translate(0, @fillerCount * (148px * @scale)) !important;
     animation: reelAnimation 3.5s 1 ease-in-out;
 }
 

@@ -1,5 +1,5 @@
 <div class="app-page-title">Slot Machine</div>
-<div style="height: calc(100% - 100px); width: 100%;">
+<div style="width: 100%;">
     <div *ngIf="loading" class="slot-loading centered-content">
         <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
     </div>
@@ -12,7 +12,7 @@
                 <div style="font-weight: 600;" class="slot-score-board-line-element">x4</div>
                 <div style="font-weight: 600;" class="slot-score-board-line-element">x5</div>
             </div>
-            <div class="slot-score-board-line" *ngFor="let symbolName of nonBonusSymbols; let i = index;">
+            <div class="slot-score-board-line" *ngFor="let symbolName of reversedNonBonusSymbols; let i = index;">
                 <div class="slot-score-board-line-element">
                     <img class="slot-score-board-line-image" [src]="availableSymbols[symbolName].imagePath" />
                 </div>
@@ -84,5 +84,43 @@
                 <div *ngIf="appService.user.balance < baseBet * betMultiplier" class="slot-deposit-button button" [ngClass]="{ 'disabled': spinning, 'no-hover': spinning }" (click)="depositBalance()">Deposit</div>
             </div>
         </div>
+    </div>
+    <div *ngIf="!loading" class="slot-rules-container">
+        <h2>Instructions</h2>
+        <h4>Balance</h4>
+        <ul>
+            <li>Play from your balance. If you're out of balance, deposit some more to play!</li>
+            <li>You can bet between <b>{{baseBet}}</b> and <b>{{baseBet * maxBetMultiplier}}</b> satoshi and the prizes will upgrade accordingly.</li>
+            <li>Any prizes won will automatically add to your balance and you can withdraw whenever you want.</li>
+        </ul>
+        <h4>Matching</h4>
+        <ul>
+            <li>You can hover over the slot reels to check the paying lines.</li>
+            <li>All prizes are paid for same symbol matches along the paying lines starting from the left (except the <b>Bonus</b> symbol which is valid anywhere in the board).</li>
+            <li>The <b>Wild</b> symbol can match any symbol and its value will be equivalent to the matched symbol.</li>
+            <li>The <b>Bonus</b> symbol does not match with <b>Wild</b> symbol to form a winning line, it can only give a prize on its own.</li>
+        </ul>
+        <h4>Symbols and Prizes</h4>
+        <ul>
+            <li *ngFor="let symbol of nonBonusSymbols.concat(bonusSymbolName)"><img [src]="availableSymbols[symbol].imagePath"> {{symbol}} - <span *ngFor="let prize of availableSymbols[symbol].prize; let pIndex = index;">{{prize > 0 ? (pIndex + 1) + 'x ' + prize + (pIndex == availableSymbols[symbol].prize.length - 1 ? '' : ' - ') : ''}}</span></li>
+        </ul>
+        <h4>Hotkeys</h4>
+        <ul>
+            <li>You can tap the <b>Space</b> key to spin the reels.</li>
+            <li>You can tap the <b>+</b> and <b>-</b> keys to increase or decrease the bet amount.</li>
+        </ul>
+        <h4>Mechanics</h4>
+        <ul>
+            <li>The final board is random. Any non <b>Bonus</b> or <b>Wild</b> symbol has the same chance of showing.</li>
+            <li><b>Wild</b> symbol has a {{fillerWildcardChance * 100}}% chance of showing up in any position.</li>
+            <li><b>Bonus</b> symbol has a {{fillerBonusChance * 100}}% chance of showing up in any position.</li>
+            <li>The game is currently tweaked to have a long term cut of < 5% for the house. Provable fairness will be implemented in a future update.</li>
+        </ul>
+        <h4>Final Notes</h4>
+        <ul>
+            <li>Be responsible. Don't bet more than you can lose.</li>
+            <li>This is intended to be a fun little game, not a job!</li>
+            <li>Have fun! If you run into any issues please contact me at nel0 [at] protonmail.com.</li>
+        </ul>
     </div>
 </div>
