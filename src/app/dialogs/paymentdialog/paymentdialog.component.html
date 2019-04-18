@@ -34,7 +34,7 @@
             </div>
         </div>
         <div *ngIf="paymentSuccess" class="centered-content full-size payment-dialog-success-message">
-            <div>{{payingToBalance ? 'Deposit' : 'Donation'}} Success!<br />Thank you!</div>
+            <div>{{payingToBalance ? 'Deposit' : 'Donation'}} Success!<br *ngIf="!payingToBalance" />{{payingToBalance ? '' : 'Thank you!'}}</div>
         </div>
         <div *ngIf="paymentTimeout" class="centered-content full-size payment-dialog-failure-message">
             <div>{{payingToBalance ? 'Deposit' : 'Donation'}} Timed Out.</div>
