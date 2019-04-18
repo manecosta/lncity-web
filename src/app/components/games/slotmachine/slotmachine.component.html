@@ -102,7 +102,7 @@
         </ul>
         <h4>Symbols and Prizes</h4>
         <ul>
-            <li *ngFor="let symbol of nonBonusSymbols.concat(bonusSymbolName)"><img [src]="availableSymbols[symbol].imagePath"> {{symbol}} - <span *ngFor="let prize of availableSymbols[symbol].prize; let pIndex = index;">{{prize > 0 ? (pIndex + 1) + 'x ' + prize + (pIndex == availableSymbols[symbol].prize.length - 1 ? '' : ' - ') : ''}}</span></li>
+            <li *ngFor="let symbol of nonBonusSymbols.concat(bonusSymbolName)"><img [src]="availableSymbols[symbol].imagePath"> {{symbol}} - <span *ngFor="let prize of availableSymbols[symbol].prize; let pIndex = index;">{{prize > 0 ? (pIndex + 1) + 'x ' + (prize * betMultiplier) + (pIndex == availableSymbols[symbol].prize.length - 1 ? '' : ' - ') : ''}}</span></li>
         </ul>
         <h4>Hotkeys</h4>
         <ul>
