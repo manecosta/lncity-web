@@ -239,7 +239,10 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
                                 this.prizeAnimationTimeout = null;
                                 this.prizeAnimationInterval = setInterval(
                                     () => {
-                                        const step = Math.min(this.lastWin, 50);
+                                        const step = Math.min(
+                                            this.lastWin,
+                                            this.betMultiplier * 50
+                                        );
                                         this.appService.user.balance += step;
                                         this.lastWin -= step;
                                         if (this.lastWin === 0) {
