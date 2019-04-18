@@ -67,6 +67,11 @@ export class AppComponent {
                     navigate: '/roulette'
                 }
             ]
+        },
+        {
+            title: 'Donate',
+            type: 'action',
+            action: 'donate'
         }
     ];
 
@@ -75,6 +80,20 @@ export class AppComponent {
         private dialog: MatDialog,
         private router: Router
     ) {}
+
+    donate() {
+        const dialogConfig = new MatDialogConfig();
+
+        dialogConfig.data = {
+            message: 'Select an amount to donate (satoshi):',
+            payingToBalance: false
+        };
+
+        const paymentDialog = this.dialog.open(
+            PaymentDialogComponent,
+            dialogConfig
+        );
+    }
 
     depositBalance() {
         const dialogConfig = new MatDialogConfig();

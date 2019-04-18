@@ -10,18 +10,4 @@ import { PaymentDialogComponent } from 'src/app/dialogs/paymentdialog/paymentdia
 })
 export class HomeComponent {
     constructor(private dialog: MatDialog) {}
-
-    donate() {
-        const dialogConfig = new MatDialogConfig();
-
-        dialogConfig.data = {
-            message: 'Choose amount to donate (satoshi):',
-            payingToBalance: false
-        };
-
-        const paymentDialog = this.dialog.open(
-            PaymentDialogComponent,
-            dialogConfig
-        );
-    }
 }

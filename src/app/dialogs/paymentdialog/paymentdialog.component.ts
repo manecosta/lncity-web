@@ -143,6 +143,7 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
                                 if (this.payingToBalance) {
                                     this.accountService.reloadAccount();
                                 }
+                                this.dialogRef.updateSize('400px', '400px');
                                 setTimeout(() => {
                                     this.dialogRef.close();
                                 }, 2000);
