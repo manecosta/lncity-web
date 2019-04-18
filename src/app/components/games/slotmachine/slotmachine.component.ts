@@ -233,7 +233,6 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
                                 prizedWins.push(win);
                             }
                         }
-                        this.lastWin *= this.betMultiplier;
 
                         if (this.lastWin > 0) {
                             this.prizeAnimationTimeout = setTimeout(() => {
