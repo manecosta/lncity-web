@@ -1,8 +1,271 @@
 <div class="app-page-title">Roulette</div>
-<div class="roulette-image-container">
-    <img class="roulette-logo-image" src="assets/img/logo-256x256.png" />
+<div class="roulette-container">
 
-    <div class="roulette-under-construction-text">
-        Coming Soon!
+    <div class="roulette-game-container">
+
+        <div class="roulette-wheel-container">
+            <div class="roulette-wheel-result-marker"></div>
+            <div #rouletteWheel class="roulette-wheel">
+                <div class="roulette-wheel-slice-container" *ngFor="let numberInfo of numbers; let i = index;"
+                    [ngStyle]="{ 'transform': 'rotate(' + (-4.865 + i * 9.72973) + 'deg) skewY(99.72973deg)' }">
+                    <div [ngClass]="{
+                        'roulette-board-black-background-field': numberInfo.color == 'black',
+                        'roulette-board-red-background-field': numberInfo.color == 'red',
+                        'roulette-board-green-background-field': numberInfo.color == 'green'
+                    }" class="roulette-wheel-slice-background"></div>
+                </div>
+                <div class="roulette-wheel-field-number-container" *ngFor="let numberInfo of numbers; let i = index;"
+                    [ngStyle]="{ 'transform': 'rotate(' + (i * 9.72973) + 'deg)' }">
+                    <div class="roulette-wheel-field-number">
+                        {{numberInfo.value}}
+                    </div>
+                </div>
+                <div class="roulette-wheel-center">
+                </div>
+            </div>
+            <div class="button roulette-spin-button" (click)="spin()" [ngClass]="{ 'disabled': spinning || totalBet() < minBet, 'no-hover': spinning || totalBet() < minBet }">{{'SPIN'}}</div>
+        </div>
+
+        <div class="roulette-controls-container">
+            <div class="roulette-board-container">
+                <div class="roulette-board-side-section">
+                    <div class="roulette-board-left-field roulette-board-transparent-background-field">
+                        0
+                        <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(0) }"
+                            [ngStyle]="{
+                                'border': '4px solid ' + valueColor(currentCoordinatesBet(0))
+                            }"
+                            class="roulette-board-field-action"
+                            (click)="addBet(0);">
+                                {{currentCoordinatesBet(0)}}
+                        </div>
+                    </div>
+                </div>
+                <div class="roulette-board-fields-container">
+                    <div class="roulette-board-info-field" style="left: 0%;"><span class="roulette-board-info-field-name">BET: </span>{{totalBet()}}</div>
+                    <div class="roulette-board-info-field" style="left: 33%;"><span class="roulette-board-info-field-name">BALANCE: </span>{{appService.user ? appService.user.balance : 0}}</div>
+                    <div class="roulette-board-info-field" style="left: 66%;"><span class="roulette-board-info-field-name">WIN: </span>{{lastPrize}}</div>
+                    <div class="roulette-board-fields-line" *ngFor="let line of lines; let li = index;">
+                        <div class="roulette-board-field" *ngFor="let column of line; let ci = index;"
+                            [ngClass]="
+                                {
+                                    'roulette-board-black-background-field': column.color == 'black',
+                                    'roulette-board-red-background-field': column.color == 'red'
+                                }">
+                            {{column.value}}
+                            <div [ngClass]="{ 'field-with-value': currentCoordinatesBet([[li, ci]]) }"
+                                [ngStyle]="{
+                                    'border': '4px solid ' + valueColor(currentCoordinatesBet([[li, ci]]))
+                                }"
+                                class="roulette-board-field-action"
+                                (click)="addBet([[li, ci]]);">
+                                    {{currentCoordinatesBet([[li, ci]])}}
+                            </div>
+                            <div [ngClass]="{ 'field-with-value': currentCoordinatesBet([[li, ci], [li, ci+1]]) }"
+                                [ngStyle]="{
+                                    'border': '4px solid ' + valueColor(currentCoordinatesBet([[li, ci], [li, ci+1]]))
+                                }"
+                                *ngIf="ci != line.length - 1"
+                                class="roulette-board-field-h2-action"
+                                (click)="addBet([[li, ci], [li, ci+1]]);">
+                                    {{currentCoordinatesBet([[li, ci], [li, ci+1]])}}
+                            </div>
+                            <div [ngClass]="{ 'field-with-value': currentCoordinatesBet([[li, ci], [li + 1, ci]]) }"
+                                [ngStyle]="{
+                                    'border': '4px solid ' + valueColor(currentCoordinatesBet([[li, ci], [li + 1, ci]]))
+                                }"
+                                *ngIf="li != lines.length - 1"
+                                class="roulette-board-field-v2-action"
+                                (click)="addBet([[li, ci], [li + 1, ci]]);">
+                                    {{currentCoordinatesBet([[li, ci], [li + 1, ci]])}}
+                            </div>
+                            <div [ngClass]="{ 'field-with-value': currentCoordinatesBet([[li, ci], [li + 1, ci], [li, ci + 1], [li + 1, ci + 1]]) }"
+                                [ngStyle]="{
+                                    'border': '4px solid ' + valueColor(currentCoordinatesBet([[li, ci], [li + 1, ci], [li, ci + 1], [li + 1, ci + 1]]))
+                                }"
+                                *ngIf="ci != line.length - 1 && li != lines.length - 1"
+                                class="roulette-board-field-d4-action"
+                                (click)="addBet([[li, ci], [li + 1, ci], [li, ci + 1], [li + 1, ci + 1]]);">
+                                    {{currentCoordinatesBet([[li, ci], [li + 1, ci], [li, ci + 1], [li + 1, ci + 1]])}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="roulette-board-fields-line">
+                        <div class="roulette-board-field roulette-board-field-div3 roulette-board-transparent-background-field">
+                            1st 12
+                            <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(firstTwelve) }"
+                                [ngStyle]="{
+                                    'border': '4px solid ' + valueColor(currentCoordinatesBet(firstTwelve))
+                                }"
+                                class="roulette-board-field-action"
+                                (click)="addBet(firstTwelve);">
+                                    {{currentCoordinatesBet(firstTwelve)}}
+                            </div>
+                        </div>
+                        <div class="roulette-board-field roulette-board-field-div3 roulette-board-transparent-background-field">
+                            2nd 12
+                            <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(secondTwelve) }"
+                                [ngStyle]="{
+                                    'border': '4px solid ' + valueColor(currentCoordinatesBet(secondTwelve))
+                                }"
+                                class="roulette-board-field-action"
+                                (click)="addBet(secondTwelve);">
+                                    {{currentCoordinatesBet(secondTwelve)}}
+                            </div>
+                        </div>
+                        <div class="roulette-board-field roulette-board-field-div3 roulette-board-transparent-background-field">
+                            3rd 12
+                            <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(thirdTwelve) }"
+                                [ngStyle]="{
+                                    'border': '4px solid ' + valueColor(currentCoordinatesBet(thirdTwelve))
+                                }"
+                                class="roulette-board-field-action"
+                                (click)="addBet(thirdTwelve);">
+                                    {{currentCoordinatesBet(thirdTwelve)}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="roulette-board-fields-line">
+                        <div class="roulette-board-field roulette-board-field-div6 roulette-board-transparent-background-field">
+                            1-18
+                            <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(firstEighteen) }"
+                                [ngStyle]="{
+                                    'border': '4px solid ' + valueColor(currentCoordinatesBet(firstEighteen))
+                                }"
+                                class="roulette-board-field-action"
+                                (click)="addBet(firstEighteen);">
+                                    {{currentCoordinatesBet(firstEighteen)}}
+                            </div>
+                        </div>
+                        <div class="roulette-board-field roulette-board-field-div6 roulette-board-transparent-background-field">
+                            Even
+                            <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(evenFields) }"
+                                [ngStyle]="{
+                                    'border': '4px solid ' + valueColor(currentCoordinatesBet(evenFields))
+                                }"
+                                class="roulette-board-field-action"
+                                (click)="addBet(evenFields);">
+                                    {{currentCoordinatesBet(evenFields)}}
+                            </div>
+                        </div>
+                        <div class="roulette-board-field roulette-board-field-div6 roulette-board-red-background-field">
+                            <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(redFields) }"
+                                [ngStyle]="{
+                                    'border': '4px solid ' + valueColor(currentCoordinatesBet(redFields))
+                                }"
+                                class="roulette-board-field-action"
+                                (click)="addBet(redFields);">
+                                    {{currentCoordinatesBet(redFields)}}
+                            </div>
+                        </div>
+                        <div class="roulette-board-field roulette-board-field-div6 roulette-board-black-background-field">
+                            <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(blackFields) }"
+                                [ngStyle]="{
+                                    'border': '4px solid ' + valueColor(currentCoordinatesBet(blackFields))
+                                }"
+                                class="roulette-board-field-action"
+                                (click)="addBet(blackFields);">
+                                    {{currentCoordinatesBet(blackFields)}}
+                            </div>
+                        </div>
+                        <div class="roulette-board-field roulette-board-field-div6 roulette-board-transparent-background-field">
+                            Odd
+                            <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(oddfields) }"
+                                [ngStyle]="{
+                                    'border': '4px solid ' + valueColor(currentCoordinatesBet(oddfields))
+                                }"
+                                class="roulette-board-field-action"
+                                (click)="addBet(oddfields);">
+                                    {{currentCoordinatesBet(oddfields)}}
+                            </div>
+                        </div>
+                        <div class="roulette-board-field roulette-board-field-div6 roulette-board-transparent-background-field">
+                            19-36
+                            <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(secondEighteen) }"
+                                [ngStyle]="{
+                                    'border': '4px solid ' + valueColor(currentCoordinatesBet(secondEighteen))
+                                }"
+                                class="roulette-board-field-action"
+                                (click)="addBet(secondEighteen);">
+                                    {{currentCoordinatesBet(secondEighteen)}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="roulette-board-side-section">
+                    <div class="roulette-board-right-fields-container roulette-board-transparent-background-field">
+                        <div class="roulette-board-right-field">
+                            2:1
+                            <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(topFields) }"
+                                [ngStyle]="{
+                                    'border': '4px solid ' + valueColor(currentCoordinatesBet(topFields))
+                                }"
+                                class="roulette-board-field-action"
+                                (click)="addBet(topFields);">
+                                    {{currentCoordinatesBet(topFields)}}
+                            </div>
+                        </div>
+                        <div class="roulette-board-right-field">
+                            2:1
+                            <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(midFields) }"
+                                [ngStyle]="{
+                                    'border': '4px solid ' + valueColor(currentCoordinatesBet(midFields))
+                                }"
+                                class="roulette-board-field-action"
+                                (click)="addBet(midFields);">
+                                    {{currentCoordinatesBet(midFields)}}
+                            </div>
+                        </div>
+                        <div class="roulette-board-right-field">
+                            2:1
+                            <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(bottomFields) }"
+                                [ngStyle]="{
+                                    'border': '4px solid ' + valueColor(currentCoordinatesBet(bottomFields))
+                                }"
+                                class="roulette-board-field-action"
+                                (click)="addBet(bottomFields);">
+                                    {{currentCoordinatesBet(bottomFields)}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="roulette-bet-controls-container">
+                <div (click)="clearBet();" [ngClass]="{ 'disabled': spinning || totalBet() == 0, 'no-hover': spinning || totalBet() == 0 }" class="button" style="position: absolute; bottom: 20px; left: 20px;">CLEAR</div>
+                <div (click)="doubleBet();" [ngClass]="{ 'disabled': spinning || totalBet() * 2 > maxBet || totalBet() == 0, 'no-hover': spinning || totalBet() * 2 > maxBet || totalBet() == 0 }" class="button" style="position: absolute; bottom: 20px; right: 20px;">DOUBLE</div>
+                <div class="roulette-bet-coins-container">
+                    <div
+                        class="roulette-bet-coin"
+                        [ngStyle]="{
+                            'border': '6px solid ' + coin.color,
+                            'left': (i * 64) + 'px',
+                            'bottom': coin.value == selectedCoinValue ? '6px': '-20px'
+                        }"
+                        *ngFor="let coin of coins; let i = index;"
+                        (click)="selectCoin(coin);">
+                        {{coin.value}}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <div class="roulette-rules-container">
+            <h2>Instructions</h2>
+            <h4>Balance</h4>
+            <ul>
+                <li>Play from your balance. If you're out of balance, deposit some more to play!</li>
+                <li>You can bet between <b>{{minBet}}</b> and <b>{{maxBet}}</b> satoshi (total).</li>
+                <li>Any prizes won will automatically add to your balance and you can withdraw whenever you want.</li>
+            </ul>
+            <h4>Hotkeys</h4>
+            <ul>
+                <li>You can tap the <b>Space</b> key to spin the wheel.</li>
+            </ul>
+            <h4>Final Notes</h4>
+            <ul>
+                <li>Be responsible. Don't bet more than you can lose.</li>
+                <li>This is intended to be a fun little game, not a job!</li>
+                <li>Have fun! If you run into any issues please contact me at nel0 [at] protonmail.com.</li>
+            </ul>
+        </div>
 </div>

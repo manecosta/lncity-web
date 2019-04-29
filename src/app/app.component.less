@@ -11,15 +11,18 @@
 }
 
 #app-menu {
-    width: 100%;
+    width: 1200px;
     height: 96px;
-    margin-bottom: 32px;
     border-bottom: 1px solid @lightbackgroundaccentcolor;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    background-color: @lightbackgroundcolor;
 }
 
 #app-content-container {
+    margin-top: 120px;
     width: 100%;
-    min-height: calc(100% - 129px);
 }
 
 .app-menu-logo {

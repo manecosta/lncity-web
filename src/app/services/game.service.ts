@@ -16,8 +16,14 @@ export class GameService {
     }
 
     getSlotBoard(betMultiplier) {
-        return this.requestService.post('/games/slots/getboard', {
+        return this.requestService.post('/games/slots/play', {
             bet_multiplier: betMultiplier
+        });
+    }
+
+    getRouletteResult(bets) {
+        return this.requestService.post('/games/roulettes/play', {
+            bets
         });
     }
 }
