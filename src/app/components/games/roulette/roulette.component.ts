@@ -3,17 +3,20 @@ import {
     OnInit,
     ViewChild,
     ElementRef,
-    OnDestroy
+    OnDestroy,
+    HostListener
 } from '@angular/core';
 import { AppService } from 'src/app/services/app.service';
 import { GameService } from 'src/app/services/game.service';
+import { MatDialogConfig, MatDialog } from '@angular/material';
+import { PaymentDialogComponent } from 'src/app/dialogs/paymentdialog/paymentdialog.component';
 
 @Component({
     selector: 'app-game-roulette',
     templateUrl: 'roulette.component.html',
     styleUrls: ['roulette.component.less']
 })
-export class RouletteGameComponent implements OnDestroy {
+export class RouletteGameComponent implements OnDestroy, OnInit {
     lines = [
         [
             { value: 3, color: 'red' },
@@ -130,6 +133,13 @@ export class RouletteGameComponent implements OnDestroy {
         }
     ];
 
+    loadingParameters = false;
+    loadedParameters = false;
+    loadParamtersInterval = null;
+
+    prizeAnimationTimeout = null;
+    prizeAnimationInterval = null;
+
     spinning = false;
     currentAngle = 0;
     wheelSpinInterval;
@@ -153,13 +163,16 @@ export class RouletteGameComponent implements OnDestroy {
     selectedCoinValue = 500;
 
     lastPrize = 0;
+    lastResults = [];
+    currentResult = null;
 
     @ViewChild('rouletteWheel')
     rouletteWheel: ElementRef;
 
     constructor(
         public appService: AppService,
-        private gameService: GameService
+        private gameService: GameService,
+        private dialog: MatDialog
     ) {
         for (let li = 0; li < this.lines.length; li++) {
             const line = this.lines[li];
@@ -203,10 +216,48 @@ export class RouletteGameComponent implements OnDestroy {
         }
     }
 
+    ngOnInit() {
+        this.loadParamtersInterval = setInterval(() => {
+            if (this.loadedParameters) {
+                clearInterval(this.loadParamtersInterval);
+                return;
+            }
+            if (!this.loadingParameters) {
+                this.loadingParameters = true;
+                this.gameService
+                    .getRouletteParameters()
+                    .then(response => {
+                        this.loadedParameters = true;
+                        this.loadingParameters = false;
+
+                        this.minBet = response.min_bet_amount;
+                        this.maxBet = response.max_bet_amount;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            }
+        }, 1000);
+    }
+
     ngOnDestroy() {
         if (this.wheelSpinInterval) {
             clearInterval(this.wheelSpinInterval);
             this.wheelSpinInterval = null;
+        }
+    }
+
+    @HostListener('window:keydown', ['$event'])
+    keyPressed(event) {
+        if (event.code === 'Space') {
+            this.spin();
+            return false;
+        } else if (event.key === '+') {
+            this.doubleBet();
+            return false;
+        } else if (event.code === 'Delete') {
+            this.clearBet();
+            return false;
         }
     }
 
@@ -238,9 +289,29 @@ export class RouletteGameComponent implements OnDestroy {
         return bets;
     }
 
+    depositBalance() {
+        const dialogConfig = new MatDialogConfig();
+
+        dialogConfig.data = {
+            message: 'Select an amount to deposit (satoshi):',
+            payingToBalance: true
+        };
+
+        const paymentDialog = this.dialog.open(
+            PaymentDialogComponent,
+            dialogConfig
+        );
+    }
+
     spin() {
-        if (!this.spinning && this.totalBet() > 0) {
+        const totalBet = this.totalBet();
+        if (
+            !this.spinning &&
+            totalBet >= this.minBet &&
+            totalBet <= this.maxBet
+        ) {
             this.spinning = true;
+            this.currentResult = null;
             this.gameService
                 .getRouletteResult(this.getBetsForServer())
                 .then(result => {
@@ -254,6 +325,7 @@ export class RouletteGameComponent implements OnDestroy {
                         const n = this.numbers[i];
                         if (n.value === resultValue) {
                             resultIndex = i;
+                            break;
                         }
                     }
 
@@ -287,7 +359,38 @@ export class RouletteGameComponent implements OnDestroy {
                             this.spinning = false;
 
                             this.lastPrize = result.prize;
-                            this.appService.user.balance += this.lastPrize;
+
+                            this.currentResult = this.numbers[resultIndex];
+                            this.lastResults = [this.currentResult].concat(
+                                this.lastResults
+                            );
+
+                            if (this.lastPrize > 0) {
+                                this.prizeAnimationTimeout = setTimeout(() => {
+                                    this.prizeAnimationTimeout = null;
+                                    this.prizeAnimationInterval = setInterval(
+                                        () => {
+                                            const step = Math.min(
+                                                this.lastPrize,
+                                                50 *
+                                                    Math.ceil(
+                                                        this.totalBet() / 500
+                                                    )
+                                            );
+                                            this.appService.user.balance += step;
+                                            this.lastPrize -= step;
+                                            if (this.lastPrize === 0) {
+                                                clearInterval(
+                                                    this.prizeAnimationInterval
+                                                );
+                                                this.prizeAnimationInterval = null;
+                                                this.appService.backupUser();
+                                            }
+                                        },
+                                        50
+                                    );
+                                }, 2000);
+                            }
                         }
                     }, 1000 / frameRate);
                 });
@@ -295,7 +398,11 @@ export class RouletteGameComponent implements OnDestroy {
     }
 
     addBet(coordinates) {
-        if (this.totalBet() + this.selectedCoinValue <= this.maxBet) {
+        const newBetValue = this.totalBet() + this.selectedCoinValue;
+        if (
+            newBetValue <= this.maxBet &&
+            newBetValue <= this.appService.user.balance
+        ) {
             let valuesKey = '0';
             if (coordinates !== 0) {
                 const values = [];
@@ -347,7 +454,8 @@ export class RouletteGameComponent implements OnDestroy {
     }
 
     doubleBet() {
-        if (this.totalBet() * 2 <= this.maxBet) {
+        const totalBet = this.totalBet();
+        if (totalBet * 2 <= this.maxBet && totalBet > 0) {
             const newBets = {};
             for (const betKey in this.bets) {
                 if (betKey in this.bets) {
@@ -378,5 +486,27 @@ export class RouletteGameComponent implements OnDestroy {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    isFieldHighlighted(coordinates) {
+        if (this.currentResult) {
+            const coordinateValues = [];
+            if (coordinates !== 0) {
+                for (const coordinate of coordinates) {
+                    coordinateValues.push(
+                        this.lines[coordinate[0]][coordinate[1]].value
+                    );
+                }
+            } else {
+                coordinateValues.push(0);
+            }
+
+            for (const value of coordinateValues) {
+                if (value === this.currentResult.value) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

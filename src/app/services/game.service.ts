@@ -21,6 +21,10 @@ export class GameService {
         });
     }
 
+    getRouletteParameters() {
+        return this.requestService.get('/games/roulettes/getparameters');
+    }
+
     getRouletteResult(bets) {
         return this.requestService.post('/games/roulettes/play', {
             bets

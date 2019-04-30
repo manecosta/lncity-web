@@ -2,8 +2,29 @@
 
 @fontSize: 18px;
 
+@keyframes inoutAnimation {
+    0% {
+        opacity: 0;
+    }
+    30% {
+        opacity: 1;
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
 .roulette-container {
     width: 100%;
+}
+
+.roulette-loading {
+    margin: 128px auto;
+    width: 128px;
+    height: 128px;
 }
 
 .roulette-game-container {
@@ -12,6 +33,40 @@
     padding: 40px;
     background-color: white;
     border-radius: 10px;
+}
+
+.roulette-last-results-container {
+    width: 100%;
+    height: 48px;
+    margin-bottom: 20px;
+    background-color: @lightaccentcolor;
+    overflow: hidden;
+    position: relative;
+}
+
+.roulette-last-result {
+    font-size: 16px;
+    line-height: 32px;
+    font-weight: 600;
+    display: inline-block;
+    padding: 0 10px;
+    position: relative;
+    vertical-align: top;
+}
+
+.roulette-last-result-red {
+    color: @negativeaccentcolor;
+    top: 0;
+}
+
+.roulette-last-result-black {
+    color: @darkbackgroundcolor;
+    top: 16px;
+}
+
+.roulette-last-result-green {
+    color: #68d859;
+    top: 8px;
 }
 
 .roulette-wheel-container {
@@ -106,6 +161,15 @@
     line-height: 44px;
 }
 
+.roulette-spin-button > span {
+    position: absolute;
+    top: 14px;
+    left: 0;
+    width: 100%;
+    font-size: 10px;
+    color: @textcolor;
+}
+
 .roulette-controls-container {
     width: 700px;
     height: 340px;
@@ -172,6 +236,22 @@
     cursor: default;
     position: relative;
     overflow: visible;
+}
+
+.roulette-board-field-highlight {
+    position: absolute;
+    z-index: 9;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    top: 0;
+    left: 0;
+    box-shadow: inset 0 0 20px 0 white;
+}
+
+.roulette-field-board-highlight-on {
+    opacity: 0;
+    animation: inoutAnimation 1s infinite;
 }
 
 .roulette-board-field-action {

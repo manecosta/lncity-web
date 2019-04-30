@@ -1,7 +1,21 @@
 <div class="app-page-title">Roulette</div>
 <div class="roulette-container">
+    <div *ngIf="!loadedParameters" class="roulette-loading centered-content">
+        <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+    </div>
+    <div *ngIf="loadedParameters" class="roulette-game-container">
 
-    <div class="roulette-game-container">
+        <div class="roulette-last-results-container">
+            <div class="roulette-last-result"
+                [ngClass]="{
+                    'roulette-last-result-red': result.color == 'red',
+                    'roulette-last-result-black': result.color == 'black',
+                    'roulette-last-result-green': result.color == 'green'
+                }"
+                *ngFor="let result of lastResults">
+                {{result.value}}
+            </div>
+        </div>
 
         <div class="roulette-wheel-container">
             <div class="roulette-wheel-result-marker"></div>
@@ -23,7 +37,17 @@
                 <div class="roulette-wheel-center">
                 </div>
             </div>
-            <div class="button roulette-spin-button" (click)="spin()" [ngClass]="{ 'disabled': spinning || totalBet() < minBet, 'no-hover': spinning || totalBet() < minBet }">{{'SPIN'}}</div>
+            <div class="button roulette-spin-button"
+                (click)="depositBalance()"
+                *ngIf="appService.user && appService.user.balance < minBet">
+                DEPOSIT
+            </div>
+            <div class="button roulette-spin-button"
+                (click)="spin()"
+                *ngIf="appService.user && appService.user.balance >= minBet"
+                [ngClass]="{
+                    'disabled no-hover': spinning || totalBet() < minBet || totalBet() > maxBet
+                }">SPIN<span>(Tap Space)</span></div>
         </div>
 
         <div class="roulette-controls-container">
@@ -31,6 +55,7 @@
                 <div class="roulette-board-side-section">
                     <div class="roulette-board-left-field roulette-board-transparent-background-field">
                         0
+                        <div class="roulette-board-field-highlight" [ngClass]="{ 'roulette-field-board-highlight-on': isFieldHighlighted(0) }"></div>
                         <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(0) }"
                             [ngStyle]="{
                                 'border': '4px solid ' + valueColor(currentCoordinatesBet(0))
@@ -53,6 +78,7 @@
                                     'roulette-board-red-background-field': column.color == 'red'
                                 }">
                             {{column.value}}
+                            <div class="roulette-board-field-highlight" [ngClass]="{ 'roulette-field-board-highlight-on': isFieldHighlighted([[li, ci]]) }"></div>
                             <div [ngClass]="{ 'field-with-value': currentCoordinatesBet([[li, ci]]) }"
                                 [ngStyle]="{
                                     'border': '4px solid ' + valueColor(currentCoordinatesBet([[li, ci]]))
@@ -93,6 +119,7 @@
                     <div class="roulette-board-fields-line">
                         <div class="roulette-board-field roulette-board-field-div3 roulette-board-transparent-background-field">
                             1st 12
+                            <div class="roulette-board-field-highlight" [ngClass]="{ 'roulette-field-board-highlight-on': isFieldHighlighted(firstTwelve) }"></div>
                             <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(firstTwelve) }"
                                 [ngStyle]="{
                                     'border': '4px solid ' + valueColor(currentCoordinatesBet(firstTwelve))
@@ -104,6 +131,7 @@
                         </div>
                         <div class="roulette-board-field roulette-board-field-div3 roulette-board-transparent-background-field">
                             2nd 12
+                            <div class="roulette-board-field-highlight" [ngClass]="{ 'roulette-field-board-highlight-on': isFieldHighlighted(secondTwelve) }"></div>
                             <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(secondTwelve) }"
                                 [ngStyle]="{
                                     'border': '4px solid ' + valueColor(currentCoordinatesBet(secondTwelve))
@@ -115,6 +143,7 @@
                         </div>
                         <div class="roulette-board-field roulette-board-field-div3 roulette-board-transparent-background-field">
                             3rd 12
+                            <div class="roulette-board-field-highlight" [ngClass]="{ 'roulette-field-board-highlight-on': isFieldHighlighted(thirdTwelve) }"></div>
                             <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(thirdTwelve) }"
                                 [ngStyle]="{
                                     'border': '4px solid ' + valueColor(currentCoordinatesBet(thirdTwelve))
@@ -128,6 +157,7 @@
                     <div class="roulette-board-fields-line">
                         <div class="roulette-board-field roulette-board-field-div6 roulette-board-transparent-background-field">
                             1-18
+                            <div class="roulette-board-field-highlight" [ngClass]="{ 'roulette-field-board-highlight-on': isFieldHighlighted(firstEighteen) }"></div>
                             <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(firstEighteen) }"
                                 [ngStyle]="{
                                     'border': '4px solid ' + valueColor(currentCoordinatesBet(firstEighteen))
@@ -139,6 +169,7 @@
                         </div>
                         <div class="roulette-board-field roulette-board-field-div6 roulette-board-transparent-background-field">
                             Even
+                            <div class="roulette-board-field-highlight" [ngClass]="{ 'roulette-field-board-highlight-on': isFieldHighlighted(evenFields) }"></div>
                             <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(evenFields) }"
                                 [ngStyle]="{
                                     'border': '4px solid ' + valueColor(currentCoordinatesBet(evenFields))
@@ -149,6 +180,7 @@
                             </div>
                         </div>
                         <div class="roulette-board-field roulette-board-field-div6 roulette-board-red-background-field">
+                            <div class="roulette-board-field-highlight" [ngClass]="{ 'roulette-field-board-highlight-on': isFieldHighlighted(redFields) }"></div>
                             <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(redFields) }"
                                 [ngStyle]="{
                                     'border': '4px solid ' + valueColor(currentCoordinatesBet(redFields))
@@ -159,6 +191,7 @@
                             </div>
                         </div>
                         <div class="roulette-board-field roulette-board-field-div6 roulette-board-black-background-field">
+                            <div class="roulette-board-field-highlight" [ngClass]="{ 'roulette-field-board-highlight-on': isFieldHighlighted(blackFields) }"></div>
                             <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(blackFields) }"
                                 [ngStyle]="{
                                     'border': '4px solid ' + valueColor(currentCoordinatesBet(blackFields))
@@ -170,6 +203,7 @@
                         </div>
                         <div class="roulette-board-field roulette-board-field-div6 roulette-board-transparent-background-field">
                             Odd
+                            <div class="roulette-board-field-highlight" [ngClass]="{ 'roulette-field-board-highlight-on': isFieldHighlighted(oddfields) }"></div>
                             <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(oddfields) }"
                                 [ngStyle]="{
                                     'border': '4px solid ' + valueColor(currentCoordinatesBet(oddfields))
@@ -181,6 +215,7 @@
                         </div>
                         <div class="roulette-board-field roulette-board-field-div6 roulette-board-transparent-background-field">
                             19-36
+                            <div class="roulette-board-field-highlight" [ngClass]="{ 'roulette-field-board-highlight-on': isFieldHighlighted(secondEighteen) }"></div>
                             <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(secondEighteen) }"
                                 [ngStyle]="{
                                     'border': '4px solid ' + valueColor(currentCoordinatesBet(secondEighteen))
@@ -196,6 +231,7 @@
                     <div class="roulette-board-right-fields-container roulette-board-transparent-background-field">
                         <div class="roulette-board-right-field">
                             2:1
+                            <div class="roulette-board-field-highlight" [ngClass]="{ 'roulette-field-board-highlight-on': isFieldHighlighted(topFields) }"></div>
                             <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(topFields) }"
                                 [ngStyle]="{
                                     'border': '4px solid ' + valueColor(currentCoordinatesBet(topFields))
@@ -207,6 +243,7 @@
                         </div>
                         <div class="roulette-board-right-field">
                             2:1
+                            <div class="roulette-board-field-highlight" [ngClass]="{ 'roulette-field-board-highlight-on': isFieldHighlighted(midFields) }"></div>
                             <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(midFields) }"
                                 [ngStyle]="{
                                     'border': '4px solid ' + valueColor(currentCoordinatesBet(midFields))
@@ -218,6 +255,7 @@
                         </div>
                         <div class="roulette-board-right-field">
                             2:1
+                            <div class="roulette-board-field-highlight" [ngClass]="{ 'roulette-field-board-highlight-on': isFieldHighlighted(bottomFields) }"></div>
                             <div [ngClass]="{ 'field-with-value': currentCoordinatesBet(bottomFields) }"
                                 [ngStyle]="{
                                     'border': '4px solid ' + valueColor(currentCoordinatesBet(bottomFields))
@@ -231,8 +269,14 @@
                 </div>
             </div>
             <div class="roulette-bet-controls-container">
-                <div (click)="clearBet();" [ngClass]="{ 'disabled': spinning || totalBet() == 0, 'no-hover': spinning || totalBet() == 0 }" class="button" style="position: absolute; bottom: 20px; left: 20px;">CLEAR</div>
-                <div (click)="doubleBet();" [ngClass]="{ 'disabled': spinning || totalBet() * 2 > maxBet || totalBet() == 0, 'no-hover': spinning || totalBet() * 2 > maxBet || totalBet() == 0 }" class="button" style="position: absolute; bottom: 20px; right: 20px;">DOUBLE</div>
+                <div (click)="clearBet();"
+                    [ngClass]="{
+                        'disabled no-hover': spinning || totalBet() == 0
+                    }" class="button" style="position: absolute; bottom: 20px; left: 20px;">CLEAR</div>
+                <div (click)="doubleBet();"
+                    [ngClass]="{
+                        'disabled no-hover': spinning || totalBet() * 2 > maxBet || totalBet() == 0
+                    }" class="button" style="position: absolute; bottom: 20px; right: 20px;">DOUBLE</div>
                 <div class="roulette-bet-coins-container">
                     <div
                         class="roulette-bet-coin"
@@ -249,7 +293,7 @@
             </div>
         </div>
     </div>
-    <div class="roulette-rules-container">
+    <div *ngIf="loadedParameters" class="roulette-rules-container">
             <h2>Instructions</h2>
             <h4>Balance</h4>
             <ul>
@@ -257,9 +301,21 @@
                 <li>You can bet between <b>{{minBet}}</b> and <b>{{maxBet}}</b> satoshi (total).</li>
                 <li>Any prizes won will automatically add to your balance and you can withdraw whenever you want.</li>
             </ul>
+            <h4>Bets and Multipliers</h4>
+            <ul>
+                <li>Betting on any specific number (<b>0</b> to <b>36</b>) will return your bet multiplied by <b>36</b>.</li>
+                <li>Betting between two numbers (<b>1</b> to <b>36</b>) will return your bet multiplied by <b>18</b>.</li>
+                <li>Betting between four number (<b>1</b> to <b>36</b>) will return your bet multiplied by <b>9</b>.</li>
+                <li>Betting on <b>1st 12</b>, <b>2nd 12</b> or <b>3rd 12</b> will return your bet multiplied by <b>3</b>.</li>
+                <li>Betting on any line (<b>2:1</b>) will return your bet multiplied by <b>3</b>.</li>
+                <li>Betting on a color (<b style="color: red;">red</b> or <b>black</b>) will return your bet multiplied by <b>2</b>.</li>
+                <li>Betting on <b>odd</b> or <b>even</b> will return your bet multiplied by <b>2</b>.</li>
+            </ul>
             <h4>Hotkeys</h4>
             <ul>
-                <li>You can tap the <b>Space</b> key to spin the wheel.</li>
+                <li>You can tap the <b>space</b> key to spin the wheel.</li>
+                <li>You can tap the <b>+</b> key to double the bet.</li>
+                <li>You can tap the <b>delete</b> key to clear the table.</li>
             </ul>
             <h4>Final Notes</h4>
             <ul>
