@@ -46,6 +46,9 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
     selectedRow: number = null;
     selectedColumn: number = null;
 
+    minAmount = 1000;
+    maxAmount = 500000;
+
     suggestedAmounts = [
         [1000, 2000, 5000],
         [10000, 20000, 50000],
