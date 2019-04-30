@@ -261,17 +261,21 @@ export class RouletteGameComponent implements OnDestroy, OnInit {
         }
     }
 
-    updateWheelAngle() {
-        this.rouletteWheel.nativeElement.style.transform =
-            'rotate(' + this.currentAngle + 'deg)';
-    }
+    depositBalance() {
+        const dialogConfig = new MatDialogConfig();
 
-    easeInOut(val, power = 2) {
-        return (
-            Math.pow(val, power) /
-            (Math.pow(val, power) + Math.pow(1 - val, power + 1))
+        dialogConfig.data = {
+            message: 'Select an amount to deposit (satoshi):',
+            payingToBalance: true
+        };
+
+        const paymentDialog = this.dialog.open(
+            PaymentDialogComponent,
+            dialogConfig
         );
     }
+
+    // Spin related methods
 
     getBetsForServer() {
         const bets = [];
@@ -289,17 +293,15 @@ export class RouletteGameComponent implements OnDestroy, OnInit {
         return bets;
     }
 
-    depositBalance() {
-        const dialogConfig = new MatDialogConfig();
+    updateWheelAngle() {
+        this.rouletteWheel.nativeElement.style.transform =
+            'rotate(' + this.currentAngle + 'deg)';
+    }
 
-        dialogConfig.data = {
-            message: 'Select an amount to deposit (satoshi):',
-            payingToBalance: true
-        };
-
-        const paymentDialog = this.dialog.open(
-            PaymentDialogComponent,
-            dialogConfig
+    easeInOut(val, power = 2) {
+        return (
+            Math.pow(val, power) /
+            (Math.pow(val, power) + Math.pow(1 - val, power + 1))
         );
     }
 
@@ -398,6 +400,12 @@ export class RouletteGameComponent implements OnDestroy, OnInit {
         }
     }
 
+    // Bet related methods
+
+    selectCoin(coin) {
+        this.selectedCoinValue = coin.value;
+    }
+
     addBet(coordinates) {
         const newBetValue = this.totalBet() + this.selectedCoinValue;
         if (
@@ -420,6 +428,39 @@ export class RouletteGameComponent implements OnDestroy, OnInit {
         }
     }
 
+    doubleBet() {
+        const totalBet = this.totalBet();
+        if (
+            totalBet * 2 <= this.maxBet &&
+            totalBet > 0 &&
+            totalBet * 2 <= this.appService.user.balance
+        ) {
+            const newBets = {};
+            for (const betKey in this.bets) {
+                if (betKey in this.bets) {
+                    newBets[betKey] = this.bets[betKey] * 2;
+                }
+            }
+            this.bets = newBets;
+        }
+    }
+
+    clearBet() {
+        this.bets = {};
+    }
+
+    totalBet() {
+        let totalBet = 0;
+        for (const betKey in this.bets) {
+            if (betKey in this.bets) {
+                totalBet += this.bets[betKey];
+            }
+        }
+        return totalBet;
+    }
+
+    // UI Helpers
+
     currentCoordinatesBet(coordinates) {
         let valuesKey = '0';
         if (coordinates !== 0) {
@@ -433,41 +474,6 @@ export class RouletteGameComponent implements OnDestroy, OnInit {
             return this.bets[valuesKey];
         } else {
             return '';
-        }
-    }
-
-    totalBet() {
-        let totalBet = 0;
-        for (const betKey in this.bets) {
-            if (betKey in this.bets) {
-                totalBet += this.bets[betKey];
-            }
-        }
-        return totalBet;
-    }
-
-    selectCoin(coin) {
-        this.selectedCoinValue = coin.value;
-    }
-
-    clearBet() {
-        this.bets = {};
-    }
-
-    doubleBet() {
-        const totalBet = this.totalBet();
-        if (
-            totalBet * 2 <= this.maxBet &&
-            totalBet > 0 &&
-            totalBet <= this.appService.user.balance
-        ) {
-            const newBets = {};
-            for (const betKey in this.bets) {
-                if (betKey in this.bets) {
-                    newBets[betKey] = this.bets[betKey] * 2;
-                }
-            }
-            this.bets = newBets;
         }
     }
 
@@ -485,12 +491,6 @@ export class RouletteGameComponent implements OnDestroy, OnInit {
         return {
             transform: 'rotate(' + this.currentAngle + 'deg)'
         };
-    }
-
-    getRandomInt(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     isFieldHighlighted(coordinates) {
