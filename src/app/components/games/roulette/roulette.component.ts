@@ -308,7 +308,8 @@ export class RouletteGameComponent implements OnDestroy, OnInit {
         if (
             !this.spinning &&
             totalBet >= this.minBet &&
-            totalBet <= this.maxBet
+            totalBet <= this.maxBet &&
+            totalBet <= this.appService.user.balance
         ) {
             this.spinning = true;
             this.currentResult = null;
@@ -455,7 +456,11 @@ export class RouletteGameComponent implements OnDestroy, OnInit {
 
     doubleBet() {
         const totalBet = this.totalBet();
-        if (totalBet * 2 <= this.maxBet && totalBet > 0) {
+        if (
+            totalBet * 2 <= this.maxBet &&
+            totalBet > 0 &&
+            totalBet <= this.appService.user.balance
+        ) {
             const newBets = {};
             for (const betKey in this.bets) {
                 if (betKey in this.bets) {

@@ -1,9 +1,9 @@
 <div class="app-page-title">Roulette</div>
 <div class="roulette-container">
-    <div *ngIf="!loadedParameters" class="roulette-loading centered-content">
+    <div *ngIf="!loadedParameters || !appService.user" class="roulette-loading centered-content">
         <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
     </div>
-    <div *ngIf="loadedParameters" class="roulette-game-container">
+    <div *ngIf="loadedParameters && appService.user" class="roulette-game-container">
 
         <div class="roulette-last-results-container">
             <div class="roulette-last-result"
@@ -46,7 +46,7 @@
                 (click)="spin()"
                 *ngIf="appService.user && appService.user.balance >= minBet"
                 [ngClass]="{
-                    'disabled no-hover': spinning || totalBet() < minBet || totalBet() > maxBet
+                    'disabled no-hover': spinning || totalBet() < minBet || totalBet() > maxBet || totalBet() > appService.user.balance
                 }">SPIN<span>(Tap Space)</span></div>
         </div>
 
@@ -275,7 +275,7 @@
                     }" class="button" style="position: absolute; bottom: 20px; left: 20px;">CLEAR</div>
                 <div (click)="doubleBet();"
                     [ngClass]="{
-                        'disabled no-hover': spinning || totalBet() * 2 > maxBet || totalBet() == 0
+                        'disabled no-hover': spinning || totalBet() * 2 > maxBet || totalBet() == 0 || totalBet() * 2 > appService.user.balance
                     }" class="button" style="position: absolute; bottom: 20px; right: 20px;">DOUBLE</div>
                 <div class="roulette-bet-coins-container">
                     <div
@@ -293,7 +293,7 @@
             </div>
         </div>
     </div>
-    <div *ngIf="loadedParameters" class="roulette-rules-container">
+    <div *ngIf="loadedParameters && appService.user" class="roulette-rules-container">
             <h2>Instructions</h2>
             <h4>Balance</h4>
             <ul>
