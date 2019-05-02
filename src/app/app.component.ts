@@ -48,11 +48,6 @@ export class AppComponent {
             navigate: '/blog'
         },
         {
-            title: 'Tutorials',
-            type: 'navigate',
-            navigate: '/tutorials'
-        },
-        {
             title: 'Games',
             type: 'menu',
             options: [
@@ -67,6 +62,11 @@ export class AppComponent {
                     navigate: '/roulette'
                 }
             ]
+        },
+        {
+            title: 'Node',
+            type: 'navigate',
+            navigate: '/node'
         },
         {
             title: 'Tip',

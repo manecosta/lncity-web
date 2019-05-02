@@ -4,7 +4,7 @@ import { RouletteGameComponent } from './components/games/roulette/roulette.comp
 import { HomeComponent } from './components/home/home.component';
 import { SlotMachinGameComponent } from './components/games/slotmachine/slotmachine.component';
 import { BlogComponent } from './components/blog/blog.component';
-import { TutorialsComponent } from './components/tutorials/tutorials.component';
+import { NodeComponent } from './components/node/node.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -12,7 +12,7 @@ const routes: Routes = [
     { path: 'roulette', component: RouletteGameComponent },
     { path: 'slot', component: SlotMachinGameComponent },
     { path: 'blog', component: BlogComponent },
-    { path: 'tutorials', component: TutorialsComponent },
+    { path: 'node', component: NodeComponent },
     { path: '**', redirectTo: '/home' }
 ];
 

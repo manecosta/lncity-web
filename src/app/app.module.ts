@@ -23,7 +23,7 @@ import { WithdrawalDialogComponent } from './dialogs/withdrawaldialog/withdrawal
 import { SlotMachinGameComponent } from './components/games/slotmachine/slotmachine.component';
 import { GameService } from './services/game.service';
 import { BlogComponent } from './components/blog/blog.component';
-import { TutorialsComponent } from './components/tutorials/tutorials.component';
+import { NodeComponent } from './components/node/node.component';
 import { RegisterDialogComponent } from './dialogs/registerdialog/registerdialog.component';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { SwitchAccountDialogComponent } from './dialogs/switchaccountdialog/switchaccountdialog.component';
@@ -41,7 +41,7 @@ import { BlogService } from './services/blog.service';
         SlotMachinGameComponent,
         HomeComponent,
         BlogComponent,
-        TutorialsComponent
+        NodeComponent
     ],
     entryComponents: [
         PaymentDialogComponent,
