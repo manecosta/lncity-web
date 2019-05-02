@@ -245,6 +245,8 @@ export class RouletteGameComponent implements OnDestroy, OnInit {
             clearInterval(this.wheelSpinInterval);
             this.wheelSpinInterval = null;
         }
+
+        this.resetPrizeAnimations();
     }
 
     @HostListener('window:keydown', ['$event'])
@@ -276,6 +278,18 @@ export class RouletteGameComponent implements OnDestroy, OnInit {
     }
 
     // Spin related methods
+
+    resetPrizeAnimations() {
+        if (this.lastPrize > 0) {
+            this.appService.user.balance += this.lastPrize;
+            if (this.prizeAnimationInterval) {
+                clearInterval(this.prizeAnimationInterval);
+                this.prizeAnimationInterval = null;
+            }
+            this.lastPrize = 0;
+        }
+        this.currentResult = null;
+    }
 
     getBetsForServer() {
         const bets = [];
@@ -313,6 +327,8 @@ export class RouletteGameComponent implements OnDestroy, OnInit {
             totalBet <= this.maxBet &&
             totalBet <= this.appService.user.balance
         ) {
+            this.resetPrizeAnimations();
+
             this.spinning = true;
             this.currentResult = null;
             this.gameService
@@ -426,6 +442,8 @@ export class RouletteGameComponent implements OnDestroy, OnInit {
                 this.bets[valuesKey] = this.selectedCoinValue;
             }
         }
+
+        this.resetPrizeAnimations();
     }
 
     doubleBet() {
@@ -443,10 +461,14 @@ export class RouletteGameComponent implements OnDestroy, OnInit {
             }
             this.bets = newBets;
         }
+
+        this.resetPrizeAnimations();
     }
 
     clearBet() {
         this.bets = {};
+
+        this.resetPrizeAnimations();
     }
 
     totalBet() {
