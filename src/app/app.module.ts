@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { Router, RouterEvent, NavigationStart } from '@angular/router';
 import { AppService } from './services/app.service';
 import { MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule } from '@angular/material';
 import {
@@ -12,7 +11,7 @@ import {
 } from './dialogs/paymentdialog/paymentdialog.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PaymentService } from './services/payment.service';
-import { HttpClientModule, HttpResponse } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { RequestService } from './services/request.service';
 import { QRCodeModule } from 'angularx-qrcode';
 import { RouletteGameComponent } from './components/games/roulette/roulette.component';
@@ -28,6 +27,7 @@ import { TutorialsComponent } from './components/tutorials/tutorials.component';
 import { RegisterDialogComponent } from './dialogs/registerdialog/registerdialog.component';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { SwitchAccountDialogComponent } from './dialogs/switchaccountdialog/switchaccountdialog.component';
+import { BlogService } from './services/blog.service';
 
 @NgModule({
     declarations: [
@@ -65,6 +65,7 @@ import { SwitchAccountDialogComponent } from './dialogs/switchaccountdialog/swit
         RequestService,
         AccountService,
         GameService,
+        BlogService,
         LocalStorage,
         {
             provide: MAT_DIALOG_DEFAULT_OPTIONS,

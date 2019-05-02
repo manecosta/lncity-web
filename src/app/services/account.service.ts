@@ -8,8 +8,6 @@ import { User } from '../models/user';
 export class AccountService {
     static instance: AccountService;
 
-    public isInside = false;
-
     constructor(
         private requestService: RequestService,
         private appService: AppService

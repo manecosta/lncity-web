@@ -5,16 +5,15 @@ import { RequestService } from './request.service';
 export class PaymentService {
     static instance: PaymentService;
 
-    public isInside = false;
-
     constructor(private requestService: RequestService) {
         PaymentService.instance = this;
     }
 
-    generateInvoice(amount, memo) {
-        return this.requestService.get(
-            '/invoices/generate/' + amount + '/' + encodeURI(memo)
-        );
+    tipTarget(target, amount) {
+        return this.requestService.post('/tips/send', {
+            target,
+            amount
+        });
     }
 
     getInvoice(rHash) {

@@ -69,9 +69,9 @@ export class AppComponent {
             ]
         },
         {
-            title: 'Donate',
+            title: 'Tip',
             type: 'action',
-            action: 'donate'
+            action: 'tip'
         }
     ];
 
@@ -81,12 +81,12 @@ export class AppComponent {
         private router: Router
     ) {}
 
-    donate() {
+    tip() {
         const dialogConfig = new MatDialogConfig();
 
         dialogConfig.data = {
-            message: 'Select an amount to donate (satoshi):',
-            payingToBalance: false
+            message: 'Select an amount to tip (satoshi):',
+            target: 'lncity'
         };
 
         const paymentDialog = this.dialog.open(
@@ -100,7 +100,7 @@ export class AppComponent {
 
         dialogConfig.data = {
             message: 'Select an amount to deposit (satoshi):',
-            payingToBalance: true
+            target: 'balance'
         };
 
         const paymentDialog = this.dialog.open(

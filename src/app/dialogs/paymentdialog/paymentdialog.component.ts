@@ -9,6 +9,7 @@ import {
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { PaymentService } from 'src/app/services/payment.service';
 import { AccountService } from 'src/app/services/account.service';
+import { AppService } from 'src/app/services/app.service';
 
 @Pipe({ name: 'amountPipe' })
 export class AmountPipe implements PipeTransform {
@@ -38,9 +39,9 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
     Math = Math;
 
     title = 'Lightning Network City';
-    message = 'Select an amount to donate (satoshi):';
+    message = 'Select an amount to deposit (satoshi):';
 
-    payingToBalance = false;
+    target = 'balance';
 
     amount: number = null;
     selectedRow: number = null;
@@ -73,7 +74,8 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
         public dialogRef: MatDialogRef<PaymentDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private paymentService: PaymentService,
-        private accountService: AccountService
+        private accountService: AccountService,
+        private appService: AppService
     ) {
         if (data) {
             if (data.title) {
@@ -84,10 +86,10 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
             }
             if (data.amount) {
                 this.amount = data.amount;
-                this.generateInvoice();
+                this.performPayment();
             }
-            if (data.payingToBalance) {
-                this.payingToBalance = data.payingToBalance;
+            if (data.target) {
+                this.target = data.target;
             }
         }
     }
@@ -143,13 +145,16 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
                                 clearInterval(this.checkInvoiceInterval);
                                 this.generatedInvoicePaymentRequest = null;
                                 this.generatedInvoiceRHash = null;
-                                if (this.payingToBalance) {
-                                    this.accountService.reloadAccount();
-                                }
                                 this.dialogRef.updateSize('400px', '400px');
-                                setTimeout(() => {
-                                    this.dialogRef.close();
-                                }, 2000);
+                                if (this.target === 'balance') {
+                                    this.accountService.reloadAccount();
+                                    setTimeout(() => {
+                                        this.dialogRef.close(true);
+                                    }, 2000);
+                                } else {
+                                    this.loading = true;
+                                    this.performTip();
+                                }
                             }
                         }
                     })
@@ -165,11 +170,37 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
         }, 500);
     }
 
-    generateInvoice() {
+    performTip() {
+        this.paymentService
+            .tipTarget(this.target, this.amount)
+            .then(_ => {
+                this.loading = false;
+                this.accountService.reloadAccount();
+                this.paymentSuccess = true;
+                setTimeout(() => {
+                    this.dialogRef.close({
+                        target: this.target,
+                        amount: this.amount
+                    });
+                }, 2000);
+            })
+            .catch(error => {
+                this.loading = false;
+                this.paymentSuccess = false;
+                setTimeout(() => {
+                    this.dialogRef.close(false);
+                }, 2000);
+            });
+    }
+
+    performPayment() {
         this.selectingAmount = false;
         this.loading = true;
-        this.dialogRef.updateSize('400px', '700px');
-        if (this.payingToBalance) {
+        if (
+            this.target === 'balance' ||
+            this.appService.user.balance < this.amount
+        ) {
+            this.dialogRef.updateSize('400px', '700px');
             this.accountService
                 .depositBalance(this.amount)
                 .then(response => {
@@ -179,17 +210,7 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
                     this.loading = false;
                 });
         } else {
-            this.paymentService
-                .generateInvoice(
-                    this.amount,
-                    this.amount + ' donation to ln.city'
-                )
-                .then(response => {
-                    this.generatedInvoiceSuccessHandler(response);
-                })
-                .catch(error => {
-                    this.loading = false;
-                });
+            this.performTip();
         }
     }
 

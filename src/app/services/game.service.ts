@@ -5,8 +5,6 @@ import { RequestService } from './request.service';
 export class GameService {
     static instance: GameService;
 
-    public isInside = false;
-
     constructor(private requestService: RequestService) {
         GameService.instance = this;
     }
