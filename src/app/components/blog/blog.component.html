@@ -17,13 +17,13 @@
                 <div class="blog-post-comment-count" (click)="loadPostComments(post)">
                     {{post.comments_count}} comment{{post.comments_count == 1 ? '': 's'}}
                 </div>
-                <div class="blog-post-donations-container" *ngIf="post.user.id != appService.user.userId">
+                <div class="blog-post-donations-container">
                     <span *ngIf="post.donation_amount > 0">
                         {{post.donation_amount}}
                         <img style="display: inline-block; vertical-align: top; height: 24px; width: auto; padding: 2px 0 6px 0;" src="assets/img/satoshi-symbol-32x64.png">
                         ({{post.donation_count}} tip{{post.donation_count == 1 ? '' : 's'}})
                     </span>
-                    <div class="blog-post-donations-button button" (click)="tipPost(post)">TIP</div>
+                    <div class="blog-post-donations-button button" *ngIf="post.user.id != appService.user.userId" (click)="tipPost(post)">TIP</div>
                 </div>
                 <div class="blog-post-comments-loader centered-content" *ngIf="post.comments_loading">
                     <div class="small-lds-ring"><div></div><div></div><div></div><div></div></div>
@@ -37,14 +37,14 @@
                     <div class="blog-post-comment-container" *ngFor="let comment of post.comments">
                         <div class="blog-post-comment-body">{{comment.body}}</div>
                         <div class="blog-post-comment-footer">{{readableDate(comment.created_time)}} by <b>{{getUserName(comment.user)}}</b></div>
-                        <div class="blog-post-comment-donations-container" *ngIf="comment.user.id != appService.user.userId">
+                        <div class="blog-post-comment-donations-container">
                             <span *ngIf="comment.donation_amount > 0">
                                 {{comment.donation_amount}}
                                 <img style="display: inline-block; vertical-align: top; height: 12px; width: auto; padding: 1px 0 3px 0;"
                                 src="assets/img/satoshi-symbol-32x64.png">
                                 ({{comment.donation_count}} tip{{comment.donation_count == 1 ? '' : 's'}})
                             </span>
-                            <div class="blog-post-comment-donations-button button" (click)="tipComment(comment)">TIP</div>
+                            <div class="blog-post-comment-donations-button button" *ngIf="comment.user.id != appService.user.userId" (click)="tipComment(comment)">TIP</div>
                         </div>
                     </div>
                 </div>
