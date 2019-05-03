@@ -10,13 +10,15 @@ export class HomeComponent implements OnInit {
     games = [
         {
             title: 'Slot',
-            description: 'Play the slots and earn up to 40x your bet!',
+            description:
+                'Play the lightning slots and earn up to 40x your bet!',
             navigate: 'slot',
             background: 'assets/img/slot/promobg.png'
         },
         {
             title: 'Roulette',
-            description: 'Play the roulette and earn up to 36x your bet!',
+            description:
+                'Play the lightning roulette and earn up to 36x your bet!',
             navigate: 'roulette',
             background: 'assets/img/roulette/promobg.png'
         }
@@ -28,7 +30,7 @@ export class HomeComponent implements OnInit {
     constructor(private blogService: BlogService) {}
 
     ngOnInit() {
-        this.blogService.getBlogPosts(1, 5).then(blogPostsResponse => {
+        this.blogService.getBlogPosts(1, 4).then(blogPostsResponse => {
             this.blogPosts = blogPostsResponse.posts;
             this.loadingBlogPosts = false;
         });
@@ -36,7 +38,7 @@ export class HomeComponent implements OnInit {
 
     getBlogPostPreview(blogPost) {
         let body: string = blogPost.body.replace(/<[^>]+>/g, '');
-        body = body.slice(0, 100);
+        body = body.slice(0, 100) + '...';
         return body;
     }
 }

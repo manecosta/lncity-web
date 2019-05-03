@@ -41,7 +41,10 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
     title = 'Lightning Network City';
     message = 'Select an amount to deposit (satoshi):';
 
+    userTarget = '';
     target = 'balance';
+
+    addedFunds = true;
 
     amount: number = null;
     selectedRow: number = null;
@@ -56,7 +59,8 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
         [100000, 200000, 500000]
     ];
 
-    selectingAmount = true;
+    selectingAmount = false;
+    selectingTarget = false;
     loading = false;
     awaitingPayment = false;
     paymentTimeout = false;
@@ -90,6 +94,9 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
             }
             if (data.target) {
                 this.target = data.target;
+                this.selectingAmount = true;
+            } else {
+                this.selectingTarget = true;
             }
         }
     }
@@ -187,6 +194,7 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
             .catch(error => {
                 this.loading = false;
                 this.paymentSuccess = false;
+                this.accountService.reloadAccount();
                 setTimeout(() => {
                     this.dialogRef.close(false);
                 }, 2000);
@@ -201,6 +209,7 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
             this.appService.user.balance < this.amount
         ) {
             this.dialogRef.updateSize('400px', '700px');
+            this.addedFunds = true;
             this.accountService
                 .depositBalance(this.amount)
                 .then(response => {
@@ -212,6 +221,12 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
         } else {
             this.performTip();
         }
+    }
+
+    selectTarget() {
+        this.target = 'user/' + this.userTarget;
+        this.selectingTarget = false;
+        this.selectingAmount = true;
     }
 
     amountInputChanged(event) {

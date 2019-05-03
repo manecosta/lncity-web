@@ -39,6 +39,11 @@ export class AppComponent {
                     title: 'Switch Account',
                     type: 'action',
                     action: 'switchAccount'
+                },
+                {
+                    title: 'Transfer Funds',
+                    type: 'action',
+                    action: 'sendFundsToUser'
                 }
             ]
         },
@@ -143,6 +148,19 @@ export class AppComponent {
 
         const registerDialog = this.dialog.open(
             SwitchAccountDialogComponent,
+            dialogConfig
+        );
+    }
+
+    sendFundsToUser() {
+        const dialogConfig = new MatDialogConfig();
+
+        dialogConfig.data = {
+            message: 'Select an amount to send (satoshi):'
+        };
+
+        const paymentDialog = this.dialog.open(
+            PaymentDialogComponent,
             dialogConfig
         );
     }

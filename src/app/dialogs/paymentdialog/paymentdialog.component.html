@@ -2,6 +2,15 @@
     {{title}}
 </div>
 <div class="payment-dialog-body">
+    <div *ngIf="selectingTarget">
+        <div style="padding-top: 30px;">
+            <div class="payment-dialog-message">Please input the username of the target:</div>
+            <div class="payment-dialog-amount-value-container centered-content">
+                <input [(ngModel)]="userTarget" (input)="amountInputChanged($event)" class="payment-dialog-amount-value-input" style="width: 60%; margin-top: 20px;" />
+            </div>
+            <div class="payment-dialog-message" style="font-size: 14px; color: #7e7e7e;">Double check the username!</div>
+        </div>
+    </div>
     <div *ngIf="selectingAmount">
         <div class="payment-dialog-message">{{message}}</div>
         <div class="payment-dialog-suggested-amount-container">
@@ -15,7 +24,7 @@
             <span class="payment-dialog-amount-message">Amount:</span> <input [(ngModel)]="amount" (input)="amountInputChanged($event)" class="payment-dialog-amount-value-input" type="number" />
         </div>
     </div>
-    <div class="full-size" *ngIf="!selectingAmount">
+    <div class="full-size" *ngIf="!selectingAmount && !selectingTarget">
         <div *ngIf="loading" class="full-size centered-content" style="width: 100%; height: 100%;">
             <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
         </div>
@@ -34,21 +43,26 @@
             </div>
         </div>
         <div *ngIf="!loading && !awaitingPayment && paymentSuccess" class="centered-content full-size payment-dialog-success-message">
-            <div>{{ target == 'balance' ? 'Deposit' : 'Tip' }} Success!</div>
+            <div>{{ target == 'balance' ? 'Deposit' : (userTarget ? 'Transfer' : 'Tip') }} Success!</div>
         </div>
-        <div *ngIf="!loading && !awaitingPayment && !paymentSuccess" class="centered-content full-size payment-dialog-success-message">
-            <div>{{ target == 'balance' ? 'Deposit' : 'Tip' }} Failed!</div>
+        <div *ngIf="!loading && !awaitingPayment && !paymentSuccess" class="centered-content full-size payment-dialog-success-message" style="position: relative;">
+            <div style="width: 100%;">{{ target == 'balance' ? 'Deposit' : (userTarget ? 'Transfer' : 'Tip') }} Failed!</div>
+            <div *ngIf="addedFunds" style="position: absolute; bottom: 40px; width: 100%; font-size: 14px;" class="payment-dialog-message">Deposited funds were added to your balance.</div>
         </div>
         <div *ngIf="!loading && !awaitingPayment && paymentTimeout" class="centered-content full-size payment-dialog-failure-message">
-            <div>{{ target == 'balance' ? 'Deposit' : 'Tip' }} Timed Out.</div>
+            <div>{{ target == 'balance' ? 'Deposit' : (userTarget ? 'Transfer' : 'Tip') }} Timed Out.</div>
         </div>
     </div>
 </div>
 <div class="payment-dialog-footer" style="position: relative;">
+        <div *ngIf="selectingTarget"
+        class="button"
+        [ngClass]="{ 'no-hover disabled': !userTarget }"
+        (click)="userTarget ? selectTarget() : null">Next</div>
     <div *ngIf="selectingAmount"
         class="button"
         [ngClass]="{ 'no-hover disabled': amount == null || amount < minAmount || amount > maxAmount }"
-        (click)="amount != null && amount >= minAmount && amount <= maxAmount ? performPayment() : null">{{ target == 'balance' ? 'Deposit' : 'Tip' }}</div>
+        (click)="amount != null && amount >= minAmount && amount <= maxAmount ? performPayment() : null">{{ target == 'balance' ? 'Deposit' : (userTarget ? 'Transfer' : 'Tip') }}</div>
     <div *ngIf="awaitingPayment" style="height: 100%; position: absolute; left: 0; top: 0;" [ngStyle]="{ width: Math.min(100, Math.ceil((timeoutElapsedRatio * 100))) + '%', 'background-color': timeoutElapsedRatio > 0.85 ? '#ee5921' : timeoutElapsedRatio > 0.5 ? '#f9a643' : '#4090c0' }"></div>
     <div *ngIf="awaitingPayment" class="full-size"style="font-size: 16px; line-height: 54px; position: absolute;">Pay within {{(Math.max(0, Math.floor((1 - timeoutElapsedRatio) * invoiceTimeout)))}} seconds</div>
 </div>
