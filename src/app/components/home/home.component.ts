@@ -1,13 +1,42 @@
 import { Component, OnInit } from '@angular/core';
-import { AppService } from 'src/app/services/app.service';
-import { MatDialogConfig, MatDialog } from '@angular/material';
-import { PaymentDialogComponent } from 'src/app/dialogs/paymentdialog/paymentdialog.component';
+import { BlogService } from 'src/app/services/blog.service';
 
 @Component({
     selector: 'app-home',
     templateUrl: 'home.component.html',
     styleUrls: ['home.component.less']
 })
-export class HomeComponent {
-    constructor(private dialog: MatDialog) {}
+export class HomeComponent implements OnInit {
+    games = [
+        {
+            title: 'Slot',
+            description: 'Play the slots and earn up to 40x your bet!',
+            navigate: 'slot',
+            background: 'assets/img/slot/promobg.png'
+        },
+        {
+            title: 'Roulette',
+            description: 'Play the roulette and earn up to 36x your bet!',
+            navigate: 'roulette',
+            background: 'assets/img/roulette/promobg.png'
+        }
+    ];
+
+    loadingBlogPosts = true;
+    blogPosts = [];
+
+    constructor(private blogService: BlogService) {}
+
+    ngOnInit() {
+        this.blogService.getBlogPosts(1, 5).then(blogPostsResponse => {
+            this.blogPosts = blogPostsResponse.posts;
+            this.loadingBlogPosts = false;
+        });
+    }
+
+    getBlogPostPreview(blogPost) {
+        let body: string = blogPost.body.replace(/<[^>]+>/g, '');
+        body = body.slice(0, 100);
+        return body;
+    }
 }

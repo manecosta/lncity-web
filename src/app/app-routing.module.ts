@@ -12,6 +12,7 @@ const routes: Routes = [
     { path: 'roulette', component: RouletteGameComponent },
     { path: 'slot', component: SlotMachinGameComponent },
     { path: 'blog', component: BlogComponent },
+    { path: 'blog/:postId', component: BlogComponent },
     { path: 'node', component: NodeComponent },
     { path: '**', redirectTo: '/home' }
 ];

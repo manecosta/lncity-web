@@ -1,17 +1,33 @@
-<div class="app-page-title">Welcome to Lightning Network City!</div>
 <div class="home-container">
-    <div class="home-intro-text">
-        <div class="home-logo-container">
-            <img class="home-logo-image" src="assets/img/logo-256x256.png" />
-
-            <div class="home-under-construction-text">
-                Heavily Under Construction!
-            </div>
-            <div class="home-disclaimer">
-                <p>Don't commit any meaningful funds to the website at this point as I cannot guarantee everything will work fine.</p>
-                <p>Feel free to contact me at nel0 [at] protonmail.com</p>
+    <div class="home-welcome-message">
+        <p>Welcome to ln.city!</p>
+        <p>This Bitcoin's Lightning Network based website.</p>
+        <p class="home-disclaimer">It is heavily recommended that you register your account if you add any funds to it so you can easily regain access on other devices or if your browsers loses the website data that keeps track of your account.</p>
+    </div>
+    <h2>Games</h2>
+    <div class="home-games-container home-content-container">
+        <div *ngFor="let game of games" class="home-game-container" [routerLink]="'/' + game.navigate">
+            <img class="home-game-background" [src]="game.background" />
+            <div class="home-game-info-container">
+                <div class="home-game-info-title">{{game.title}}</div>
+                <div class="home-game-info-description">{{game.description}}</div>
             </div>
         </div>
+    </div>
+    <h2>Latest Blog Posts</h2>
+    <div class="home-blogposts-container home-content-container">
+        <div *ngFor="let blogPost of blogPosts" class="home-blogpost-container" [routerLink]="'/blog/' + blogPost.id">
+            <img class="home-blogpost-background" src="assets/img/logo-256x128.png" />
+            <div class="home-blogpost-info-container">
+                <div class="home-blogpost-info-title">{{blogPost.title}}</div>
+                <div class="home-blogpost-info-description">{{getBlogPostPreview(blogPost)}}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="home-footer-message">
+        <p>If you find any issue or want to contact me please send an email to:</p>
+        <p>nel0 [at] protonmail.com</p>
     </div>
 </div>
 

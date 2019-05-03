@@ -5,6 +5,7 @@ import { BlogService } from 'src/app/services/blog.service';
 import * as moment from 'moment';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { PaymentDialogComponent } from 'src/app/dialogs/paymentdialog/paymentdialog.component';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 
 @Component({
     selector: 'app-blog',
@@ -28,11 +29,33 @@ export class BlogComponent implements OnInit {
     constructor(
         public appService: AppService,
         private blogService: BlogService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private route: ActivatedRoute,
+        private router: Router
     ) {}
 
     ngOnInit() {
         this.loading = true;
+        this.route.paramMap.subscribe((route: ParamMap) => {
+            const postId = route.get('postId');
+            if (postId) {
+                this.blogService
+                    .getBlogPost(postId)
+                    .then(result => {
+                        this.pagePosts = [result];
+                        this.allCount = 1;
+                        this.loading = false;
+                    })
+                    .catch(error => {
+                        this.router.navigate(['blog']);
+                    });
+            } else {
+                this.retrievePostList();
+            }
+        });
+    }
+
+    retrievePostList() {
         this.blogService.getBlogPosts(1, 10).then(result => {
             this.allCount = result.all_count;
             this.pagePosts = result.posts;

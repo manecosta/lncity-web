@@ -9,6 +9,10 @@ export class BlogService {
         BlogService.instance = this;
     }
 
+    getBlogPost(blogPostId) {
+        return this.requestService.get('/blogs/1/posts/' + blogPostId);
+    }
+
     getBlogPosts(page, count) {
         return this.requestService.get('/blogs/1/posts/' + page + '/' + count);
     }
