@@ -44,7 +44,7 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
     userTarget = '';
     target = 'balance';
 
-    addedFunds = true;
+    addedFunds = false;
 
     amount: number = null;
     selectedRow: number = null;
