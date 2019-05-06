@@ -15,7 +15,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 export class BlogComponent implements OnInit {
     page = 1;
     count = 10;
-    allCount = 10;
+    total = 10;
 
     pageCount = 0;
 
@@ -43,7 +43,7 @@ export class BlogComponent implements OnInit {
                     .getBlogPost(postId)
                     .then(result => {
                         this.pagePosts = [result];
-                        this.allCount = 1;
+                        this.total = 1;
                         this.loading = false;
                     })
                     .catch(error => {
@@ -57,7 +57,7 @@ export class BlogComponent implements OnInit {
 
     retrievePostList() {
         this.blogService.getBlogPosts(1, 10).then(result => {
-            this.allCount = result.all_count;
+            this.total = result.total;
             this.pagePosts = result.posts;
             this.loading = false;
         });

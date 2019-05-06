@@ -5,12 +5,15 @@
         </div>
         <div class="app-menu-item" [ngClass]="{ 'no-hover': (option.type == 'menu') }" *ngFor="let option of menuOptions" (click)="clickedOption(option)">
             {{option.title ? option.title : getMethodResult(option.titleMethod)}}
+            <div *ngIf="checkIsWarn(option)" class="app-menu-item-warn"></div>
             <div *ngIf="option.subtitle != null" class="app-menu-item-subtitle">
                 {{getBalance()}} <img src="assets/img/satoshi-symbol-32x64.png"/>
             </div>
             <div class="app-menu-item-submenu" *ngIf="option.type == 'menu'">
                 <div *ngFor="let subOption of option.options" [ngStyle]="{ 'display': (subOption.condition == null || getMethodResult(subOption.condition)) ? 'block' : 'none' }" class="app-menu-item-submenu-item" (click)="clickedOption(subOption)">
                     {{subOption.title}}
+                    <div *ngIf="subOption.type == 'separator'" class="app-menu-item-submenu-separator">{{subOption.name}}</div>
+                    <div *ngIf="checkIsWarn(subOption)" class="app-menu-item-submenu-item-warn"></div>
                 </div>
             </div>
         </div>

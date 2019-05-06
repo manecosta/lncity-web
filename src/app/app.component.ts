@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AppService } from './services/app.service';
 import { PaymentDialogComponent } from './dialogs/paymentdialog/paymentdialog.component';
 import { MatDialog, MatDialogConfig } from '@angular/material';
@@ -6,19 +6,35 @@ import { WithdrawalDialogComponent } from './dialogs/withdrawaldialog/withdrawal
 import { Router } from '@angular/router';
 import { RegisterDialogComponent } from './dialogs/registerdialog/registerdialog.component';
 import { SwitchAccountDialogComponent } from './dialogs/switchaccountdialog/switchaccountdialog.component';
+import { NotificationService } from './services/notification.service';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.less']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     menuOptions = [
         {
             titleMethod: 'getAccountTitle',
+            isWarn: 'hasUnseenNotifications',
             type: 'menu',
             subtitle: 'getBalance',
             options: [
+                {
+                    name: 'Activity',
+                    type: 'separator'
+                },
+                {
+                    title: 'Activity',
+                    type: 'navigate',
+                    navigate: '/activity',
+                    isWarn: 'hasUnseenNotifications'
+                },
+                {
+                    name: 'Balance',
+                    type: 'separator'
+                },
                 {
                     title: 'Deposit',
                     type: 'action',
@@ -30,6 +46,15 @@ export class AppComponent {
                     action: 'withdrawBalance'
                 },
                 {
+                    title: 'Transfer Funds',
+                    type: 'action',
+                    action: 'sendFundsToUser'
+                },
+                {
+                    name: 'Account',
+                    type: 'separator'
+                },
+                {
                     title: 'Register Account',
                     type: 'action',
                     action: 'registerAccount',
@@ -39,11 +64,6 @@ export class AppComponent {
                     title: 'Switch Account',
                     type: 'action',
                     action: 'switchAccount'
-                },
-                {
-                    title: 'Transfer Funds',
-                    type: 'action',
-                    action: 'sendFundsToUser'
                 }
             ]
         },
@@ -82,9 +102,17 @@ export class AppComponent {
 
     constructor(
         public appService: AppService,
+        private notificationService: NotificationService,
         private dialog: MatDialog,
         private router: Router
     ) {}
+
+    ngOnInit() {
+        this.notificationService.updateNotificationCounts();
+        setInterval(() => {
+            this.notificationService.updateNotificationCounts();
+        }, 30000);
+    }
 
     tip() {
         const dialogConfig = new MatDialogConfig();
@@ -199,5 +227,16 @@ export class AppComponent {
 
     getMethodResult(methodName) {
         return this[methodName]();
+    }
+
+    checkIsWarn(option) {
+        if (option.isWarn) {
+            return this[option.isWarn]();
+        }
+        return false;
+    }
+
+    hasUnseenNotifications() {
+        return this.notificationService.notificationCounts.unseen !== 0;
     }
 }

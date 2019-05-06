@@ -47,6 +47,7 @@ export class SwitchAccountDialogComponent implements AfterViewInit {
 
                     setTimeout(() => {
                         this.dialogRef.close();
+                        window.location.reload();
                     }, 2000);
                 })
                 .catch(error => {

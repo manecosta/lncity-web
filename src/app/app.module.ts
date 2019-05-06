@@ -28,6 +28,8 @@ import { RegisterDialogComponent } from './dialogs/registerdialog/registerdialog
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { SwitchAccountDialogComponent } from './dialogs/switchaccountdialog/switchaccountdialog.component';
 import { BlogService } from './services/blog.service';
+import { NotificationService } from './services/notification.service';
+import { ActivityComponent } from './components/activity/activity.component';
 
 @NgModule({
     declarations: [
@@ -41,7 +43,8 @@ import { BlogService } from './services/blog.service';
         SlotMachinGameComponent,
         HomeComponent,
         BlogComponent,
-        NodeComponent
+        NodeComponent,
+        ActivityComponent
     ],
     entryComponents: [
         PaymentDialogComponent,
@@ -66,6 +69,7 @@ import { BlogService } from './services/blog.service';
         AccountService,
         GameService,
         BlogService,
+        NotificationService,
         LocalStorage,
         {
             provide: MAT_DIALOG_DEFAULT_OPTIONS,

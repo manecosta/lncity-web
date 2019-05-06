@@ -5,6 +5,7 @@ import { HomeComponent } from './components/home/home.component';
 import { SlotMachinGameComponent } from './components/games/slotmachine/slotmachine.component';
 import { BlogComponent } from './components/blog/blog.component';
 import { NodeComponent } from './components/node/node.component';
+import { ActivityComponent } from './components/activity/activity.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -14,6 +15,7 @@ const routes: Routes = [
     { path: 'blog', component: BlogComponent },
     { path: 'blog/:postId', component: BlogComponent },
     { path: 'node', component: NodeComponent },
+    { path: 'activity', component: ActivityComponent },
     { path: '**', redirectTo: '/home' }
 ];
 

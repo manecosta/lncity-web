@@ -25,6 +25,16 @@
     width: 100%;
 }
 
+.app-menu-item-warn {
+    background-color: @negativeaccentcolor;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    position: absolute;
+    right: 10px;
+    top: 30px;
+}
+
 .app-menu-logo {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 16px;
@@ -95,6 +105,7 @@
 }
 
 .app-menu-item-submenu {
+    padding-top: 5px;
     display: none;
     background-color: @lightbackgroundaccentcolor;
     min-width: 100%;
@@ -126,4 +137,22 @@
 
 .app-menu-item-submenu-item:focus {
     outline: none;
+}
+
+.app-menu-item-submenu-item-warn {
+    background-color: @negativeaccentcolor;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+.app-menu-item-submenu-separator {
+    padding: 10px 0 0 0;
+    font-size: 10px;
+    color: @infotextcolor;
+    line-height: 12px;
+    cursor: default;
 }

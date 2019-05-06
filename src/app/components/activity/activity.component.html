@@ -1,0 +1,15 @@
+<div class="app-page-title">Activity</div>
+<div class="activity-container">
+    <div class="activity-loading csentered-content" *ngIf="loading">
+        <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+    </div>
+    <div class="activity-none" *ngIf="!loading && notifications.length == 0">No notifications.</div>
+    <div class="activity-items" *ngIf="!loading && notifications.length > 0">
+        <div class="activity-item" *ngFor="let notification of notifications">
+            <div class="activity-item-warn" *ngIf="!notification.seen"></div>
+            <div class="activity-item-date">{{notificationDate(notification)}}</div>
+            <div class="activity-item-title">{{notificationTitle(notification)}}</div>
+            <div class="activity-item-description" [innerHTML]="notificationDescription(notification)"></div>
+        </div>
+    </div>
+</div>
