@@ -12,8 +12,8 @@ const routes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'roulette', component: RouletteGameComponent },
     { path: 'slot', component: SlotMachinGameComponent },
-    { path: 'blog', component: BlogComponent },
-    { path: 'blog/:postId', component: BlogComponent },
+    { path: 'blog/:filter', component: BlogComponent },
+    { path: 'blog', redirectTo: '/blog/latest' },
     { path: 'node', component: NodeComponent },
     { path: 'activity', component: ActivityComponent },
     { path: '**', redirectTo: '/home' }

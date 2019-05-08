@@ -19,9 +19,13 @@ export class BlogComponent implements OnInit {
 
     pageCount = 0;
 
+    loading = false;
     pagePosts = [];
 
-    loading = true;
+    loadingLatest = false;
+    latestPosts = [];
+    loadingTags = false;
+    tags = [];
 
     MAX_COMMENT_LENGTH = 500;
     addingComment = false;
@@ -37,30 +41,61 @@ export class BlogComponent implements OnInit {
     ngOnInit() {
         this.loading = true;
         this.route.paramMap.subscribe((route: ParamMap) => {
-            const postId = route.get('postId');
-            if (postId) {
-                this.blogService
-                    .getBlogPost(postId)
-                    .then(result => {
-                        this.pagePosts = [result];
-                        this.total = 1;
-                        this.loading = false;
-                    })
-                    .catch(error => {
-                        this.router.navigate(['blog']);
-                    });
+            const filter = route.get('filter');
+            if (filter && filter !== 'latest') {
+                if (isNaN(parseInt(filter, 10))) {
+                    this.retrievePagePosts(filter);
+                } else {
+                    this.blogService
+                        .getBlogPost(filter)
+                        .then(result => {
+                            this.pagePosts = [result];
+                            this.total = 1;
+                            this.loading = false;
+                        })
+                        .catch(error => {
+                            this.router.navigate(['blog']);
+                        });
+                }
+                this.retrieveLatestPosts();
             } else {
-                this.retrievePostList();
+                this.retrievePagePosts();
+
+                if (this.page !== 1) {
+                    this.retrieveLatestPosts();
+                }
             }
+        });
+        this.retrieveTags();
+    }
+
+    retrieveLatestPosts() {
+        this.loadingLatest = true;
+        this.blogService.getBlogPosts(1, 10).then(result => {
+            this.latestPosts = result.posts;
+            this.loadingLatest = false;
         });
     }
 
-    retrievePostList() {
-        this.blogService.getBlogPosts(1, 10).then(result => {
-            this.total = result.total;
-            this.pagePosts = result.posts;
-            this.loading = false;
+    retrieveTags() {
+        this.loadingTags = true;
+        this.blogService.getTags().then(result => {
+            this.tags = result.tags;
+            this.loadingTags = false;
         });
+    }
+
+    retrievePagePosts(tag?) {
+        this.blogService
+            .getBlogPosts(this.page, this.count, tag)
+            .then(result => {
+                this.total = result.total;
+                this.pagePosts = result.posts;
+                this.loading = false;
+                if (this.page === 1 && !tag) {
+                    this.latestPosts = result.posts;
+                }
+            });
     }
 
     // Tips

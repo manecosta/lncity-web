@@ -268,7 +268,7 @@ export class RouletteGameComponent implements OnDestroy, OnInit {
 
         dialogConfig.data = {
             message: 'Select an amount to deposit (satoshi):',
-            payingToBalance: true
+            target: 'balance'
         };
 
         const paymentDialog = this.dialog.open(

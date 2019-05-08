@@ -3,7 +3,7 @@
     <div class="activity-loading csentered-content" *ngIf="loading">
         <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
     </div>
-    <div class="activity-none" *ngIf="!loading && notifications.length == 0">No notifications.</div>
+    <div class="activity-none" *ngIf="!loading && notifications.length == 0">No activity.</div>
     <div class="activity-items" *ngIf="!loading && notifications.length > 0">
         <div class="activity-item" *ngFor="let notification of notifications">
             <div class="activity-item-warn" *ngIf="!notification.seen"></div>

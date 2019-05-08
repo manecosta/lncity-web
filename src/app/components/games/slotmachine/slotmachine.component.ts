@@ -388,7 +388,7 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
 
         dialogConfig.data = {
             message: 'Select an amount to deposit (satoshi):',
-            payingToBalance: true
+            target: 'balance'
         };
 
         const paymentDialog = this.dialog.open(

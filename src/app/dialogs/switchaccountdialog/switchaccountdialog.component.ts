@@ -17,7 +17,7 @@ export class SwitchAccountDialogComponent implements AfterViewInit {
     requestCompleted = false;
     requestSuccess = false;
 
-    failureMessage = 'Register Failed.';
+    failureMessage = 'Login Failed.';
 
     constructor(
         public dialogRef: MatDialogRef<SwitchAccountDialogComponent>,

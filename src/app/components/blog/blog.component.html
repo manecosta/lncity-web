@@ -13,6 +13,10 @@
                 <div class="blog-post-header-subtitle">{{readableDate(post.created_time)}} by <b>{{getUserName(post.user)}}</b></div>
             </div>
             <div class="blog-post-body" [innerHTML]="post.body"></div>
+            <div class="blog-post-tags">
+                <h4>Tags:</h4>
+                <div class="blog-post-tag" *ngFor="let tag of post.tags" [routerLink]="'/blog/' + tag.name">{{tag.name}}</div>
+            </div>
             <div class="blog-post-footer">
                 <div class="blog-post-comment-count" (click)="loadPostComments(post)">
                     {{post.comments_count}} comment{{post.comments_count == 1 ? '': 's'}}
@@ -48,6 +52,20 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="!loading" class="blog-indexes-container">
+        <div class="blog-index-container">
+            <div class="blog-index-title">Latest Blog Posts</div>
+            <div class="blog-index-post-element" *ngFor="let latestPost of latestPosts"  [routerLink]="'/blog/' + latestPost.id">
+                {{latestPost.title}}
+            </div>
+        </div>
+        <div class="blog-index-container">
+            <div class="blog-index-title">Tags</div>
+            <div class="blog-index-tag-element" *ngFor="let tag of tags" [routerLink]="'/blog/' + tag.name">
+                {{tag.name}}
             </div>
         </div>
     </div>

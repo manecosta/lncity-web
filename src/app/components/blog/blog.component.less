@@ -7,13 +7,65 @@
 .blog-posts-container {
     width: calc(70% - 40px);
     padding: 20px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.blog-indexes-container {
+    width: calc(30% - 20px);
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 20px;
+}
+
+.blog-index-container {
+    padding: 20px;
+    width: calc(100% - 40px);
+    background-color: white;
+    margin-bottom: 20px;
+}
+
+.blog-index-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: @textcolor;
+    margin-bottom: 20px;
+}
+
+.blog-index-post-element {
+    font-size: 16px;
+    line-height: 28px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.blog-index-post-element:hover {
+    color: @darkaccentcolor;
+}
+
+.blog-index-tag-element {
+    font-size: 16px;
+    color: white;
+    background-color: @darkaccentcolor;
+    border-radius: 5px;
+    margin-right: 10px;
+    padding: 5px 10px;
+    display: inline-block;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+.blog-index-tag-element:hover {
+    color: @darkaccentcolor;
+    background-color: @lightaccentcolor;
 }
 
 .blog-post {
     width: calc(100% - 40px);
     margin-bottom: 20px;
     padding: 0 20px;
-    background-color: #f9f9f9;
+    background-color: white;
 }
 
 .blog-post-header {
@@ -43,6 +95,33 @@
     padding: 10px 0;
     line-height: 20px;
     color: @textcolor;
+}
+
+.blog-post-tags {
+    width: 100%;
+    padding-bottom: 10px;
+}
+
+.blog-post-tags > h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.blog-post-tag {
+    font-size: 16px;
+    color: white;
+    background-color: @darkaccentcolor;
+    border-radius: 5px;
+    margin-right: 10px;
+    padding: 5px 10px;
+    display: inline-block;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+.blog-post-tag:hover {
+    color: @darkaccentcolor;
+    background-color: @lightaccentcolor;
 }
 
 .blog-post-footer {
