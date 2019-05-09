@@ -3,85 +3,91 @@
     <div *ngIf="!loadedParameters" class="slot-loading centered-content">
         <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
     </div>
-    <div *ngIf="loadedParameters" class="slot-container">
-        <div class="slot-score-board">
-            <div class="slot-score-board-title">Prizes:</div>
-            <div class="slot-score-board-line">
-                <div class="slot-score-board-line-element"></div>
-                <div style="font-weight: 600;" class="slot-score-board-line-element">x3</div>
-                <div style="font-weight: 600;" class="slot-score-board-line-element">x4</div>
-                <div style="font-weight: 600;" class="slot-score-board-line-element">x5</div>
-            </div>
-            <div class="slot-score-board-line" *ngFor="let symbolName of reversedNonBonusSymbols; let i = index;">
-                <div class="slot-score-board-line-element">
-                    <img class="slot-score-board-line-image" [src]="availableSymbols[symbolName].imagePath" />
+    <div *ngIf="loadedParameters" class="slot-mobile-disclaimer">
+        Support for smaller screens is experimental!<br />
+        On mobile, prefer landscape orietation.
+    </div>
+    <div *ngIf="loadedParameters" class="slot-external-container">
+        <div class="slot-container">
+            <div class="slot-score-board">
+                <div class="slot-score-board-title">Prizes:</div>
+                <div class="slot-score-board-line">
+                    <div class="slot-score-board-line-element"></div>
+                    <div style="font-weight: 600;" class="slot-score-board-line-element">x3</div>
+                    <div style="font-weight: 600;" class="slot-score-board-line-element">x4</div>
+                    <div style="font-weight: 600;" class="slot-score-board-line-element">x5</div>
                 </div>
-                <div class="slot-score-board-line-element slot-score-board-prize">
-                    <div [ngClass]="{ 'slot-score-board-prize-highlighted': isPrizeWon(symbolName, 2) }" class="slot-score-board-prize-overlay"></div>
-                    <div [ngClass]="{ 'slot-score-board-line-element-wild': availableSymbols[symbolName].prize[2] == 0 }">{{availableSymbols[symbolName].prize[2] > 0 ? availableSymbols[symbolName].prize[2] * betMultiplier : 'WILD'}}</div>
-                </div>
-                <div class="slot-score-board-line-element slot-score-board-prize">
-                    <div [ngClass]="{ 'slot-score-board-prize-highlighted': isPrizeWon(symbolName, 3) }" class="slot-score-board-prize-overlay"></div>
-                    <div [ngClass]="{ 'slot-score-board-line-element-wild': availableSymbols[symbolName].prize[3] == 0 }">{{availableSymbols[symbolName].prize[3] > 0 ? availableSymbols[symbolName].prize[3] * betMultiplier : 'WILD'}}</div>
-                </div>
-                <div class="slot-score-board-line-element slot-score-board-prize">
-                    <div [ngClass]="{ 'slot-score-board-prize-highlighted': isPrizeWon(symbolName, 4) }" class="slot-score-board-prize-overlay"></div>
-                    <b>{{availableSymbols[symbolName].prize[4] * betMultiplier}}</b>
-                </div>
-            </div>
-            <div style="width: 100%; height: 32px; margin-top: 16px; margin-bottom: 8px;" class="centered-content slot-score-board-line">
-                <img class="slot-score-board-line-image" [src]="availableSymbols[bonusSymbolName].imagePath"/>
-                <span style="margin-left: 10px; vertical-align: top; line-height: 32px;">Bonus (anywhere)</span>
-            </div>
-            <div class="slot-score-board-line">
-                <div style="font-weight: 600;" class="slot-score-board-line-element">x3</div>
-                <div style="font-weight: 600;" class="slot-score-board-line-element">x4</div>
-                <div style="font-weight: 600;" class="slot-score-board-line-element">x5</div>
-                <div style="font-weight: 600;" class="slot-score-board-line-element">x6</div>
-            </div>
-            <div class="slot-score-board-line slot-score-board-line-bonus">
-                <div [ngStyle]="{ width: prize > 0 ? '25%': '0' }" class="slot-score-board-line-element" *ngFor="let prize of availableSymbols[bonusSymbolName].prize; let i = index">
-                    <div class="slot-score-board-prize" *ngIf="prize > 0">
-                        <div [ngClass]="{ 'slot-score-board-prize-highlighted': isPrizeWon(bonusSymbolName, i) }" class="slot-score-board-prize-overlay"></div>
-                        {{prize * betMultiplier}}
+                <div class="slot-score-board-line" *ngFor="let symbolName of reversedNonBonusSymbols; let i = index;">
+                    <div class="slot-score-board-line-element">
+                        <img class="slot-score-board-line-image" [src]="availableSymbols[symbolName].imagePath" />
+                    </div>
+                    <div class="slot-score-board-line-element slot-score-board-prize">
+                        <div [ngClass]="{ 'slot-score-board-prize-highlighted': isPrizeWon(symbolName, 2) }" class="slot-score-board-prize-overlay"></div>
+                        <div [ngClass]="{ 'slot-score-board-line-element-wild': availableSymbols[symbolName].prize[2] == 0 }">{{availableSymbols[symbolName].prize[2] > 0 ? availableSymbols[symbolName].prize[2] * betMultiplier : 'WILD'}}</div>
+                    </div>
+                    <div class="slot-score-board-line-element slot-score-board-prize">
+                        <div [ngClass]="{ 'slot-score-board-prize-highlighted': isPrizeWon(symbolName, 3) }" class="slot-score-board-prize-overlay"></div>
+                        <div [ngClass]="{ 'slot-score-board-line-element-wild': availableSymbols[symbolName].prize[3] == 0 }">{{availableSymbols[symbolName].prize[3] > 0 ? availableSymbols[symbolName].prize[3] * betMultiplier : 'WILD'}}</div>
+                    </div>
+                    <div class="slot-score-board-line-element slot-score-board-prize">
+                        <div [ngClass]="{ 'slot-score-board-prize-highlighted': isPrizeWon(symbolName, 4) }" class="slot-score-board-prize-overlay"></div>
+                        <b>{{availableSymbols[symbolName].prize[4] * betMultiplier}}</b>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div *ngIf="board != null" class="slot-reels-container">
-            <img class="slot-reels-lines-overlay" src="assets/img/slot/lines-overlay.png" />
-            <div class="slot-reels-container-shadow"></div>
-            <div>
-                <div class="slot-reels-column" [ngStyle]="{ top: (fillerBoard == null) ? '0' : 'calc(-' + fillerCount + ' * ' + (148 * uiScale) + 'px)' }" [ngClass]="
-                    {
-                        'slots-reel-column-animation-0' : column == 0 && animatingColumn[column],
-                        'slots-reel-column-animation-1' : column == 1 && animatingColumn[column],
-                        'slots-reel-column-animation-2' : column == 2 && animatingColumn[column],
-                        'slots-reel-column-animation-3' : column == 3 && animatingColumn[column],
-                        'slots-reel-column-animation-4' : column == 4 && animatingColumn[column]
-                    }" *ngFor="let columnElements of board; let column = index">
-                    <div class="slot-reels-element-container" *ngFor="let element of columnElements; let line = index">
-                        <div class="slot-reels-element-container-overlay" [ngClass]="{ 'slot-highlighted-element': highlightedElements[column][line] }"></div>
-                        <img class="slot-reels-element-img" [src]="availableSymbols[element].imagePath"/>
-                    </div>
-                    <div *ngIf="fillerBoard != null">
-                        <div  class="slot-reels-element-container"  *ngFor="let element of fillerBoard[column];">
-                            <img class="slot-reels-element-img" [src]="availableSymbols[element].imagePath"/>
+                <div class="centered-content slot-score-board-line slot-score-board-bonus-line">
+                    <img class="slot-score-board-line-image" [src]="availableSymbols[bonusSymbolName].imagePath"/>
+                    <span style="margin-left: 10px; vertical-align: top; line-height: 32px;">Bonus (anywhere)</span>
+                </div>
+                <div class="slot-score-board-line">
+                    <div style="font-weight: 600;" class="slot-score-board-line-element">x3</div>
+                    <div style="font-weight: 600;" class="slot-score-board-line-element">x4</div>
+                    <div style="font-weight: 600;" class="slot-score-board-line-element">x5</div>
+                    <div style="font-weight: 600;" class="slot-score-board-line-element">x6</div>
+                </div>
+                <div class="slot-score-board-line slot-score-board-line-bonus">
+                    <div [ngStyle]="{ width: prize > 0 ? '25%': '0' }" class="slot-score-board-line-element" *ngFor="let prize of availableSymbols[bonusSymbolName].prize; let i = index">
+                        <div class="slot-score-board-prize" *ngIf="prize > 0">
+                            <div [ngClass]="{ 'slot-score-board-prize-highlighted': isPrizeWon(bonusSymbolName, i) }" class="slot-score-board-prize-overlay"></div>
+                            {{prize * betMultiplier}}
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="slot-credit-info-container">
-            <div class="slot-credit-info-field">
-                <div class="slot-credit-info-field-element"><span>BET: </span><span>{{baseBet * betMultiplier}}</span></div>
-                <div class="slot-credit-info-field-element button" [ngClass]="{ 'disabled': betMultiplier == 1 || spinning, 'no-hover': betMultiplier == 1 || spinning }" (click)="decreaseMultiplier()">-</div>
-                <div class="slot-credit-info-field-element button" [ngClass]="{ 'disabled': betMultiplier == maxBetMultiplier || spinning, 'no-hover': betMultiplier == maxBetMultiplier || spinning }" (click)="increaseMultiplier()">+</div></div>
-            <div class="slot-credit-info-field"><span>BALANCE: </span><span >{{appService.user.balance}}</span></div>
-            <div class="slot-credit-info-field"><span>WIN: </span><span>{{lastWin}}</span></div>
-            <div class="slot-credit-info-field">
-                <div *ngIf="appService.user.balance >= baseBet * betMultiplier" class="slot-spin-button button" [ngClass]="{ 'disabled': spinning, 'no-hover': spinning }" (click)="spin()">SPIN<span>(Tap Space)</span></div>
-                <div *ngIf="appService.user.balance < baseBet * betMultiplier" class="slot-deposit-button button" [ngClass]="{ 'disabled': spinning, 'no-hover': spinning }" (click)="depositBalance()">Deposit</div>
+            <div *ngIf="board != null" class="slot-reels-container">
+                <img class="slot-reels-lines-overlay" src="assets/img/slot/lines-overlay.png" />
+                <div class="slot-reels-container-shadow"></div>
+                <div>
+                    <div class="slot-reels-column" [ngStyle]="{ top: (fillerBoard == null) ? '0' : 'calc(-' + fillerCount + ' * ' + (148 * uiScale) + 'px)' }" [ngClass]="
+                        {
+                            'slots-reel-column-animation-0' : column == 0 && animatingColumn[column],
+                            'slots-reel-column-animation-1' : column == 1 && animatingColumn[column],
+                            'slots-reel-column-animation-2' : column == 2 && animatingColumn[column],
+                            'slots-reel-column-animation-3' : column == 3 && animatingColumn[column],
+                            'slots-reel-column-animation-4' : column == 4 && animatingColumn[column]
+                        }" *ngFor="let columnElements of board; let column = index">
+                        <div class="slot-reels-element-container" *ngFor="let element of columnElements; let line = index">
+                            <div class="slot-reels-element-container-overlay" [ngClass]="{ 'slot-highlighted-element': highlightedElements[column][line] }"></div>
+                            <img class="slot-reels-element-img" [src]="availableSymbols[element].imagePath"/>
+                        </div>
+                        <div *ngIf="fillerBoard != null">
+                            <div  class="slot-reels-element-container"  *ngFor="let element of fillerBoard[column];">
+                                <img class="slot-reels-element-img" [src]="availableSymbols[element].imagePath"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slot-credit-info-container">
+                <div class="slot-credit-info-field">
+                    <div class="slot-credit-info-field-element"><span>BET: </span><span>{{baseBet * betMultiplier}}</span></div>
+                    <div class="slot-credit-info-field-element button" [ngClass]="{ 'disabled': betMultiplier == 1 || spinning, 'no-hover': betMultiplier == 1 || spinning }" (click)="decreaseMultiplier()">-</div>
+                    <div class="slot-credit-info-field-element button" [ngClass]="{ 'disabled': betMultiplier == maxBetMultiplier || spinning, 'no-hover': betMultiplier == maxBetMultiplier || spinning }" (click)="increaseMultiplier()">+</div></div>
+                <div class="slot-credit-info-field"><span>BALANCE: </span><span >{{appService.user.balance}}</span></div>
+                <div class="slot-credit-info-field"><span>WIN: </span><span>{{lastWin}}</span></div>
+                <div class="slot-credit-info-field">
+                    <div *ngIf="appService.user.balance >= baseBet * betMultiplier" class="slot-spin-button button" [ngClass]="{ 'disabled': spinning, 'no-hover': spinning }" (click)="spin()">SPIN<span>(Tap Space)</span></div>
+                    <div *ngIf="appService.user.balance < baseBet * betMultiplier" class="slot-deposit-button button" [ngClass]="{ 'disabled': spinning, 'no-hover': spinning }" (click)="depositBalance()">Deposit</div>
+                </div>
             </div>
         </div>
     </div>

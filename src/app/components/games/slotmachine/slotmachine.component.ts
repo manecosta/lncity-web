@@ -20,8 +20,8 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
     loadedParameters = false;
     loadingParameters = false;
 
-    fillerWildcardChance = 0.08;
-    fillerBonusChance = 0.08;
+    fillerWildcardChance = 0.03;
+    fillerBonusChance = 0.04;
 
     baseBet = null;
     betMultiplier = null;

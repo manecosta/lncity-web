@@ -3,6 +3,20 @@
     <div *ngIf="loading" class="centered-content">
         <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
     </div>
+    <div *ngIf="!loading" class="blog-indexes-container">
+        <div class="blog-index-container">
+            <div class="blog-index-title">Latest Blog Posts</div>
+            <div class="blog-index-post-element" *ngFor="let latestPost of latestPosts"  [routerLink]="'/blog/' + latestPost.id">
+                {{latestPost.title}}
+            </div>
+        </div>
+        <div class="blog-index-container">
+            <div class="blog-index-title">Tags</div>
+            <div class="blog-index-tag-element" *ngFor="let tag of tags" [routerLink]="'/blog/' + tag.name">
+                {{tag.name}}
+            </div>
+        </div>
+    </div>
     <div *ngIf="!loading" class="blog-posts-container">
         <div *ngIf="pagePosts.length == 0">
             No posts yet
@@ -52,20 +66,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div *ngIf="!loading" class="blog-indexes-container">
-        <div class="blog-index-container">
-            <div class="blog-index-title">Latest Blog Posts</div>
-            <div class="blog-index-post-element" *ngFor="let latestPost of latestPosts"  [routerLink]="'/blog/' + latestPost.id">
-                {{latestPost.title}}
-            </div>
-        </div>
-        <div class="blog-index-container">
-            <div class="blog-index-title">Tags</div>
-            <div class="blog-index-tag-element" *ngFor="let tag of tags" [routerLink]="'/blog/' + tag.name">
-                {{tag.name}}
             </div>
         </div>
     </div>

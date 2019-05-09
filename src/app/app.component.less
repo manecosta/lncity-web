@@ -1,8 +1,21 @@
 @import '../variables.less';
 
+@media only screen and (max-width: 700px) {
+    .app-menu-mobile-show {
+        display: block !important;
+    }
+    .app-menu-mobile-hide {
+        display: none !important;
+    }
+    .app-menu-item {
+        padding: 0 20px !important;
+    }
+}
+
 #app-container {
     min-height: 100vh;
     width: 1200px;
+    max-width: 100vw;
     padding: 0;
     margin: 0 auto;
     background-color: @lightbackgroundcolor;
@@ -12,16 +25,13 @@
 
 #app-menu {
     width: 1200px;
-    height: 96px;
+    max-width: 100vw;
+    min-height: 96px;
     border-bottom: 1px solid @lightbackgroundaccentcolor;
-    position: fixed;
-    z-index: 999;
-    top: 0;
     background-color: @lightbackgroundcolor;
 }
 
 #app-content-container {
-    margin-top: 120px;
     width: 100%;
 }
 
@@ -32,7 +42,7 @@
     border-radius: 50%;
     position: absolute;
     right: 10px;
-    top: 30px;
+    top: calc(50% - 16px);
 }
 
 .app-menu-logo {
@@ -40,10 +50,11 @@
     font-size: 16px;
     font-weight: 600;
     color: @textcolor;
-    float: left;
     padding: 0 20px;
     cursor: pointer;
-    height: 100%;
+    width: 96px;
+    height: 96px;
+    float: left;
 }
 
 .app-menu-logo:focus {
@@ -51,10 +62,35 @@
 }
 
 .app-menu-logo-image {
-    width: auto;
-    height: 50%;
+    height: auto;
+    width: 100%;
     position: relative;
-    top: 25%;
+    top: calc(50% - 25px);
+}
+
+.app-menu-items-container {
+    width: calc(100% - 140px);
+    display: inline-block;
+    vertical-align: top;
+    height: 100%;
+    position: relative;
+}
+
+.app-menu-items-mobile {
+    position: absolute;
+    top: calc(100%);
+    right: 0;
+    width: 64px;
+    z-index: 999;
+}
+
+.app-menu-icon {
+    height: 96px - 60px;
+    width: 96px - 60px;
+    padding: 30px 20px;
+    cursor: pointer;
+    float: right;
+    display: none;
 }
 
 .app-menu-item {
@@ -68,6 +104,12 @@
     position: relative;
     float: right;
     padding: 0 30px;
+}
+
+.app-menu-item.app-menu-item-mobile {
+    width: 64px;
+    background-color: @lightbackgroundaccentcolor;
+    line-height: 44px;
 }
 
 .app-menu-item:hover {
@@ -105,7 +147,6 @@
 }
 
 .app-menu-item-submenu {
-    padding-top: 5px;
     display: none;
     background-color: @lightbackgroundaccentcolor;
     min-width: 100%;
@@ -113,6 +154,11 @@
     top: 100%;
     right: 10px;
     z-index: 999;
+}
+
+.app-menu-item-submenu.app-menu-item-submenu-mobile {
+    top: 0;
+    right: 100%;
 }
 
 .app-menu-item:hover > .app-menu-item-submenu {

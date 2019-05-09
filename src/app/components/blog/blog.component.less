@@ -1,5 +1,16 @@
 @import '../../../variables.less';
 
+@media only screen and (max-width: 700px) {
+    .blog-indexes-container {
+        width: calc(100% - 40px) !important;
+        margin: 0 20px !important;
+        padding-right: 0 !important;
+    }
+    .blog-posts-container {
+        width: calc(100% - 40px) !important;
+    }
+}
+
 .blog-container {
     width: 100%;
 }
@@ -7,15 +18,14 @@
 .blog-posts-container {
     width: calc(70% - 40px);
     padding: 20px;
-    display: inline-block;
-    vertical-align: top;
+    float: right;
 }
 
 .blog-indexes-container {
-    width: calc(30% - 20px);
-    display: inline-block;
-    vertical-align: top;
+    width: calc(30% - 40px);
+    float: right;
     padding-top: 20px;
+    padding-right: 20px;
 }
 
 .blog-index-container {
@@ -50,6 +60,7 @@
     background-color: @darkaccentcolor;
     border-radius: 5px;
     margin-right: 10px;
+    margin-bottom: 10px;
     padding: 5px 10px;
     display: inline-block;
     vertical-align: top;

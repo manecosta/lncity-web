@@ -1,5 +1,55 @@
 @import '../../../../variables.less';
 
+@media only screen and (max-width: 500px) {
+    .slot-container {
+        transform: scale(0.3);
+        transform-origin: top left;
+        position: absolute;
+        left: calc(50% - 171px);
+    }
+    .slot-external-container {
+        position: relative;
+        height: 190px;
+    }
+    .slot-mobile-disclaimer {
+        display: block !important;
+    }
+}
+
+@media only screen and (min-width: 501px) and (max-width: 700px) {
+    .slot-container {
+        transform: scale(0.45);
+        transform-origin: top left;
+        position: absolute;
+        left: calc(50% - 255px);
+    }
+    .slot-external-container {
+        position: relative;
+        height: 280px;
+    }
+    .slot-mobile-disclaimer {
+        display: block !important;
+    }
+}
+
+@media only screen and (min-width: 701px) and (max-width: 1200px) {
+    .slot-container {
+        transform: scale(0.6);
+        transform-origin: top left;
+        position: absolute;
+        left: calc(50% - 342px);
+    }
+    .slot-external-container {
+        position: relative;
+        height: 370px;
+    }
+    .slot-mobile-disclaimer {
+        display: block !important;
+    }
+}
+
+@scale: 1;
+
 @fillerCount: 30;
 
 @keyframes inoutAnimation {
@@ -44,19 +94,26 @@
     }
 }
 
-@scale: 1;
-
 .slot-loading {
-    margin: calc(128px * @scale) auto;
-    width: calc(128px * @scale);
-    height: calc(128px * @scale);
+    margin: 128px * @scale auto;
+    width: 128px * @scale;
+    height: 128px * @scale;
+}
+
+.slot-mobile-disclaimer {
+    text-align: center;
+    font-size: 16px;
+    color: @infotextcolor;
+    padding-bottom: 20px;
+    line-height: 28px;
+    display: none;
 }
 
 .slot-container {
-    width: calc(1100px * @scale);
-    height: calc(568px * @scale);
+    width: 1100px * @scale;
+    height: 568px * @scale;
     margin: 0 auto;
-    padding: calc(20px * @scale);
+    padding: 20px * @scale;
     background-color: white;
 }
 
@@ -76,65 +133,71 @@
 }
 
 .slot-score-board {
-    width: calc(280px * @scale);
-    height: calc(464px * @scale);
+    width: 280px * @scale;
+    height: 464px * @scale;
     display: inline-block;
     background-color: #eee;
     vertical-align: top;
-    margin-right: calc(20px * @scale);
+    margin-right: 20px * @scale;
 }
 
 .slot-score-board-title {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: calc(22px * @scale);
+    font-size: 22px * @scale;
     color: @textcolor;
     text-align: center;
-    height: calc(44px * @scale);
-    line-height: calc(44px * @scale);
+    height: 44px * @scale;
+    line-height: 44px * @scale;
     width: 100%;
     font-weight: 600;
 }
 
 .slot-score-board-line {
     width: calc(100% - (10px * @scale));
-    height: calc(32px * @scale);
-    margin-bottom: calc(4px * @scale);
+    height: 32px * @scale;
+    margin-bottom: 4px * @scale;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: calc(16px * @scale);
+    font-size: 16px * @scale;
     color: @textcolor;
-    line-height: calc(32px * @scale);
-    padding: calc(2px * @scale) calc(5px * @scale);
+    line-height: 32px * @scale;
+    padding: 2px * @scale 5px * @scale;
+}
+
+.slot-score-board-bonus-line {
+    width: 100%;
+    height: 32px * @scale;
+    margin-top: 16px * @scale;
+    margin-bottom: 8px * @scale;
 }
 
 .slot-score-board-line-bonus > div:nth-child(3) {
-    font-size: calc(12px * @scale);
+    font-size: 12px * @scale;
 }
 
 .slot-score-board-line-bonus > div:nth-child(4) {
-    font-size: calc(14px * @scale);
+    font-size: 14px * @scale;
 }
 
 .slot-score-board-line-bonus > div:nth-child(5) {
-    font-size: calc(16px * @scale);
+    font-size: 16px * @scale;
 }
 
 .slot-score-board-line-bonus > div:nth-child(6) {
-    font-size: calc(18px * @scale);
+    font-size: 18px * @scale;
     font-weight: 600;
 }
 
 .slot-score-board-prize-overlay {
     position: absolute;
-    top: calc(2px * @scale);
-    left: calc(2px * @scale);
+    top: 2px * @scale;
+    left: 2px * @scale;
     width: calc(100% - (8px * @scale));
     height: calc(100% - (8px * @scale));
 }
 
 .slot-score-board-prize-highlighted {
-    border: calc(2px * @scale) solid #333;
-    box-shadow: inset 0 0 calc(2px * @scale) calc(2px * @scale)
-        @warningaccentcolor;
+    border: 2px * @scale solid #333;
+    box-shadow: inset 0 0 2px * @scale 2px * @scale @warningaccentcolor;
     opacity: 0;
     animation: inoutAnimation 1s infinite;
 }
@@ -143,7 +206,7 @@
     width: 25%;
     height: 100%;
     display: inline-block;
-    line-height: calc(32px * @scale);
+    line-height: 32px * @scale;
     vertical-align: top;
     text-align: center;
 }
@@ -154,20 +217,20 @@
 }
 
 .slot-score-board-prize {
-    font-size: calc(12px * @scale);
+    font-size: 12px * @scale;
     position: relative;
 }
 
 .slot-score-board-prize:nth-of-type(3) {
-    font-size: calc(15px * @scale);
+    font-size: 15px * @scale;
 }
 
 .slot-score-board-prize:nth-of-type(4) {
-    font-size: calc(18px * @scale);
+    font-size: 18px * @scale;
 }
 
 .slot-score-board-line-image {
-    padding: calc(2px * @scale);
+    padding: 2px * @scale;
     width: auto;
     height: calc(100% - (4px * @scale));
 }
@@ -175,12 +238,12 @@
 .slot-reels-container {
     position: relative;
     overflow: hidden;
-    width: calc(800px * @scale);
-    height: calc(464px * @scale);
+    width: 800px * @scale;
+    height: 464px * @scale;
     background-color: #333;
     display: inline-block;
     vertical-align: top;
-    margin-bottom: calc(20px * @scale);
+    margin-bottom: 20px * @scale;
 }
 
 .slot-reels-lines-overlay {
@@ -204,7 +267,7 @@
     display: inline-block;
     vertical-align: top;
     height: 100%;
-    margin-right: calc(10px * @scale);
+    margin-right: 10px * @scale;
     border-right: 10px * @scale solid grey;
     border-left: 10px * @scale solid grey;
     position: relative;
@@ -236,35 +299,35 @@
 }
 
 .slot-reels-column:first-child {
-    margin-left: calc(10px * @scale);
+    margin-left: 10px * @scale;
 }
 
 .slot-reels-element-container {
-    height: calc(108px * @scale);
-    width: calc(108px * @scale);
-    margin-bottom: calc(20px * @scale);
+    height: 108px * @scale;
+    width: 108px * @scale;
+    margin-bottom: 20px * @scale;
     position: relative;
-    padding: calc(10px * @scale);
+    padding: 10px * @scale;
 }
 
 .slot-reels-element-container-overlay {
     position: absolute;
-    top: calc(-6px * @scale);
-    left: calc(-6px * @scale);
+    top: -6px * @scale;
+    left: -6px * @scale;
     width: 100%;
     height: 100%;
-    border-radius: calc(10px * @scale);
+    border-radius: 10px * @scale;
 }
 
 .slot-highlighted-element {
-    box-shadow: inset 0 0 calc(5px * @scale) calc(5px * @scale) #f9a643;
-    border: calc(6px * @scale) solid #333;
+    box-shadow: inset 0 0 5px * @scale 5px * @scale #f9a643;
+    border: 6px * @scale solid #333;
     opacity: 0;
     animation: inoutAnimation 1s infinite;
 }
 
 .slot-reels-element-container:first-child {
-    margin-top: calc(20px * @scale);
+    margin-top: 20px * @scale;
 }
 
 .slot-reels-element-img {
@@ -277,52 +340,54 @@
     position: absolute;
     z-index: 10;
     top: 0;
-    left: calc(-10px * @scale);
+    left: -10px * @scale;
     width: calc(100% + (20px * @scale));
     height: 100%;
-    box-shadow: inset 0 0 calc(20px * @scale) calc(10px * @scale) black;
+    box-shadow: inset 0 0 20px * @scale 10px * @scale black;
 }
 
 .slot-spin-button {
     display: block !important;
-    width: calc(100% - 20px);
-    height: calc(44px * @scale);
-    line-height: calc(44px * @scale);
+    width: calc(100% - (20px * @scale));
+    height: 44px * @scale;
+    line-height: 44px * @scale;
     position: relative;
+    font-size: 15px * @scale;
+    padding: 0 10px * @scale;
 }
 
 .slot-spin-button > span {
     position: absolute;
-    top: calc(14px * @scale);
+    top: 14px * @scale;
     left: 0;
     width: 100%;
-    font-size: calc(10px * @scale);
+    font-size: 10px * @scale;
     color: @textcolor;
 }
 
 .slot-deposit-button {
     display: block !important;
-    width: calc(100% - 20px);
-    height: calc(44px * @scale);
-    line-height: calc(44px * @scale);
+    width: calc(100% - (20px * @scale));
+    height: 44px * @scale;
+    line-height: 44px * @scale;
     position: relative;
 }
 
 .slot-credit-info-container {
-    width: calc(1060px * @scale);
-    height: calc(44px * @scale);
+    width: 1060px * @scale;
+    height: 44px * @scale;
     margin: 0 auto;
     background-color: white;
-    padding: calc(20px * @scale);
+    padding: 20px * @scale;
 }
 
 .slot-credit-info-field {
     display: inline-block;
     width: 25%;
     height: 100%;
-    line-height: calc(44px * @scale);
+    line-height: 44px * @scale;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: calc(14px * @scale);
+    font-size: 14px * @scale;
     color: #333;
     text-align: center;
     vertical-align: top;
@@ -334,12 +399,13 @@
 }
 
 .slot-credit-info-field-element.button {
-    margin-left: calc(20px * @scale);
-    width: calc(24px * @scale);
-    height: calc(44px * @scale);
-    line-height: calc(44px * @scale);
+    margin-left: 20px * @scale;
+    width: 24px * @scale;
+    height: 44px * @scale;
+    line-height: 44px * @scale;
     font-weight: 600;
-    font-size: calc(24px * @scale);
+    font-size: 24px * @scale;
+    padding: 0 10px * @scale;
 }
 
 .slot-credit-info-field > span:nth-child(1) {
@@ -350,7 +416,7 @@
 .slot-credit-info-field > span:nth-child(2) {
     vertical-align: top;
     color: @highlightedtextcolor;
-    font-size: calc(24px * @scale);
+    font-size: 24px * @scale;
 }
 
 .slot-credit-info-field > .slot-credit-info-field-element > span:nth-child(1) {
@@ -361,5 +427,5 @@
 .slot-credit-info-field > .slot-credit-info-field-element > span:nth-child(2) {
     vertical-align: top;
     color: @highlightedtextcolor;
-    font-size: calc(24px * @scale);
+    font-size: 24px * @scale;
 }

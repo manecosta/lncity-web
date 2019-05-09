@@ -1,5 +1,53 @@
 @import '../../../../variables.less';
 
+@media only screen and (max-width: 500px) {
+    .roulette-container {
+        transform: scale(0.3);
+        transform-origin: top left;
+        position: absolute;
+        left: calc(50% - 171px);
+    }
+    .roulette-external-container {
+        position: relative;
+        height: 190px;
+    }
+    .roulette-mobile-disclaimer {
+        display: block !important;
+    }
+}
+
+@media only screen and (min-width: 501px) and (max-width: 700px) {
+    .roulette-container {
+        transform: scale(0.45);
+        transform-origin: top left;
+        position: absolute;
+        left: calc(50% - 255px);
+    }
+    .roulette-external-container {
+        position: relative;
+        height: 280px;
+    }
+    .roulette-mobile-disclaimer {
+        display: block !important;
+    }
+}
+
+@media only screen and (min-width: 701px) and (max-width: 1200px) {
+    .roulette-container {
+        transform: scale(0.6);
+        transform-origin: top left;
+        position: absolute;
+        left: calc(50% - 342px);
+    }
+    .roulette-external-container {
+        position: relative;
+        height: 370px;
+    }
+    .roulette-mobile-disclaimer {
+        display: block !important;
+    }
+}
+
 @fontSize: 18px;
 
 @keyframes inoutAnimation {
@@ -25,6 +73,15 @@
     margin: 128px auto;
     width: 128px;
     height: 128px;
+}
+
+.roulette-mobile-disclaimer {
+    text-align: center;
+    font-size: 16px;
+    color: @infotextcolor;
+    padding-bottom: 20px;
+    line-height: 28px;
+    display: none;
 }
 
 .roulette-game-container {

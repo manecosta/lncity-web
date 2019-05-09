@@ -14,12 +14,14 @@ import { NotificationService } from './services/notification.service';
     styleUrls: ['./app.component.less']
 })
 export class AppComponent implements OnInit {
+    mobileMenuOptions = [];
     menuOptions = [
         {
             titleMethod: 'getAccountTitle',
             isWarn: 'hasUnseenNotifications',
             type: 'menu',
             subtitle: 'getBalance',
+            mobileMenu: false,
             options: [
                 {
                     name: 'Activity',
@@ -70,11 +72,13 @@ export class AppComponent implements OnInit {
         {
             title: 'Blog',
             type: 'navigate',
-            navigate: '/blog'
+            navigate: '/blog',
+            mobileMenu: true
         },
         {
             title: 'Games',
             type: 'menu',
+            mobileMenu: true,
             options: [
                 {
                     title: 'Slot Machine',
@@ -91,21 +95,32 @@ export class AppComponent implements OnInit {
         {
             title: 'Node',
             type: 'navigate',
-            navigate: '/node'
+            navigate: '/node',
+            mobileMenu: true
         },
         {
             title: 'Tip',
             type: 'action',
-            action: 'tip'
+            action: 'tip',
+            mobileMenu: true
         }
     ];
+
+    mobileMenuShowing = false;
 
     constructor(
         public appService: AppService,
         private notificationService: NotificationService,
         private dialog: MatDialog,
         private router: Router
-    ) {}
+    ) {
+        this.mobileMenuOptions = [];
+        for (const option of this.menuOptions.slice().reverse()) {
+            if (option.mobileMenu) {
+                this.mobileMenuOptions.push(option);
+            }
+        }
+    }
 
     ngOnInit() {
         this.notificationService.updateNotificationCounts();
@@ -195,8 +210,10 @@ export class AppComponent implements OnInit {
 
     clickedOption(option) {
         if (option.type === 'navigate') {
+            this.mobileMenuShowing = false;
             this.router.navigateByUrl(option.navigate);
         } else if (option.type === 'action') {
+            this.mobileMenuShowing = false;
             this[option.action]();
         }
         return true;
@@ -238,5 +255,9 @@ export class AppComponent implements OnInit {
 
     hasUnseenNotifications() {
         return this.notificationService.notificationCounts.unseen !== 0;
+    }
+
+    toggleMobileMenu() {
+        this.mobileMenuShowing = !this.mobileMenuShowing;
     }
 }
