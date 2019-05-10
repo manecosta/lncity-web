@@ -1,0 +1,78 @@
+<div class="app-page-title">Poker</div>
+<div style="width: 100%;">
+    <div *ngIf="!loadedParameters" class="poker-loading centered-content">
+        <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+    </div>
+    <div *ngIf="loadedParameters" class="poker-mobile-disclaimer">
+        Support for smaller screens is experimental!<br />
+        On mobile, prefer landscape orietation.
+    </div>
+    <div style="position: relative;">
+        <img style="position: absolute; width: 10px; height: 10px; display: none;" *ngFor="let card of cards" src="assets/img/cards/{{card.suit + '_' + card.name}}.png" />
+    </div>
+    <div *ngIf="loadedParameters" class="poker-external-container">
+        <div class="poker-container">
+            <div class="poker-prizes-container">
+                <div class="poker-prize-title">Prize List</div>
+                <div class="poker-prize-line" *ngFor="let prizeInfo of prizeInfos" [ngStyle]="{'color': isPrizeWon(prizeInfo) ? '#ee5921' : '#3e3e3e', 'font-weight': isPrizeWon(prizeInfo) ? '600' : '400', 'text-shadow': isPrizeWon(prizeInfo) ? '1px 1px 2px #333' : 'none' }">
+                    <div class="poker-prize-column poker-prize-column-0">{{prizeInfo.title}}</div>
+                    <div class="poker-prize-column poker-prize-column-1"></div>
+                    <div class="poker-prize-column poker-prize-column-2">{{prizeInfo.multiplier * baseBet * betMultiplier}}</div>
+                </div>
+            </div>
+            <div class="poker-cards-contaner">
+                <div (click)="toggleHoldCardIndex(i)" [ngStyle]="{'cursor': identifier ? 'pointer' : 'default'}" class="poker-card" *ngFor="let cardInfo of showingCards; let i = index;">
+                    <div [ngClass]="{ 'poker-prize-highlighted': matchedIndexes.indexOf(i) != -1 }" class="poker-prize-overlay"></div>
+                    <div class="poker-card-hold" *ngIf="holdIndexes.indexOf(i) != -1">HOLD</div>
+                    <img src="assets/img/cards/back.png" />
+                    <img class="poker-card-real" src="assets/img/cards/{{cardInfo.suit + '_' + cardInfo.name}}.png" *ngIf="cardInfo" />
+                </div>
+            </div>
+            <div class="poker-controls-container">
+                <div class="poker-credit-info-field">
+                    <div class="poker-credit-info-field-element"><span>BET: </span><span>{{baseBet * betMultiplier}}</span></div>
+                    <div class="poker-credit-info-field-element button" [ngClass]="{ 'disabled': betMultiplier == 1 || dealingOrDrawing || identifier, 'no-hover': betMultiplier == 1 || dealingOrDrawing  || identifier }" (click)="decreaseMultiplier()">-</div>
+                    <div class="poker-credit-info-field-element button" [ngClass]="{ 'disabled': betMultiplier == maxBetMultiplier || dealingOrDrawing || identifier, 'no-hover': betMultiplier == maxBetMultiplier || dealingOrDrawing || identifier }" (click)="increaseMultiplier()">+</div></div>
+                <div class="poker-credit-info-field"><span>BALANCE: </span><span >{{appService.user.balance}}</span></div>
+                <div class="poker-credit-info-field"><span>WIN: </span><span>{{lastWin}}</span></div>
+                <div class="poker-credit-info-field">
+                    <div *ngIf="appService.user.balance >= baseBet * betMultiplier" class="poker-spin-button button" [ngClass]="{ 'disabled': dealingOrDrawing, 'no-hover': dealingOrDrawing }" (click)="dealOrDraw()">{{identifier ? 'Draw' :'Deal'}}<span>(Tap Space)</span></div>
+                    <div *ngIf="appService.user.balance < baseBet * betMultiplier" class="poker-deposit-button button" [ngClass]="{ 'disabled': dealingOrDrawing, 'no-hover': dealingOrDrawing }" (click)="depositBalance()">Deposit</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="loadedParameters" class="poker-rules-container">
+        <h2>Instructions</h2>
+        <h4>Balance</h4>
+        <ul>
+            <li>Play from your balance. If you're out of balance, deposit some more to play!</li>
+            <li>You can bet between <b>{{baseBet}}</b> and <b>{{baseBet * maxBetMultiplier}}</b> satoshi and the prizes will upgrade accordingly.</li>
+            <li>Any prizes won will automatically add to your balance and you can withdraw whenever you want.</li>
+        </ul>
+        <h4>Matching</h4>
+        <ul>
+
+        </ul>
+        <h4>Symbols and Prizes</h4>
+        <ul>
+
+        </ul>
+        <h4>Hotkeys</h4>
+        <ul>
+            <li>You can tap <b>Space</b> to deal/draw.</li>
+            <li>You can tap numbers <b>1</b> to <b>5</b> key to hold cards.</li>
+            <li>You can tap the <b>+</b> and <b>-</b> keys to increase or decrease the bet amount.</li>
+        </ul>
+        <h4>Mechanics</h4>
+        <ul>
+
+        </ul>
+        <h4>Final Notes</h4>
+        <ul>
+            <li>Be responsible. Don't bet more than you can lose.</li>
+            <li>This is intended to be a fun little game, not a job!</li>
+            <li>Have fun! If you run into any issues please contact me at nel0 [at] protonmail.com.</li>
+        </ul>
+    </div>
+</div>

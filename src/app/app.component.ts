@@ -89,6 +89,11 @@ export class AppComponent implements OnInit {
                     title: 'Roulette',
                     type: 'navigate',
                     navigate: '/roulette'
+                },
+                {
+                    title: 'Poker',
+                    type: 'navigate',
+                    navigate: '/poker'
                 }
             ]
         },
@@ -97,13 +102,13 @@ export class AppComponent implements OnInit {
             type: 'navigate',
             navigate: '/node',
             mobileMenu: true
-        },
+        } /*,
         {
             title: 'Tip',
             type: 'action',
             action: 'tip',
             mobileMenu: true
-        }
+        }*/
     ];
 
     mobileMenuShowing = false;

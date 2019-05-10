@@ -6,12 +6,14 @@ import { SlotMachinGameComponent } from './components/games/slotmachine/slotmach
 import { BlogComponent } from './components/blog/blog.component';
 import { NodeComponent } from './components/node/node.component';
 import { ActivityComponent } from './components/activity/activity.component';
+import { PokerGameComponent } from './components/games/poker/poker.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
     { path: 'roulette', component: RouletteGameComponent },
     { path: 'slot', component: SlotMachinGameComponent },
+    { path: 'poker', component: PokerGameComponent },
     { path: 'blog/:filter', component: BlogComponent },
     { path: 'blog', redirectTo: '/blog/latest' },
     { path: 'node', component: NodeComponent },

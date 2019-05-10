@@ -9,6 +9,8 @@ export class GameService {
         GameService.instance = this;
     }
 
+    // Slot
+
     getSlotParameters() {
         return this.requestService.get('/games/slots/getparameters');
     }
@@ -19,6 +21,8 @@ export class GameService {
         });
     }
 
+    // Roulette
+
     getRouletteParameters() {
         return this.requestService.get('/games/roulettes/getparameters');
     }
@@ -26,6 +30,25 @@ export class GameService {
     getRouletteResult(bets) {
         return this.requestService.post('/games/roulettes/play', {
             bets
+        });
+    }
+
+    // Poker
+
+    getPokerParameters() {
+        return this.requestService.get('/games/pokers/getparameters');
+    }
+
+    getPokerHand(betMultiplier) {
+        return this.requestService.post('/games/pokers/get', {
+            bet_multiplier: betMultiplier
+        });
+    }
+
+    getPokerResult(identifier, holdIndexes) {
+        return this.requestService.post('/games/pokers/play', {
+            identifier,
+            hold_indexes: holdIndexes
         });
     }
 }

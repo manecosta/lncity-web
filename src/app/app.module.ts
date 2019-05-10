@@ -30,6 +30,7 @@ import { SwitchAccountDialogComponent } from './dialogs/switchaccountdialog/swit
 import { BlogService } from './services/blog.service';
 import { NotificationService } from './services/notification.service';
 import { ActivityComponent } from './components/activity/activity.component';
+import { PokerGameComponent } from './components/games/poker/poker.component';
 
 @NgModule({
     declarations: [
@@ -41,6 +42,7 @@ import { ActivityComponent } from './components/activity/activity.component';
         AmountPipe,
         RouletteGameComponent,
         SlotMachinGameComponent,
+        PokerGameComponent,
         HomeComponent,
         BlogComponent,
         NodeComponent,

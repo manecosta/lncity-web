@@ -379,10 +379,6 @@ export class SlotMachinGameComponent implements OnInit, OnDestroy {
         return board;
     }
 
-    aboveZero(e) {
-        return e > 0;
-    }
-
     depositBalance() {
         const dialogConfig = new MatDialogConfig();
 
