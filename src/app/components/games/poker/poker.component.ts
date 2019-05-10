@@ -143,8 +143,11 @@ export class PokerGameComponent implements OnInit, OnDestroy {
 
         this.resetPrizeAnimations();
 
-        if (this.appService.user.balance >= betPrice) {
+        if (this.appService.user.balance >= betPrice || this.identifier) {
             if (!this.identifier) {
+                this.appService.user.balance -= betPrice;
+                this.appService.backupUser();
+
                 this.showingCards = [null, null, null, null, null];
                 this.holdIndexes = [];
                 this.matchedIndexes = [];
