@@ -1,11 +1,11 @@
 <div class="app-page-title">Roulette</div>
+<div *ngIf="loadedParameters" class="roulette-mobile-disclaimer">
+    Support for smaller screens is experimental!<br />
+    On mobile, prefer landscape orietation.
+</div>
 <div class="roulette-external-container">
     <div *ngIf="!loadedParameters || !appService.user" class="roulette-loading centered-content">
         <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-    </div>
-    <div *ngIf="loadedParameters" class="roulette-mobile-disclaimer">
-        Support for smaller screens is experimental!<br />
-        On mobile, prefer landscape orietation.
     </div>
     <div class="roulette-container">
         <div *ngIf="loadedParameters && appService.user" class="roulette-game-container">
