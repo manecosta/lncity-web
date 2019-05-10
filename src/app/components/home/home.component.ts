@@ -11,7 +11,7 @@ export class HomeComponent implements OnInit {
         {
             title: 'Slot',
             description:
-                'Play the lightning slots and earn up to 40x your bet!',
+                'Play the lightning slots and earn up to 200x your bet!',
             navigate: 'slot',
             background: 'assets/img/slot/promobg.png'
         },
@@ -21,6 +21,12 @@ export class HomeComponent implements OnInit {
                 'Play the lightning roulette and earn up to 36x your bet!',
             navigate: 'roulette',
             background: 'assets/img/roulette/promobg.png'
+        },
+        {
+            title: 'Poker',
+            description: 'Play lightning poker and earn up to 250x your bet!',
+            navigate: 'poker',
+            background: 'assets/img/poker/promobg.png'
         }
     ];
 
