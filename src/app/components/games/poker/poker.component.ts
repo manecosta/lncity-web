@@ -13,6 +13,8 @@ export class PokerGameComponent implements OnInit, OnDestroy {
     uiScale = 1;
     fillerCount = 30;
 
+    firstDeal = true;
+
     loadParamtersInterval = null;
     loadedParameters = false;
     loadingParameters = false;
@@ -20,13 +22,11 @@ export class PokerGameComponent implements OnInit, OnDestroy {
     dealingOrDrawing = false;
     identifier = null;
 
+    prizeInfos = [];
     cards = [];
     baseBet = null;
     betMultiplier = null;
     maxBetMultiplier = null;
-    lastWin = 0;
-    serverPrize = null;
-    lastPrizeInfo = null;
 
     showCardsInterval = null;
     showingCards = [null, null, null, null, null];
@@ -36,7 +36,14 @@ export class PokerGameComponent implements OnInit, OnDestroy {
     prizeAnimationTimeout = null;
     prizeAnimationInterval = null;
 
-    prizeInfos = [];
+    tempLastWin = 0;
+    tempPrizeInfo = null;
+    tempMatchedIndexes = [];
+
+    staticLastWin = 0;
+    lastWin = 0;
+    serverPrize = null;
+    lastPrizeInfo = null;
     matchedIndexes = [];
 
     constructor(
@@ -152,6 +159,8 @@ export class PokerGameComponent implements OnInit, OnDestroy {
                 this.holdIndexes = [];
                 this.matchedIndexes = [];
                 this.dealingOrDrawing = true;
+                this.firstDeal = false;
+                this.staticLastWin = 0;
                 this.gameService
                     .getPokerHand(this.betMultiplier)
                     .then(result => {
@@ -164,6 +173,10 @@ export class PokerGameComponent implements OnInit, OnDestroy {
                             if (cardIndex > 4) {
                                 clearInterval(this.showCardsInterval);
                                 this.dealingOrDrawing = false;
+                                this.tempLastWin = result.prize;
+                                this.tempPrizeInfo = result.prize_info;
+                                this.tempMatchedIndexes =
+                                    result.matched_indexes;
                             }
                         }, 300);
                         this.identifier = result.identifier;
@@ -195,8 +208,12 @@ export class PokerGameComponent implements OnInit, OnDestroy {
                                 this.dealingOrDrawing = false;
                                 this.lastPrizeInfo = result.prize_info;
                                 this.lastWin = result.prize;
+                                this.staticLastWin = result.prize;
                                 this.matchedIndexes = result.matched_indexes;
                                 this.identifier = null;
+                                this.tempLastWin = 0;
+                                this.tempMatchedIndexes = [];
+                                this.tempPrizeInfo = null;
 
                                 if (this.lastWin > 0) {
                                     this.prizeAnimationTimeout = setTimeout(
@@ -248,6 +265,15 @@ export class PokerGameComponent implements OnInit, OnDestroy {
     isPrizeWon(prizeInfo) {
         if (this.lastPrizeInfo) {
             if (prizeInfo.name === this.lastPrizeInfo.name) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    isTempPrizeWon(prizeInfo) {
+        if (this.tempPrizeInfo) {
+            if (prizeInfo.name === this.tempPrizeInfo.name) {
                 return true;
             }
         }

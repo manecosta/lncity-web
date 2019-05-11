@@ -14,15 +14,23 @@
         <div class="poker-container">
             <div class="poker-prizes-container">
                 <div class="poker-prize-title">Prize List</div>
-                <div class="poker-prize-line" *ngFor="let prizeInfo of prizeInfos" [ngStyle]="{'color': isPrizeWon(prizeInfo) ? '#ee5921' : '#3e3e3e', 'font-weight': isPrizeWon(prizeInfo) ? '600' : '400', 'text-shadow': isPrizeWon(prizeInfo) ? '1px 1px 2px #333' : 'none' }">
+                <div class="poker-prize-line" *ngFor="let prizeInfo of prizeInfos" [ngStyle]="{'color': isPrizeWon(prizeInfo) ? '#ee5921' : (isTempPrizeWon(prizeInfo) ? '#4090c0' : '#3e3e3e'), 'font-weight': isPrizeWon(prizeInfo) ? '600' : '400', 'text-shadow': isPrizeWon(prizeInfo) ? '1px 1px 2px #333' : 'none' }">
                     <div class="poker-prize-column poker-prize-column-0">{{prizeInfo.title}}</div>
                     <div class="poker-prize-column poker-prize-column-1"></div>
                     <div class="poker-prize-column poker-prize-column-2">{{prizeInfo.multiplier * baseBet * betMultiplier}}</div>
                 </div>
             </div>
-            <div class="poker-cards-contaner">
+            <div class="poker-cards-container">
+                <div class="poker-cards-container-info-fields">
+                    <div class="poker-cards-container-info-field" *ngIf="lastPrizeInfo">Congratulations! You won {{staticLastWin}} ({{lastPrizeInfo.title}})</div>
+                    <div class="poker-cards-container-info-field" *ngIf="!identifier && !lastPrizeInfo && !dealingOrDrawing && !firstDeal">Game over!</div>
+                    <div class="poker-cards-container-info-field" *ngIf="!identifier && !dealingOrDrawing">Deal cards to play{{ firstDeal ? '' : ' again' }}!</div>
+                    <div class="poker-cards-container-info-field" *ngIf="dealingOrDrawing">Good luck!</div>
+                    <div class="poker-cards-container-info-field" *ngIf="identifier && !dealingOrDrawing">Select cards to HOLD!</div>
+                    <div class="poker-cards-container-info-field" *ngIf="tempPrizeInfo">Current Prize: {{tempLastWin}} ({{tempPrizeInfo.title}})</div>
+                </div>
                 <div (click)="toggleHoldCardIndex(i)" [ngStyle]="{'cursor': identifier ? 'pointer' : 'default'}" class="poker-card" *ngFor="let cardInfo of showingCards; let i = index;">
-                    <div [ngClass]="{ 'poker-prize-highlighted': matchedIndexes.indexOf(i) != -1 }" class="poker-prize-overlay"></div>
+                    <div [ngClass]="{ 'poker-prize-highlighted': matchedIndexes.indexOf(i) != -1, 'poker-card-temp-prize': tempMatchedIndexes.indexOf(i) != -1 }" class="poker-prize-overlay"></div>
                     <div class="poker-card-hold" *ngIf="holdIndexes.indexOf(i) != -1">HOLD</div>
                     <img src="assets/img/cards/back.png" />
                     <img class="poker-card-real" src="assets/img/cards/{{cardInfo.suit + '_' + cardInfo.name}}.png" *ngIf="cardInfo" />
@@ -36,8 +44,8 @@
                 <div class="poker-credit-info-field"><span>BALANCE: </span><span >{{appService.user.balance}}</span></div>
                 <div class="poker-credit-info-field"><span>WIN: </span><span>{{lastWin}}</span></div>
                 <div class="poker-credit-info-field">
-                    <div *ngIf="appService.user.balance >= baseBet * betMultiplier" class="poker-spin-button button" [ngClass]="{ 'disabled': dealingOrDrawing, 'no-hover': dealingOrDrawing }" (click)="dealOrDraw()">{{identifier ? 'Draw' :'Deal'}}<span>(Tap Space)</span></div>
-                    <div *ngIf="appService.user.balance < baseBet * betMultiplier" class="poker-deposit-button button" [ngClass]="{ 'disabled': dealingOrDrawing, 'no-hover': dealingOrDrawing }" (click)="depositBalance()">Deposit</div>
+                    <div *ngIf="appService.user.balance >= baseBet * betMultiplier || identifier" class="poker-spin-button button" [ngClass]="{ 'disabled': dealingOrDrawing, 'no-hover': dealingOrDrawing }" (click)="dealOrDraw()">{{identifier ? 'Swap' :'Deal'}}<span>(Tap Space)</span></div>
+                    <div *ngIf="appService.user.balance < baseBet * betMultiplier && !identifier" class="poker-deposit-button button" [ngClass]="{ 'disabled': dealingOrDrawing, 'no-hover': dealingOrDrawing }" (click)="depositBalance()">Deposit</div>
                 </div>
             </div>
         </div>
