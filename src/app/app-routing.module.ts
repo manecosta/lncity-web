@@ -7,6 +7,7 @@ import { BlogComponent } from './components/blog/blog.component';
 import { NodeComponent } from './components/node/node.component';
 import { ActivityComponent } from './components/activity/activity.component';
 import { PokerGameComponent } from './components/games/poker/poker.component';
+import { TippingComponent } from './components/tipping/tipping.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -18,6 +19,8 @@ const routes: Routes = [
     { path: 'blog', redirectTo: '/blog/latest' },
     { path: 'node', component: NodeComponent },
     { path: 'activity', component: ActivityComponent },
+    { path: 'tipping/:filter', component: TippingComponent },
+    { path: 'tipping', component: TippingComponent },
     { path: '**', redirectTo: '/home' }
 ];
 

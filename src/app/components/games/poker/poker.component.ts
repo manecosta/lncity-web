@@ -367,9 +367,9 @@ export class PokerGameComponent implements OnInit, OnDestroy {
                     .getPokerResult(this.identifier, this.holdIndexes)
                     .then(result => {
                         const swapIndexes = [];
-                        for (let i = 0; i < 5; i++) {
-                            if (this.holdIndexes.indexOf(i) === -1) {
-                                swapIndexes.push(i);
+                        for (let j = 0; j < 5; j++) {
+                            if (this.holdIndexes.indexOf(j) === -1) {
+                                swapIndexes.push(j);
                             }
                         }
 

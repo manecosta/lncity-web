@@ -1,6 +1,6 @@
 import { Component, Inject, AfterViewInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { AccountService } from 'src/app/services/account.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
     selector: 'app-switchaccountdialog',
@@ -22,7 +22,7 @@ export class SwitchAccountDialogComponent implements AfterViewInit {
     constructor(
         public dialogRef: MatDialogRef<SwitchAccountDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private accountService: AccountService
+        private userService: UserService
     ) {
         if (data) {
             if (data.title) {
@@ -38,7 +38,7 @@ export class SwitchAccountDialogComponent implements AfterViewInit {
     loginToAccount() {
         if (this.username !== '' && this.password !== '') {
             this.loading = true;
-            this.accountService
+            this.userService
                 .loginToAccount(this.username, this.password)
                 .then(response => {
                     this.loading = false;

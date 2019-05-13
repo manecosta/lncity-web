@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="payment-dialog-amount-value-container centered-content">
-            <span class="payment-dialog-amount-message">Amount:</span> <input [(ngModel)]="amount" (input)="amountInputChanged($event)" class="payment-dialog-amount-value-input" type="number" />
+            <span class="payment-dialog-amount-message">Amount (100 to 500k):</span> <input [(ngModel)]="amount" (input)="amountInputChanged($event)" class="payment-dialog-amount-value-input" type="number" />
         </div>
     </div>
     <div class="full-size" *ngIf="!selectingAmount && !selectingTarget">

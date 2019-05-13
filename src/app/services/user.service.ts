@@ -5,14 +5,14 @@ import { HttpResponse } from '@angular/common/http';
 import { User } from '../models/user';
 
 @Injectable()
-export class AccountService {
-    static instance: AccountService;
+export class UserService {
+    static instance: UserService;
 
     constructor(
         private requestService: RequestService,
         private appService: AppService
     ) {
-        AccountService.instance = this;
+        UserService.instance = this;
     }
 
     reloadAccount() {
@@ -68,13 +68,7 @@ export class AccountService {
             });
     }
 
-    depositBalance(amount) {
-        return this.requestService.post('/balances/deposit', { amount });
-    }
-
-    withdrawBalance(paymentRequest) {
-        return this.requestService.post('/balances/withdraw', {
-            payment_request: paymentRequest
-        });
+    getUser(identifier) {
+        return this.requestService.get('/users/' + identifier);
     }
 }

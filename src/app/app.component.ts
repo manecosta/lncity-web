@@ -57,6 +57,11 @@ export class AppComponent implements OnInit {
                     type: 'separator'
                 },
                 {
+                    title: 'My Tipping Page',
+                    type: 'navigate',
+                    navigate: 'tipping'
+                },
+                {
                     title: 'Register Account',
                     type: 'action',
                     action: 'registerAccount',
@@ -66,6 +71,12 @@ export class AppComponent implements OnInit {
                     title: 'Switch Account',
                     type: 'action',
                     action: 'switchAccount'
+                },
+                {
+                    title: 'Log out',
+                    type: 'action',
+                    action: 'logOut',
+                    condition: 'isLogOutVisible'
                 }
             ]
         },
@@ -238,6 +249,18 @@ export class AppComponent implements OnInit {
         } else {
             return false;
         }
+    }
+
+    isLogOutVisible() {
+        if (this.appService.user) {
+            return this.appService.user.username != null;
+        }
+        return false;
+    }
+
+    logOut() {
+        this.appService.clearUserAndAuth();
+        window.location.reload();
     }
 
     getAccountTitle() {

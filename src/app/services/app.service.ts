@@ -15,7 +15,8 @@ export class AppService {
     constructor(private localStorage: LocalStorage) {
         AppService.instance = this;
 
-        this.user = LocalStorage.getObject('user');
+        const userInfo = LocalStorage.getObject('user');
+        this.user = userInfo ? new User(userInfo) : null;
         this.authToken = LocalStorage.get('auth_token');
         this.refreshToken = LocalStorage.get('refresh_token');
     }
@@ -36,5 +37,14 @@ export class AppService {
         LocalStorage.setObject('user', this.user.serializable());
         LocalStorage.set('auth_token', this.authToken);
         LocalStorage.set('refresh_token', this.refreshToken);
+    }
+
+    clearUserAndAuth() {
+        this.user = null;
+        this.authToken = null;
+        this.refreshToken = null;
+        LocalStorage.remove('user');
+        LocalStorage.remove('auth_token');
+        LocalStorage.remove('refresh_token');
     }
 }

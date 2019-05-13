@@ -8,7 +8,8 @@ import {
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { PaymentService } from 'src/app/services/payment.service';
-import { AccountService } from 'src/app/services/account.service';
+import { BalanceService } from 'src/app/services/balance.service';
+import { UserService } from 'src/app/services/user.service';
 import { AppService } from 'src/app/services/app.service';
 
 @Pipe({ name: 'amountPipe' })
@@ -50,7 +51,7 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
     selectedRow: number = null;
     selectedColumn: number = null;
 
-    minAmount = 1000;
+    minAmount = 100;
     maxAmount = 500000;
 
     suggestedAmounts = [
@@ -78,7 +79,8 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
         public dialogRef: MatDialogRef<PaymentDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private paymentService: PaymentService,
-        private accountService: AccountService,
+        private balanceService: BalanceService,
+        private userService: UserService,
         private appService: AppService
     ) {
         if (data) {
@@ -154,7 +156,7 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
                                 this.generatedInvoiceRHash = null;
                                 this.dialogRef.updateSize('400px', '400px');
                                 if (this.target === 'balance') {
-                                    this.accountService.reloadAccount();
+                                    this.userService.reloadAccount();
                                     setTimeout(() => {
                                         this.dialogRef.close(true);
                                     }, 2000);
@@ -182,7 +184,7 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
             .tipTarget(this.target, this.amount)
             .then(_ => {
                 this.loading = false;
-                this.accountService.reloadAccount();
+                this.userService.reloadAccount();
                 this.paymentSuccess = true;
                 setTimeout(() => {
                     this.dialogRef.close({
@@ -194,7 +196,7 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
             .catch(error => {
                 this.loading = false;
                 this.paymentSuccess = false;
-                this.accountService.reloadAccount();
+                this.userService.reloadAccount();
                 setTimeout(() => {
                     this.dialogRef.close(false);
                 }, 2000);
@@ -210,7 +212,7 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
         ) {
             this.dialogRef.updateSize('400px', '700px');
             this.addedFunds = true;
-            this.accountService
+            this.balanceService
                 .depositBalance(this.amount)
                 .then(response => {
                     this.generatedInvoiceSuccessHandler(response);

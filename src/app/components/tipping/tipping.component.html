@@ -1,0 +1,12 @@
+<div class="app-page-title">Tipping</div>
+<div class="tipping-container">
+    <div *ngIf="loading" class="centered-content">
+        <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+    </div>
+    <div *ngIf="!loading">
+        <div *ngIf="tipUser" class="tipping-username">{{tipUser.username ? tipUser.username : 'Anonymous'}}</div>
+        <div *ngIf="tipUser" [ngClass]="{ 'disabled no-hover': tipUser.id == appService.user.userId }" class="tipping-button button" (click)="tipUserAction()">Tip</div>
+        <div *ngIf="!tipUser" class="tipping-user-not-found">User not found</div>
+        <div *ngIf="tipUser && tipUser.id == appService.user.userId" class="tipping-warn">(Can't tip yourself)</div>
+    </div>
+</div>

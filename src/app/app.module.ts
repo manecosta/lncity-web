@@ -18,7 +18,8 @@ import { RouletteGameComponent } from './components/games/roulette/roulette.comp
 import { LocalStorage } from './services/localstorage.service';
 import { HomeComponent } from './components/home/home.component';
 import { FormsModule } from '@angular/forms';
-import { AccountService } from './services/account.service';
+import { UserService } from './services/user.service';
+import { BalanceService } from './services/balance.service';
 import { WithdrawalDialogComponent } from './dialogs/withdrawaldialog/withdrawaldialog.component';
 import { SlotMachinGameComponent } from './components/games/slotmachine/slotmachine.component';
 import { GameService } from './services/game.service';
@@ -31,6 +32,7 @@ import { BlogService } from './services/blog.service';
 import { NotificationService } from './services/notification.service';
 import { ActivityComponent } from './components/activity/activity.component';
 import { PokerGameComponent } from './components/games/poker/poker.component';
+import { TippingComponent } from './components/tipping/tipping.component';
 
 @NgModule({
     declarations: [
@@ -46,7 +48,8 @@ import { PokerGameComponent } from './components/games/poker/poker.component';
         HomeComponent,
         BlogComponent,
         NodeComponent,
-        ActivityComponent
+        ActivityComponent,
+        TippingComponent
     ],
     entryComponents: [
         PaymentDialogComponent,
@@ -68,7 +71,8 @@ import { PokerGameComponent } from './components/games/poker/poker.component';
         AppService,
         PaymentService,
         RequestService,
-        AccountService,
+        UserService,
+        BalanceService,
         GameService,
         BlogService,
         NotificationService,
@@ -84,12 +88,12 @@ export class AppModule {
     constructor(
         private appService: AppService,
         private requestService: RequestService,
-        private accountService: AccountService
+        private userService: UserService
     ) {
         if (!this.appService.user) {
             this.requestService.register();
         } else {
-            this.accountService.reloadAccount();
+            this.userService.reloadAccount();
         }
     }
 }

@@ -1,7 +1,8 @@
 import { Component, Inject, AfterViewInit, ViewChild } from '@angular/core';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { AccountService } from 'src/app/services/account.service';
+import { BalanceService } from 'src/app/services/balance.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
     selector: 'app-withdrawaldialog',
@@ -42,7 +43,8 @@ export class WithdrawalDialogComponent implements AfterViewInit {
     constructor(
         public dialogRef: MatDialogRef<WithdrawalDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
-        private accountService: AccountService
+        private balanceService: BalanceService,
+        private userService: UserService
     ) {
         if (data) {
             if (data.title) {
@@ -85,14 +87,14 @@ export class WithdrawalDialogComponent implements AfterViewInit {
 
     withdrawPaymentRequest() {
         this.loading = true;
-        this.accountService
+        this.balanceService
             .withdrawBalance(this.paymentRequest)
             .then(result => {
                 this.loading = false;
                 this.paymentCompleted = true;
                 this.paymentSuccess = true;
                 this.paymentMessage = 'Withdrawal succeeded!';
-                this.accountService.reloadAccount();
+                this.userService.reloadAccount();
                 setTimeout(() => {
                     this.dialogRef.close();
                 }, 2000);
