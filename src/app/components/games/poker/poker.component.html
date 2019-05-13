@@ -16,7 +16,11 @@
                 <div class="poker-prize-title">Prize List</div>
                 <div class="poker-prize-line" *ngFor="let prizeInfo of prizeInfos" [ngStyle]="{'color': isPrizeWon(prizeInfo) ? '#ee5921' : (isTempPrizeWon(prizeInfo) ? '#4090c0' : '#3e3e3e'), 'font-weight': isPrizeWon(prizeInfo) ? '600' : '400', 'text-shadow': isPrizeWon(prizeInfo) ? '1px 1px 2px #333' : 'none' }">
                     <div class="poker-prize-column poker-prize-column-0">{{prizeInfo.title}}</div>
-                    <div class="poker-prize-column poker-prize-column-1"></div>
+                    <div class="poker-prize-column poker-prize-column-1">
+                        <div class="poker-prize-example-cards-container" *ngIf="prizeCards[prizeInfo.name]">
+                            <img class="poker-prize-example-card" src="assets/img/cards/{{card.suit + '_' + card.name}}.png" *ngFor="let card of prizeCards[prizeInfo.name]" />
+                        </div>
+                    </div>
                     <div class="poker-prize-column poker-prize-column-2">{{prizeInfo.multiplier * baseBet * betMultiplier}}</div>
                 </div>
             </div>
@@ -29,7 +33,7 @@
                     <div class="poker-cards-container-info-field" *ngIf="identifier && !dealingOrDrawing">Select cards to HOLD!</div>
                     <div class="poker-cards-container-info-field" *ngIf="tempPrizeInfo">Current Prize: {{tempLastWin}} ({{tempPrizeInfo.title}})</div>
                 </div>
-                <div (click)="toggleHoldCardIndex(i)" [ngStyle]="{'cursor': identifier ? 'pointer' : 'default'}" class="poker-card" *ngFor="let cardInfo of showingCards; let i = index;">
+                <div (click)="toggleHoldCardIndex(i)" [ngStyle]="{'cursor': identifier ? 'pointer' : 'default'}" [ngClass]="{'poker-card-no-prize' : showingResult && matchedIndexes.indexOf(i) == -1}" class="poker-card" *ngFor="let cardInfo of showingCards; let i = index;">
                     <div [ngClass]="{ 'poker-prize-highlighted': matchedIndexes.indexOf(i) != -1, 'poker-card-temp-prize': tempMatchedIndexes.indexOf(i) != -1 }" class="poker-prize-overlay"></div>
                     <div class="poker-card-hold" *ngIf="holdIndexes.indexOf(i) != -1">HOLD</div>
                     <img src="assets/img/cards/back.png" />
@@ -58,23 +62,21 @@
             <li>You can bet between <b>{{baseBet}}</b> and <b>{{baseBet * maxBetMultiplier}}</b> satoshi and the prizes will upgrade accordingly.</li>
             <li>Any prizes won will automatically add to your balance and you can withdraw whenever you want.</li>
         </ul>
-        <h4>Matching</h4>
+        <h4>Gameplay</h4>
         <ul>
-
+            <li>You get an initial hand of 5 cards. You can choose which cards to hold from that initial hand.</li>
+            <li>All the cards you didn't hold are replaced with a new random one. Hand is checked and you get the corresponding prize.</li>
+            <li>The game is played with a single deck, so there are no duplicate cards.</li>
         </ul>
-        <h4>Symbols and Prizes</h4>
+        <h4>Prized Hands</h4>
         <ul>
-
+            <li *ngFor="let prizeInfo of prizeInfos">{{prizeInfo.title}} - (Multiplier: {{prizeInfo.multiplier}}x)</li>
         </ul>
         <h4>Hotkeys</h4>
         <ul>
             <li>You can tap <b>Space</b> to deal/draw.</li>
             <li>You can tap numbers <b>1</b> to <b>5</b> key to hold cards.</li>
             <li>You can tap the <b>+</b> and <b>-</b> keys to increase or decrease the bet amount.</li>
-        </ul>
-        <h4>Mechanics</h4>
-        <ul>
-
         </ul>
         <h4>Final Notes</h4>
         <ul>

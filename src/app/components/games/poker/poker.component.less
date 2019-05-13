@@ -51,19 +51,24 @@
 @keyframes inoutAnimation {
     0% {
         opacity: 0;
-        background-color: transparent;
     }
     30% {
         opacity: 1;
-        background-color: #f9a64355;
     }
     70% {
         opacity: 1;
-        background-color: #f9a64355;
     }
     100% {
         opacity: 0;
-        background-color: transparent;
+    }
+}
+
+@keyframes fadeOutAnimation {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.5;
     }
 }
 
@@ -106,6 +111,11 @@
     border-bottom: 1px solid @infotextcolor;
     padding: 4px 10px;
     position: relative;
+}
+
+.poker-card-no-prize {
+    animation: fadeOutAnimation 1s;
+    opacity: 0.5;
 }
 
 .poker-card > .poker-prize-overlay {
@@ -155,21 +165,35 @@
     display: inline-block;
     line-height: 32px;
     font-size: 18px;
+    height: 32px;
+    vertical-align: top;
 }
 
 .poker-prize-column-0 {
-    width: 40%;
+    width: 20%;
 }
 
 .poker-prize-column-1 {
-    width: 30%;
-    text-align: center;
+    width: 50%;
 }
 
 .poker-prize-column-2 {
     width: 30%;
     text-align: right;
     font-weight: 600;
+}
+
+.poker-prize-example-cards-container {
+    height: 100%;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.poker-prize-example-card {
+    height: 100%;
+    width: auto;
+    display: inline-block;
+    margin-right: 5px;
 }
 
 .poker-cards-container {

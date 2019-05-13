@@ -45,6 +45,180 @@ export class PokerGameComponent implements OnInit, OnDestroy {
     serverPrize = null;
     lastPrizeInfo = null;
     matchedIndexes = [];
+    showingResult = false;
+
+    prizeCards = {
+        royal_flush: [
+            {
+                suit: 'hearts',
+                name: 'ten'
+            },
+            {
+                suit: 'hearts',
+                name: 'jack'
+            },
+            {
+                suit: 'hearts',
+                name: 'queen'
+            },
+            {
+                suit: 'hearts',
+                name: 'king'
+            },
+            {
+                suit: 'hearts',
+                name: 'ace'
+            }
+        ],
+        straight_flush: [
+            {
+                suit: 'spades',
+                name: 'seven'
+            },
+            {
+                suit: 'spades',
+                name: 'eight'
+            },
+            {
+                suit: 'spades',
+                name: 'nine'
+            },
+            {
+                suit: 'spades',
+                name: 'ten'
+            },
+            {
+                suit: 'spades',
+                name: 'jack'
+            }
+        ],
+        four_of_a_kind: [
+            {
+                suit: 'diamonds',
+                name: 'six'
+            },
+            {
+                suit: 'spades',
+                name: 'six'
+            },
+            {
+                suit: 'hearts',
+                name: 'six'
+            },
+            {
+                suit: 'clubs',
+                name: 'six'
+            }
+        ],
+        full_house: [
+            {
+                suit: 'spades',
+                name: 'seven'
+            },
+            {
+                suit: 'diamonds',
+                name: 'seven'
+            },
+            {
+                suit: 'clubs',
+                name: 'seven'
+            },
+            {
+                suit: 'hearts',
+                name: 'two'
+            },
+            {
+                suit: 'spades',
+                name: 'two'
+            }
+        ],
+        flush: [
+            {
+                suit: 'spades',
+                name: 'seven'
+            },
+            {
+                suit: 'spades',
+                name: 'two'
+            },
+            {
+                suit: 'spades',
+                name: 'eight'
+            },
+            {
+                suit: 'spades',
+                name: 'queen'
+            },
+            {
+                suit: 'spades',
+                name: 'ace'
+            }
+        ],
+        straight: [
+            {
+                suit: 'spades',
+                name: 'three'
+            },
+            {
+                suit: 'diamonds',
+                name: 'four'
+            },
+            {
+                suit: 'clubs',
+                name: 'five'
+            },
+            {
+                suit: 'hearts',
+                name: 'six'
+            },
+            {
+                suit: 'spades',
+                name: 'seven'
+            }
+        ],
+        three_of_a_kind: [
+            {
+                suit: 'spades',
+                name: 'jack'
+            },
+            {
+                suit: 'diamonds',
+                name: 'jack'
+            },
+            {
+                suit: 'clubs',
+                name: 'jack'
+            }
+        ],
+        two_pairs: [
+            {
+                suit: 'spades',
+                name: 'ace'
+            },
+            {
+                suit: 'diamonds',
+                name: 'ace'
+            },
+            {
+                suit: 'clubs',
+                name: 'three'
+            },
+            {
+                suit: 'hearts',
+                name: 'three'
+            }
+        ],
+        pair_jacks_or_better: [
+            {
+                suit: 'spades',
+                name: 'king'
+            },
+            {
+                suit: 'diamonds',
+                name: 'king'
+            }
+        ]
+    };
 
     constructor(
         public appService: AppService,
@@ -151,6 +325,7 @@ export class PokerGameComponent implements OnInit, OnDestroy {
         this.resetPrizeAnimations();
 
         if (this.appService.user.balance >= betPrice || this.identifier) {
+            this.showingResult = false;
             if (!this.identifier) {
                 this.appService.user.balance -= betPrice;
                 this.appService.backupUser();
@@ -214,6 +389,7 @@ export class PokerGameComponent implements OnInit, OnDestroy {
                                 this.tempLastWin = 0;
                                 this.tempMatchedIndexes = [];
                                 this.tempPrizeInfo = null;
+                                this.showingResult = true;
 
                                 if (this.lastWin > 0) {
                                     this.prizeAnimationTimeout = setTimeout(
