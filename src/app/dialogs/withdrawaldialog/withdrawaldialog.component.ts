@@ -69,13 +69,10 @@ export class WithdrawalDialogComponent implements AfterViewInit {
                 .then(result => {
                     this.webln = result;
                     this.webln
-                        .makeInvoice(
-                            undefined,
-                            this.appService.user.balance,
-                            100,
-                            this.appService.user.balance,
-                            'Withdrawal from ln.city'
-                        )
+                        .makeInvoice({
+                            amount: this.appService.user.balance,
+                            defaultMemo: 'Withdrawal from ln.city'
+                        })
                         .then(invoice => {
                             this.paymentRequest = invoice.paymentRequest;
                             this.withdrawPaymentRequest();
@@ -88,7 +85,7 @@ export class WithdrawalDialogComponent implements AfterViewInit {
                     console.log('WebLN Not Available (1)');
                 });
         } catch (error) {
-            console.log('WebLN Not Available (2)');
+            console.log('WebLN Not Available (2)', error);
         }
     }
 

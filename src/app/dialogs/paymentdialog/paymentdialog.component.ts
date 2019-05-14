@@ -146,7 +146,7 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
                     console.log('WebLN Not Available (1)');
                 });
         } catch (error) {
-            console.log('WebLN Not Available (2)');
+            console.log('WebLN Not Available (2)', error);
         }
     }
 
