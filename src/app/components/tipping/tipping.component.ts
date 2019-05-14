@@ -68,7 +68,6 @@ export class TippingComponent implements OnInit {
             const dialogConfig = new MatDialogConfig();
 
             dialogConfig.data = {
-                message: 'Select an amount to tip (satoshi):',
                 target: 'user/' + this.tipUser.id
             };
 

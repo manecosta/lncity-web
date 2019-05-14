@@ -104,7 +104,6 @@ export class BlogComponent implements OnInit {
         const dialogConfig = new MatDialogConfig();
 
         dialogConfig.data = {
-            message: 'Select an amount to tip (satoshi):',
             target: 'blogpost/' + post.id
         };
 
@@ -125,7 +124,6 @@ export class BlogComponent implements OnInit {
         const dialogConfig = new MatDialogConfig();
 
         dialogConfig.data = {
-            message: 'Select an amount to tip (satoshi):',
             target: 'blogpostcomment/' + comment.id
         };
 

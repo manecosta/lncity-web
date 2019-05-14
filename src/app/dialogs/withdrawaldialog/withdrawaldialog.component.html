@@ -44,12 +44,17 @@
         <div>Withdrawal Success!</div>
     </div>
     <div *ngIf="paymentCompleted && !paymentSuccess" class="full-size" style="text-align: center; font-family: Arial, Helvetica, sans-serif;">
-        <div style="color: #ee5921; font-size: 32px; padding: 100px 0 40px 0;">Withdrawal failed.</div>
+        <div style="color: #ee5921; font-size: 32px; padding: 130px 0 40px 0;">Withdrawal failed.</div>
         <div style="color: #7e7e7e; font-size: 16px;">{{paymentResultMessage}}</div>
     </div>
 </div>
 <div class="withdrawal-dialog-footer" style="position: relative;">
-    <div *ngIf="!loading && !paymentCompleted && selectedTab != 1" class="button" [ngClass]="{ 'no-hover disabled': paymentRequest == '' }" (click)="paymentRequest != '' ? withdrawPaymentRequest() : null">Withdraw</div>
+    <div *ngIf="!loading && !paymentCompleted && selectedTab != 1"
+        class="button withdrawal-dialog-footer-button"
+        [ngClass]="{ 'no-hover disabled': paymentRequest == '' }"
+        (click)="paymentRequest != '' ? withdrawPaymentRequest() : null">
+        Withdraw
+    </div>
     <div *ngIf="loading" class="centered-content full-size">
         Withdrawing...
     </div>

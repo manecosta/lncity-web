@@ -149,7 +149,6 @@ export class AppComponent implements OnInit {
         const dialogConfig = new MatDialogConfig();
 
         dialogConfig.data = {
-            message: 'Select an amount to tip (satoshi):',
             target: 'lncity'
         };
 
@@ -163,7 +162,6 @@ export class AppComponent implements OnInit {
         const dialogConfig = new MatDialogConfig();
 
         dialogConfig.data = {
-            message: 'Select an amount to deposit (satoshi):',
             target: 'balance'
         };
 
@@ -214,9 +212,7 @@ export class AppComponent implements OnInit {
     sendFundsToUser() {
         const dialogConfig = new MatDialogConfig();
 
-        dialogConfig.data = {
-            message: 'Select an amount to send (satoshi):'
-        };
+        dialogConfig.data = {};
 
         const paymentDialog = this.dialog.open(
             PaymentDialogComponent,

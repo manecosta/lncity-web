@@ -3,6 +3,8 @@ import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { BalanceService } from 'src/app/services/balance.service';
 import { UserService } from 'src/app/services/user.service';
+import { requestProvider } from 'webln';
+import { AppService } from 'src/app/services/app.service';
 
 @Component({
     selector: 'app-withdrawaldialog',
@@ -24,6 +26,8 @@ export class WithdrawalDialogComponent implements AfterViewInit {
 
     selectedTab = 0;
 
+    webln = null;
+
     // Camera
 
     cameraInitialized = false;
@@ -44,7 +48,8 @@ export class WithdrawalDialogComponent implements AfterViewInit {
         public dialogRef: MatDialogRef<WithdrawalDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private balanceService: BalanceService,
-        private userService: UserService
+        private userService: UserService,
+        private appService: AppService
     ) {
         if (data) {
             if (data.title) {
@@ -58,6 +63,27 @@ export class WithdrawalDialogComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         this.dialogRef.updateSize('400px', '500px');
+
+        try {
+            requestProvider().then(result => {
+                this.webln = result;
+                this.webln
+                    .makeInvoice(
+                        undefined,
+                        this.appService.user.balance,
+                        100,
+                        this.appService.user.balance,
+                        'Withdrawal from ln.city'
+                    )
+                    .then(invoice => {
+                        this.paymentRequest = invoice.paymentRequest;
+                        this.withdrawPaymentRequest();
+                    })
+                    .catch(error => {
+                        this.withdrawResult(false, error);
+                    });
+            });
+        } catch (err) {}
     }
 
     camerasFoundHandler(devices) {
@@ -85,29 +111,33 @@ export class WithdrawalDialogComponent implements AfterViewInit {
         this.hasPermission = hasPermission;
     }
 
+    withdrawResult(success, errorMessage = null) {
+        this.dialogRef.updateSize('400px', '400px');
+        this.loading = false;
+        this.paymentCompleted = true;
+        this.paymentSuccess = success;
+        if (success) {
+            this.paymentMessage = 'Withdrawal succeeded!';
+        } else {
+            this.paymentMessage = 'Withdrawal failed.';
+            this.paymentResultMessage = errorMessage;
+        }
+        this.userService.reloadAccount();
+        setTimeout(() => {
+            this.dialogRef.close(success);
+        }, 2000);
+    }
+
     withdrawPaymentRequest() {
         this.loading = true;
+        this.dialogRef.updateSize('400px', '400px');
         this.balanceService
             .withdrawBalance(this.paymentRequest)
             .then(result => {
-                this.loading = false;
-                this.paymentCompleted = true;
-                this.paymentSuccess = true;
-                this.paymentMessage = 'Withdrawal succeeded!';
-                this.userService.reloadAccount();
-                setTimeout(() => {
-                    this.dialogRef.close();
-                }, 2000);
+                this.withdrawResult(true);
             })
             .catch(error => {
-                this.loading = false;
-                this.paymentCompleted = true;
-                this.paymentSuccess = false;
-                this.paymentMessage = 'Withdrawal failed.';
-                this.paymentResultMessage = error.error;
-                setTimeout(() => {
-                    this.dialogRef.close();
-                }, 2000);
+                this.withdrawResult(false, error.error);
             });
     }
 

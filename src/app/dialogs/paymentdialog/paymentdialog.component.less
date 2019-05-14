@@ -1,27 +1,14 @@
 @import '../../../variables.less';
 
 @media only screen and (max-width: 700px) {
-    .payment-dialog-suggested-amount-value {
-        font-size: 12px !important;
-    }
-    .payment-dialog-suggested-amount-container {
-        width: 100% !important;
-        margin-left: 0 !important;
-        margin-top: 15px !important;
-    }
-    .payment-dialog-amount-value-container {
-        padding-top: 15px !important;
-    }
 }
 
-@verticalspacing: 10px;
-@horizontalspacing: 20px;
+// Main Components
 
 .payment-dialog-header {
     width: 100%;
     height: 54px;
     background-color: @darkaccentcolor;
-    font-family: Arial, Helvetica, sans-serif;
     font-size: 24px;
     line-height: 54px;
     text-align: center;
@@ -37,6 +24,7 @@
 .payment-dialog-message {
     padding-top: 30px;
     font-size: 18px;
+    line-height: 22px;
     text-align: center;
     color: @textcolor;
 }
@@ -46,66 +34,187 @@
     width: 100%;
     height: 54px;
     background-color: @lightaccentcolor;
-    font-family: Arial, Helvetica, sans-serif;
     font-size: 24px;
-    line-height: 44px;
+    line-height: 54px;
     text-align: center;
 }
 
+.payment-dialog-loading {
+    width: 100%;
+    height: calc(100% - 52px);
+}
+
+// Target Selection
+
+.payment-dialog-target-selection-container {
+    margin-top: 60px;
+    width: 100%;
+    height: 32px;
+    position: relative;
+}
+
+.payment-dialog-target-input {
+    position: absolute;
+    width: 60%;
+    left: 20%;
+    top: 0;
+    height: 100%;
+    font-size: 16px;
+    text-align: center;
+    line-height: 31px;
+    padding: 0;
+}
+
+.payment-dialog-target-input-info {
+    position: absolute;
+    top: 100%;
+    left: 20%;
+    width: 60%;
+    height: 20px;
+    line-height: 26px;
+    font-size: 12px;
+    color: @infotextcolor;
+    text-align: center;
+}
+
+// Amount Selection
+
 .payment-dialog-suggested-amount-container {
     width: calc(100% - 60px);
-    margin-left: 30px;
-    margin-top: 20px;
+    margin: 0 auto;
+    padding-top: 30px;
 }
 
 .payment-dialog-suggested-amount-line {
     display: flex;
     flex-direction: row;
+    margin-bottom: 10px;
 }
 
 .payment-dialog-suggested-amount-line:last-child {
-    margin-bottom: @verticalspacing;
+    margin-bottom: 0;
 }
 
 .payment-dialog-suggested-amount-value {
-    margin: @verticalspacing 0 0 @horizontalspacing;
+    margin: 0 0 0 20px;
     flex-grow: 1;
 }
 
 .payment-dialog-suggested-amount-value:last-child {
-    margin-right: @horizontalspacing;
+    margin-right: 20px;
 }
 
 .payment-dialog-amount-value-container {
-    font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
     color: @textcolor;
-    padding-top: 20px;
-}
-
-.payment-dialog-amount-value-input {
-    vertical-align: middle;
-    height: 24px;
-    font-size: 16px;
-    width: 96px;
-    margin-left: 10px;
-    text-align: center;
+    margin-top: 25px;
+    position: relative;
+    height: 32px;
 }
 
 .payment-dialog-amount-message {
     color: @textcolor;
-    font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
+    position: absolute;
+    height: 100%;
+    line-height: 32px;
+    top: 0;
+    right: calc(50% + 19px);
 }
 
-.payment-dialog-success-message {
+.payment-dialog-amount-value-input {
+    font-size: 16px;
+    text-align: center;
+    position: absolute;
+    height: 100%;
+    width: 96px;
+    line-height: 31px;
+    top: 0;
+    left: calc(50% - 9px);
+    padding: 0;
+}
+
+.payment-dialog-amount-value-input-info {
+    position: absolute;
+    left: calc(50% - 9px);
+    top: 100%;
+    width: 96px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 12px;
+    color: @infotextcolor;
+    text-align: center;
+}
+
+// Awaiting Payment
+
+.payment-dialog-awaiting-payment-container {
+    width: 100%;
+    height: calc(100% - 52px);
+}
+
+.payment-dialog-payment-request-textarea {
+    resize: none;
+    width: calc(100% - 60px);
+    height: calc(100% - 40px);
+    font-size: 12px;
+}
+
+// Result Screens
+
+.payment-dialog-result-container {
+    font-size: 32px;
+    text-align: center;
+    width: calc(100% - 40px);
+    height: calc(100% - 40px);
+    padding: 20px;
+    position: relative;
+}
+
+.payment-dialog-positive-result {
     color: @highlightedtextcolor;
-    font-size: 32px;
-    text-align: center;
 }
 
-.payment-dialog-failure-message {
+.payment-dialog-negative-result {
     color: @negativeaccentcolor;
-    font-size: 32px;
-    text-align: center;
+}
+
+.payment-dialog-result-submessage {
+    position: absolute;
+    bottom: 30px;
+    color: @infotextcolor;
+    font-size: 12px;
+    left: 20px;
+    width: calc(100% - 40px);
+}
+
+// Footer
+
+.payment-dialog-footer-button {
+    width: calc(100% - 22px);
+    height: calc(100% - 2px);
+    line-height: 52px;
+    display: block;
+}
+
+.payment-dialog-footer-note {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: calc(100% - 22px);
+    height: 100%;
+    line-height: 52px;
+    display: block;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.payment-dialog-footer-progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    height: 100%;
+    display: block;
 }

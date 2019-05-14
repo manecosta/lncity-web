@@ -460,7 +460,6 @@ export class PokerGameComponent implements OnInit, OnDestroy {
         const dialogConfig = new MatDialogConfig();
 
         dialogConfig.data = {
-            message: 'Select an amount to deposit (satoshi):',
             target: 'balance'
         };
 
