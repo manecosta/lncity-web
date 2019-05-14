@@ -24,7 +24,7 @@
                         "tsConfig": "src/tsconfig.app.json",
                         "assets": ["src/favicon.ico", "src/assets"],
                         "styles": ["src/styles.less"],
-                        "scripts": [],
+                        "scripts": ["node_modules/webln/dist/webln.min.js"],
                         "es5BrowserSupport": true
                     },
                     "configurations": {

@@ -11,7 +11,8 @@ import { PaymentService } from 'src/app/services/payment.service';
 import { BalanceService } from 'src/app/services/balance.service';
 import { UserService } from 'src/app/services/user.service';
 import { AppService } from 'src/app/services/app.service';
-import { requestProvider } from 'webln';
+
+declare var window: any;
 
 enum PaymentPhase {
     SelectingTarget = 1,
@@ -101,6 +102,7 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
     success = false;
 
     // WebLN
+    weblninterval = null;
     webln = null;
 
     constructor(
@@ -138,8 +140,9 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
 
     ngAfterViewInit() {
         try {
-            requestProvider()
+            window.WebLN.requestProvider()
                 .then(result => {
+                    console.log('WebLN provider found!');
                     this.webln = result;
                 })
                 .catch(error => {

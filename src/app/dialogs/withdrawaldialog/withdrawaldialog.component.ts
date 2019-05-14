@@ -3,8 +3,9 @@ import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { BalanceService } from 'src/app/services/balance.service';
 import { UserService } from 'src/app/services/user.service';
-import { requestProvider } from 'webln';
 import { AppService } from 'src/app/services/app.service';
+
+declare var window: any;
 
 @Component({
     selector: 'app-withdrawaldialog',
@@ -65,8 +66,9 @@ export class WithdrawalDialogComponent implements AfterViewInit {
         this.dialogRef.updateSize('400px', '500px');
 
         try {
-            requestProvider()
+            window.WebLN.requestProvider()
                 .then(result => {
+                    console.log('WebLN provider found!');
                     this.webln = result;
                     this.webln
                         .makeInvoice({
