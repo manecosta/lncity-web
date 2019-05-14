@@ -65,25 +65,31 @@ export class WithdrawalDialogComponent implements AfterViewInit {
         this.dialogRef.updateSize('400px', '500px');
 
         try {
-            requestProvider().then(result => {
-                this.webln = result;
-                this.webln
-                    .makeInvoice(
-                        undefined,
-                        this.appService.user.balance,
-                        100,
-                        this.appService.user.balance,
-                        'Withdrawal from ln.city'
-                    )
-                    .then(invoice => {
-                        this.paymentRequest = invoice.paymentRequest;
-                        this.withdrawPaymentRequest();
-                    })
-                    .catch(error => {
-                        this.withdrawResult(false, error);
-                    });
-            });
-        } catch (err) {}
+            requestProvider()
+                .then(result => {
+                    this.webln = result;
+                    this.webln
+                        .makeInvoice(
+                            undefined,
+                            this.appService.user.balance,
+                            100,
+                            this.appService.user.balance,
+                            'Withdrawal from ln.city'
+                        )
+                        .then(invoice => {
+                            this.paymentRequest = invoice.paymentRequest;
+                            this.withdrawPaymentRequest();
+                        })
+                        .catch(error => {
+                            this.withdrawResult(false, error);
+                        });
+                })
+                .catch(error => {
+                    console.log('WebLN Not Available (1)');
+                });
+        } catch (error) {
+            console.log('WebLN Not Available (2)');
+        }
     }
 
     camerasFoundHandler(devices) {

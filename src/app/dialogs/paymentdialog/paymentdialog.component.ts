@@ -138,10 +138,16 @@ export class PaymentDialogComponent implements AfterViewInit, OnDestroy {
 
     ngAfterViewInit() {
         try {
-            requestProvider().then(result => {
-                this.webln = result;
-            });
-        } catch (err) {}
+            requestProvider()
+                .then(result => {
+                    this.webln = result;
+                })
+                .catch(error => {
+                    console.log('WebLN Not Available (1)');
+                });
+        } catch (error) {
+            console.log('WebLN Not Available (2)');
+        }
     }
 
     ngOnDestroy() {
