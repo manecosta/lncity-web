@@ -33,6 +33,7 @@ import { NotificationService } from './services/notification.service';
 import { ActivityComponent } from './components/activity/activity.component';
 import { PokerGameComponent } from './components/games/poker/poker.component';
 import { TippingComponent } from './components/tipping/tipping.component';
+import { FAQComponent } from './components/faq/faq.component';
 
 @NgModule({
     declarations: [
@@ -49,7 +50,8 @@ import { TippingComponent } from './components/tipping/tipping.component';
         BlogComponent,
         NodeComponent,
         ActivityComponent,
-        TippingComponent
+        TippingComponent,
+        FAQComponent
     ],
     entryComponents: [
         PaymentDialogComponent,

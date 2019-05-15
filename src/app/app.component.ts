@@ -109,6 +109,12 @@ export class AppComponent implements OnInit {
             ]
         },
         {
+            title: 'FAQ',
+            type: 'navigate',
+            navigate: '/faq',
+            mobileMenu: true
+        },
+        {
             title: 'Node',
             type: 'navigate',
             navigate: '/node',

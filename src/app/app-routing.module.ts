@@ -8,6 +8,7 @@ import { NodeComponent } from './components/node/node.component';
 import { ActivityComponent } from './components/activity/activity.component';
 import { PokerGameComponent } from './components/games/poker/poker.component';
 import { TippingComponent } from './components/tipping/tipping.component';
+import { FAQComponent } from './components/faq/faq.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -21,6 +22,7 @@ const routes: Routes = [
     { path: 'activity', component: ActivityComponent },
     { path: 'tipping/:filter', component: TippingComponent },
     { path: 'tipping', component: TippingComponent },
+    { path: 'faq', component: FAQComponent },
     { path: '**', redirectTo: '/home' }
 ];
 
