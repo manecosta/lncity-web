@@ -18,7 +18,7 @@ This is a website with a bunch of lightning network interactions.
     - Balance transfers between users
     - Activity / Notifications
 
-# Server
+# API
 
 You can find the API code here:
 
