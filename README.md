@@ -17,11 +17,15 @@ This is a website with a bunch of lightning network interactions.
     - Balance Deposit/Withdraw
     - Balance transfers between users
     - Activity / Notifications
-    
-You can see it live in https://ln.city
 
 # Server
 
 You can find the API code here:
 
 https://github.com/manecosta/lncity-api
+
+# Live Version
+
+You can experiment with the end result here:
+
+https://ln.city
