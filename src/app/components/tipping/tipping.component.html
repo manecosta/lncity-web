@@ -8,5 +8,8 @@
         <div *ngIf="tipUser" [ngClass]="{ 'disabled no-hover': tipUser.id == appService.user.userId }" class="tipping-button button" (click)="tipUserAction()">Tip</div>
         <div *ngIf="!tipUser" class="tipping-user-not-found">User not found</div>
         <div *ngIf="tipUser && tipUser.id == appService.user.userId" class="tipping-warn">(Can't tip yourself)</div>
+        <div *ngIf="tipUser && tipUser.id == appService.user.userId" class="tipping-message">You can share the following URL:</div>
+        <input *ngIf="tipUser && tipUser.id == appService.user.userId" class="tipping-url"
+            value="https://ln.city/tipping/{{appService.user.username ? appService.user.username : appService.user.userId}}" />
     </div>
 </div>

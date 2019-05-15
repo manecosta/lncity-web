@@ -355,6 +355,11 @@ export class PokerGameComponent implements OnInit, OnDestroy {
                             }
                         }, 300);
                         this.identifier = result.identifier;
+                        if (result.balance) {
+                            // Recovered game
+                            this.betMultiplier = result.multiplier;
+                            this.appService.user.balance = result.balance;
+                        }
                     });
             } else {
                 this.dealingOrDrawing = true;
