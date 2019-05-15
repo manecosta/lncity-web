@@ -18,6 +18,8 @@ This is a website with a bunch of lightning network interactions.
     - Balance transfers between users
     - Activity / Notifications
 
+The code is not very friendly at this point. There's also some lack of standard in the way some things are done. I'm honestly a bit clumsy... Any feedback and contributions are greatly appreciated, mostly to make it easy to test out.
+
 # API
 
 You can find the API code here:
