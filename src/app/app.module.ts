@@ -5,10 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AppService } from './services/app.service';
 import { MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule } from '@angular/material';
-import {
-    PaymentDialogComponent,
-    AmountPipe
-} from './dialogs/paymentdialog/paymentdialog.component';
+import { PaymentDialogComponent } from './dialogs/paymentdialog/paymentdialog.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PaymentService } from './services/payment.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -34,6 +31,8 @@ import { ActivityComponent } from './components/activity/activity.component';
 import { PokerGameComponent } from './components/games/poker/poker.component';
 import { TippingComponent } from './components/tipping/tipping.component';
 import { FAQComponent } from './components/faq/faq.component';
+import { SafeHtmlPipe } from './pipes/safehtml.pipe';
+import { AmountPipe } from './pipes/amount.pipe';
 
 @NgModule({
     declarations: [
@@ -43,6 +42,7 @@ import { FAQComponent } from './components/faq/faq.component';
         RegisterDialogComponent,
         SwitchAccountDialogComponent,
         AmountPipe,
+        SafeHtmlPipe,
         RouletteGameComponent,
         SlotMachinGameComponent,
         PokerGameComponent,

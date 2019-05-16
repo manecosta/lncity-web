@@ -1,11 +1,4 @@
-import {
-    Component,
-    Inject,
-    PipeTransform,
-    Pipe,
-    AfterViewInit,
-    OnDestroy
-} from '@angular/core';
+import { Component, Inject, AfterViewInit, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { PaymentService } from 'src/app/services/payment.service';
 import { BalanceService } from 'src/app/services/balance.service';
@@ -27,25 +20,6 @@ enum PaymentPhase {
     TransferSuccess,
     TransferFailed,
     ShowingResult
-}
-
-@Pipe({ name: 'amountPipe' })
-export class AmountPipe implements PipeTransform {
-    transform(value: number, exponent: string): string {
-        const components = [];
-        while (value > 0) {
-            let component = '';
-            if (value > 999) {
-                component = ('000' + (value % 1000)).slice(-3);
-            } else {
-                component = '' + value;
-            }
-
-            components.push(component);
-            value = Math.floor(value / 1000);
-        }
-        return components.reverse().join(' ');
-    }
 }
 
 @Component({

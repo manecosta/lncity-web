@@ -26,7 +26,7 @@
                 <div class="blog-post-header-title">{{post.title}}</div>
                 <div class="blog-post-header-subtitle">{{readableDate(post.created_time)}} by <b>{{getUserName(post.user)}}</b></div>
             </div>
-            <div class="blog-post-body" [innerHTML]="post.body"></div>
+            <div class="blog-post-body" [innerHTML]="post.body | safeHtml"></div>
             <div class="blog-post-tags">
                 <h4>Tags:</h4>
                 <div class="blog-post-tag" *ngFor="let tag of post.tags" [routerLink]="'/blog/' + tag.name">{{tag.name}}</div>
