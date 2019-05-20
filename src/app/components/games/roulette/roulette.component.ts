@@ -195,7 +195,7 @@ export class RouletteGameComponent implements OnDestroy, OnInit {
                     this.secondTwelve.push([li, ci]);
                 }
 
-                if (numberInfo.value < 17) {
+                if (numberInfo.value < 19) {
                     this.firstEighteen.push([li, ci]);
                 } else {
                     this.secondEighteen.push([li, ci]);
