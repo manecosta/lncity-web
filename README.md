@@ -32,4 +32,4 @@ https://github.com/manecosta/lncity-api
 
 You can experiment with the end result here:
 
-https://ln.city
+https://ln.city (DOWN)
